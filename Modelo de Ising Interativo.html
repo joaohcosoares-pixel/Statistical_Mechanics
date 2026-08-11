@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modelo de Ising Interativo — Simulação Didática de Transições de Fase</title>
+  
+  <!-- SEO & Description -->
+  <meta name="description" content="Simulador didático e interativo do Modelo de Ising em 1D e 2D (Rede Quadrada e Triangular, Antiferromagnetismo, Vidro de Spin e Histerese) em HTML5/JavaScript.">
+  
+  <!-- Google Fonts & FontAwesome CDN -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-icon">
+        <i class="fa-solid fa-atom"></i>
+      </div>
+      <div class="brand-title">
+        <h1>Modelo de Ising Interativo</h1>
+        <p>Mecânica Estatística & Transições de Fase</p>
+      </div>
+    </div>
+    
+    <div class="header-badges">
+      <div class="badge badge-phase" id="badgePhase">
+        <span class="status-dot"></span>
+        <span id="valPhase">Fase Ferromagnética (Ordenada)</span>
+      </div>
+      <div class="badge">
+        <i class="fa-solid fa-temperature-half"></i>
+        <span>T<sub>c</sub> (2D Quadrada) &approx; 2.27 J/k<sub>B</sub></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container Layout -->
+  <div class="app-container">
+    
+    <!-- LEFT SIDEBAR: Presets & Controls -->
+    <aside class="panel">
+      <div class="panel-title">
+        <i class="fa-solid fa-sliders"></i>
+        <span>Predefinições Didáticas</span>
+      </div>
+      
+      <div class="preset-grid">
+        <button class="preset-btn active" data-preset="ferro_low_t">
+          <span class="title">Ferromagnetismo</span>
+          <span class="desc">T &lt; T<sub>c</sub> (Ordenado)</span>
+        </button>
+
+        <button class="preset-btn" data-preset="critical_point">
+          <span class="title">Ponto Crítico</span>
+          <span class="desc">T = T<sub>c</sub> (Flutuações)</span>
+        </button>
+
+        <button class="preset-btn" data-preset="paramagnetic">
+          <span class="title">Paramagnetismo</span>
+          <span class="desc">T &gt; T<sub>c</sub> (Desordenado)</span>
+        </button>
+
+        <button class="preset-btn" data-preset="antiferro">
+          <span class="title">Antiferro (J &lt; 0)</span>
+          <span class="desc">Padrão Xadrez</span>
+        </button>
+
+        <button class="preset-btn" data-preset="triangular_frust">
+          <span class="title">Rede Triangular</span>
+          <span class="desc">Frustração Geométrica</span>
+        </button>
+
+        <button class="preset-btn" data-preset="spin_glass">
+          <span class="title">Vidro de Spin</span>
+          <span class="desc">Acoplamento Aleatório</span>
+        </button>
+
+        <button class="preset-btn" data-preset="model_1d">
+          <span class="title">Modelo 1D</span>
+          <span class="desc">Cadeia Unidimensional</span>
+        </button>
+
+        <button class="preset-btn" data-preset="hysteresis">
+          <span class="title">Loop de Histerese</span>
+          <span class="desc">Varredura de B</span>
+        </button>
+      </div>
+
+      <div class="panel-title" style="margin-top: 0.5rem;">
+        <i class="fa-solid fa-gauge-high"></i>
+        <span>Parâmetros Físicos</span>
+      </div>
+
+      <!-- Temperature Slider -->
+      <div class="control-group">
+        <div class="control-label">
+          <span><i class="fa-solid fa-temperature-full"></i> Temperatura (T)</span>
+          <span class="control-val" id="tempVal">2.27</span>
+        </div>
+        <div class="slider-container">
+          <input type="range" id="tempSlider" min="0.05" max="5.0" step="0.05" value="2.27">
+        </div>
+      </div>
+
+      <!-- Coupling Constant J Slider -->
+      <div class="control-group">
+        <div class="control-label">
+          <span><i class="fa-solid fa-link"></i> Acoplamento (J)</span>
+          <span class="control-val" id="couplingVal">+1.00</span>
+        </div>
+        <div class="slider-container">
+          <input type="range" id="couplingSlider" min="-2.0" max="2.0" step="0.1" value="1.0">
+        </div>
+      </div>
+
+      <!-- External Field B Slider -->
+      <div class="control-group">
+        <div class="control-label">
+          <span><i class="fa-solid fa-magnet"></i> Campo Magnético (B)</span>
+          <span class="control-val" id="fieldVal">0.00</span>
+        </div>
+        <div class="slider-container">
+          <input type="range" id="fieldSlider" min="-3.0" max="3.0" step="0.1" value="0.0">
+        </div>
+      </div>
+
+      <!-- Speed Control -->
+      <div class="control-group">
+        <div class="control-label">
+          <span><i class="fa-solid fa-bolt"></i> Velocidade (Passos MC/frame)</span>
+          <span class="control-val" id="speedVal">5x</span>
+        </div>
+        <div class="slider-container">
+          <input type="range" id="speedSlider" min="1" max="50" step="1" value="5">
+        </div>
+      </div>
+
+      <div class="panel-title" style="margin-top: 0.5rem;">
+        <i class="fa-solid fa-cubes"></i>
+        <span>Configurações da Rede</span>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">Geometria da Rede</label>
+        <select id="geometrySelect" class="select-custom">
+          <option value="2D_square">Rede Quadrada 2D</option>
+          <option value="2D_triangular">Rede Triangular 2D (Frustração)</option>
+          <option value="1D">Cadeia 1D (Unidimensional)</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">Tipo de Acoplamento</label>
+        <select id="couplingTypeSelect" class="select-custom">
+          <option value="ferro">Ferromagnético (J > 0)</option>
+          <option value="antiferro">Antiferromagnético (J < 0)</option>
+          <option value="spin_glass">Vidro de Spin (J_ij Aleatório)</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">Tamanho da Grade (L &times; L)</label>
+        <select id="latticeSizeSelect" class="select-custom">
+          <option value="32">32 &times; 32 (1.024 spins)</option>
+          <option value="64" selected>64 &times; 64 (4.096 spins)</option>
+          <option value="128">128 &times; 128 (16.384 spins)</option>
+        </select>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">Tema Visual</label>
+        <select id="themeSelect" class="select-custom">
+          <option value="cyberpunk" selected>Cyberpunk (Ciano / Magenta)</option>
+          <option value="classic">Clássico (Azul / Vermelho)</option>
+          <option value="emerald">Esmeralda / Grafite</option>
+          <option value="monochrome">Alto Contraste P/B</option>
+        </select>
+      </div>
+    </aside>
+
+    <!-- CENTER MAIN VIEW: Canvas & Metrics -->
+    <main class="main-view">
+      
+      <!-- Metrics Bar HUD -->
+      <div class="metrics-bar">
+        <div class="metric-card">
+          <div class="metric-label">
+            <span>Magnetização (m)</span>
+            <i class="fa-solid fa-compass"></i>
+          </div>
+          <div class="metric-value" id="valMag">+0.000</div>
+        </div>
+
+        <div class="metric-card pink">
+          <div class="metric-label">
+            <span>|Magnetização| (|m|)</span>
+            <i class="fa-solid fa-chart-line"></i>
+          </div>
+          <div class="metric-value" id="valAbsMag">0.000</div>
+        </div>
+
+        <div class="metric-card amber">
+          <div class="metric-label">
+            <span>Energia p/ Spin (e)</span>
+            <i class="fa-solid fa-fire-flame-curved"></i>
+          </div>
+          <div class="metric-value" id="valEnergy">-0.000</div>
+        </div>
+
+        <div class="metric-card purple">
+          <div class="metric-label">
+            <span>Taxa de Atualização</span>
+            <i class="fa-solid fa-microchip"></i>
+          </div>
+          <div class="metric-value" id="fpsDisplay">60 FPS</div>
+        </div>
+      </div>
+
+      <!-- Simulation Canvas Container -->
+      <div class="canvas-wrapper">
+        <canvas id="isingCanvas"></canvas>
+        
+        <!-- Canvas Tool Bar -->
+        <div class="canvas-overlay-tools">
+          <div class="interaction-mode-group">
+            <button class="tool-btn active" data-tool="laser">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> Laser Magnético
+            </button>
+            <button class="tool-btn" data-tool="flip">
+              <i class="fa-solid fa-rotate"></i> Inverter Spin
+            </button>
+            <button class="tool-btn" data-tool="up">
+              <i class="fa-solid fa-arrow-up"></i> Forçar UP
+            </button>
+            <button class="tool-btn" data-tool="down">
+              <i class="fa-solid fa-arrow-down"></i> Forçar DOWN
+            </button>
+          </div>
+
+          <div class="legend-bar">
+            <div class="legend-item">
+              <div class="legend-color" style="background: var(--spin-up-color);"></div>
+              <span>Spin Up (&uparrow; +1)</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-color" style="background: var(--spin-down-color);"></div>
+              <span>Spin Down (&downarrow; -1)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Simulation Action Buttons -->
+      <div class="btn-row">
+        <button id="playPauseBtn" class="btn btn-primary">
+          <i class="fa-solid fa-pause"></i> Pausar
+        </button>
+        <button id="stepBtn" class="btn btn-secondary">
+          <i class="fa-solid fa-forward-step"></i> Passo Monte Carlo
+        </button>
+        <button id="resetBtn" class="btn btn-secondary">
+          <i class="fa-solid fa-rotate-right"></i> Reiniciar Rede
+        </button>
+        <button id="sweepHysteresisBtn" class="btn btn-secondary">
+          <i class="fa-solid fa-sync"></i> Loop de Histerese Auto
+        </button>
+      </div>
+
+    </main>
+
+    <!-- RIGHT SIDEBAR: Charts & Educational Physics Guide -->
+    <aside class="panel sidebar-right">
+      
+      <!-- Charts Tabs Header -->
+      <div class="tab-header">
+        <button class="tab-btn active" data-tab="tab-realtime">
+          <i class="fa-solid fa-chart-area"></i> Tempo Real
+        </button>
+        <button class="tab-btn" data-tab="tab-hysteresis">
+          <i class="fa-solid fa-circle-notch"></i> Histerese (M &times; B)
+        </button>
+        <button class="tab-btn" data-tab="tab-phase">
+          <i class="fa-solid fa-chart-line"></i> Transição (|m| &times; T)
+        </button>
+      </div>
+
+      <!-- Tab 1: Realtime m(t) and e(t) -->
+      <div id="tab-realtime" class="tab-content active">
+        <div class="chart-container">
+          <canvas id="realtimeChartCanvas"></canvas>
+        </div>
+      </div>
+
+      <!-- Tab 2: Hysteresis m vs B -->
+      <div id="tab-hysteresis" class="tab-content">
+        <div class="chart-container">
+          <canvas id="hysteresisChartCanvas"></canvas>
+        </div>
+      </div>
+
+      <!-- Tab 3: Phase Diagram |m| vs T -->
+      <div id="tab-phase" class="tab-content">
+        <div class="chart-container">
+          <canvas id="phaseChartCanvas"></canvas>
+        </div>
+      </div>
+
+      <!-- Didactic Accordion Guide Section -->
+      <div class="panel-title" style="margin-top: 0.5rem;">
+        <i class="fa-solid fa-book-open-reader"></i>
+        <span>Aprenda a Física do Modelo</span>
+      </div>
+
+      <div class="didactic-section">
+        
+        <!-- Accordion Item 1 -->
+        <div class="didactic-card open">
+          <div class="didactic-card-header">
+            <span>1. O que é o Modelo de Ising?</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+          <div class="didactic-card-body">
+            <p>O <strong>Modelo de Ising</strong> é o pilar fundamental da mecânica estatística para entender como interações locais entre átomos microscópicos geram fenômenos macroscópicos como o <strong>Ferromagnetismo</strong> (imãs permanentes).</p>
+            <p>Cada ponto da rede possui um <em>spin</em> s<sub>i</sub> &in; {+1, -1} apontando para cima (&uparrow;) ou para baixo (&downarrow;).</p>
+            <div class="math-formula">
+              H = &minus; J &sum;<sub>&langle;i,j&rangle;</sub> s<sub>i</sub>s<sub>j</sub> &minus; B &sum;<sub>i</sub> s<sub>i</sub>
+            </div>
+            <div class="highlight-box">
+              <strong>J &gt; 0 (Ferromagnético):</strong> Spins vizinhos preferem alinhar na mesma direção (&uparrow;&uparrow; ou &downarrow;&downarrow;).<br>
+              <strong>J &lt; 0 (Antiferromagnético):</strong> Spins preferem alternar (&uparrow;&downarrow;).
+            </div>
+          </div>
+        </div>
+
+        <!-- Accordion Item 2 -->
+        <div class="didactic-card">
+          <div class="didactic-card-header">
+            <span>2. Algoritmo de Metropolis (Monte Carlo)</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+          <div class="didactic-card-body">
+            <p>Para simular a agitação térmica de um sistema físico em equilíbrio na temperatura <strong>T</strong>, usamos o algoritmo de <strong>Metropolis-Hastings</strong>:</p>
+            <ol style="margin-left: 1.2rem; margin-top: 0.4rem;">
+              <li>Escolhe-se um spin aleatório s<sub>i</sub> e calcula-se a variação de energia &Delta;E se ele for invertido.</li>
+              <li>Se &Delta;E &le; 0 (diminui energia), a inversão é <strong>aceita imediatamente</strong>.</li>
+              <li>Se &Delta;E &gt; 0, a inversão é aceita com probabilidade probabilística de Boltzmann:
+                <div class="math-formula">P = exp(&minus;&Delta;E / k<sub>B</sub>T)</div>
+              </li>
+            </ol>
+            <p style="margin-top:0.4rem;">Em baixas temperaturas, diminui-se o ruído e o sistema busca o estado de menor energia!</p>
+          </div>
+        </div>
+
+        <!-- Accordion Item 3 -->
+        <div class="didactic-card">
+          <div class="didactic-card-header">
+            <span>3. Transição de Fase Crítica (T<sub>c</sub>)</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+          <div class="didactic-card-body">
+            <p>Em 2 dimensões na rede quadrada com B = 0, existe uma temperatura exata chamada <strong>Temperatura Crítica de Curie (T<sub>c</sub>)</strong>, resolvida exatamente por Lars Onsager (1944):</p>
+            <div class="math-formula">
+              T<sub>c</sub> = 2 J / (k<sub>B</sub> ln(1 + &radic;2)) &approx; 2.269 J/k<sub>B</sub>
+            </div>
+            <ul style="margin-left: 1.2rem; margin-top:0.4rem;">
+              <li><strong>T &lt; T<sub>c</sub>:</strong> Magnetização espontânea. Domínios gigantes alinhados.</li>
+              <li><strong>T &gt; T<sub>c</sub>:</strong> Fase paramagnética. Ruído térmico domina e destrói o alinhamento (m = 0).</li>
+              <li><strong>T = T<sub>c</sub>:</strong> Estado crítico com flutuações fractais de todas as escalas!</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Accordion Item 4 -->
+        <div class="didactic-card">
+          <div class="didactic-card-header">
+            <span>4. Frustração Geométrica & Rede Triangular</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+          <div class="didactic-card-body">
+            <p>Em uma <strong>rede quadrada antiferromagnética</strong> (J &lt; 0), todos os spins conseguem se alinhar de forma perfeita em um padrão de tabuleiro de xadrez (&uparrow;&downarrow;&uparrow;&downarrow;).</p>
+            <p>Porém, em um <strong>triângulo de spins</strong> com acoplamento antiferromagnético, é impossível satisfazer os 3 pares ao mesmo tempo! Se dois spins se antiparalelizam (&uparrow; e &downarrow;), o terceiro spin se vê obrigado a ficar paralelo a um deles. Isso é a <strong>Frustração Magnética</strong>!</p>
+          </div>
+        </div>
+
+        <!-- Accordion Item 5 -->
+        <div class="didactic-card">
+          <div class="didactic-card-header">
+            <span>5. Vidro de Spin (Spin Glass)</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+          <div class="didactic-card-body">
+            <p>Um <strong>Vidro de Spin</strong> ocorre quando as conexões J<sub>ij</sub> entre cada par de vizinhos são <em>aleatórias</em> (algumas atrativas +J, outras repulsivas &minus;J).</p>
+            <p>Isso gera uma paisagem de energia complexa cheia de <strong>múltiplos mínimos locais de energia</strong>. O sistema fica "congelado" em estados desordenados únicos, o que deu origem ao estudo moderno de inteligência artificial, redes neurais e otimização combinatória!</p>
+          </div>
+        </div>
+
+        <!-- Accordion Item 6 -->
+        <div class="didactic-card">
+          <div class="didactic-card-header">
+            <span>6. Teorema de Mermin-Wagner & Modelo 1D</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+          <div class="didactic-card-body">
+            <p>Por que não existe ferromagnetismo permanente em 1 dimensão para T &gt; 0?</p>
+            <p>Em 1D (uma cadeia de spins), a energia necessária para criar um <em>parede de domínio</em> (inverter metade da cadeia) é constante (&Delta;E = 2J), independente do tamanho da cadeia. Como o ganho de entropia ao mover essa parede é gigantesco, qualquer agitação térmica T &gt; 0 destrói a ordem de longo alcance!</p>
+          </div>
+        </div>
+
+      </div>
+
+    </aside>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/ising.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/ui.js"></script>
+
+</body>
+</html>
