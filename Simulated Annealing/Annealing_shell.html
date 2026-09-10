@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Recozimento físico conceitual: uma sequência determinística de 15 segundos. XLIII Semana da Física da UFG.">
+  <title>Thermal Annealing — Animação Conceitual</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --background: #0f111a;
+      --panel: #151823;
+      --text: #f8f8f2;
+      --muted: #9ba4b9;
+      --dim: #758199;
+      --line: #2a303f;
+      --cyan: #8be9fd;
+      --purple: #bd93f9;
+      --green: #8cdfb3;
+      --thermal: #ffb86c;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      background: var(--background);
+      color: var(--text);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-width: 320px; }
+    body.recording { user-select: none; -webkit-user-select: none; }
+    button, input { font: inherit; }
+    button { -webkit-tap-highlight-color: transparent; }
+    button:focus-visible, input:focus-visible {
+      outline: 2px solid var(--cyan); outline-offset: 6px;
+    }
+    .instrument {
+      max-width: 2048px;
+      min-height: 100svh;
+      height: 100svh;
+      min-height: 940px;
+      margin: 0 auto;
+      padding: clamp(28px, 3.1vw, 60px) clamp(28px, 3.35vw, 72px) 24px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .masthead {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 28px; padding-bottom: clamp(26px, 3vh, 38px); flex-shrink: 0;
+    }
+    .eyebrow {
+      display: flex; align-items: center; gap: 12px; font: 11px var(--mono);
+      letter-spacing: 0.16em; color: var(--muted); margin-bottom: 15px;
+    }
+    .eyebrow::before { content: ""; height: 1px; width: 26px; background: var(--cyan); }
+    h1 { font-size: clamp(27px, 2.55vw, 49px); line-height: 1.08; letter-spacing: -0.035em; font-weight: 500; margin: 0; }
+    .subtitle { color: var(--muted); font: 13px var(--mono); letter-spacing: 0.015em; margin: 14px 0 0; }
+    .concept-badge {
+      display: inline-flex; align-items: center; gap: 10px; white-space: nowrap;
+      padding: 11px 15px; border: 1px solid #374354; border-radius: 3px;
+      font: 11px var(--mono); letter-spacing: 0.1em; color: #c3d3df;
+      background: #151c27;
+    }
+    .concept-badge::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); }
+    .workspace { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) clamp(250px, 19vw, 348px); gap: clamp(24px, 2.6vw, 50px); }
+    .ensemble {
+      position: relative; display: flex; flex-direction: column; min-height: 0;
+      background: radial-gradient(ellipse at 50% 42%, #171d2a 0%, #121620 70%);
+      border: 1px solid #303847; border-radius: 5px;
+    }
+    .ensemble::before, .ensemble::after {
+      content: ""; position: absolute; pointer-events: none; width: 20px; height: 20px;
+      border-color: #647587; border-style: solid;
+    }
+    .ensemble::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; border-radius: 5px 0 0; }
+    .ensemble::after { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; border-radius: 0 0 5px; }
+    .ensemble-head, .ensemble-foot {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 15px; padding: 22px 26px; font: 10px var(--mono); letter-spacing: 0.11em;
+      color: var(--dim); flex-shrink: 0;
+    }
+    .ensemble-head { padding-bottom: 10px; }
+    .ensemble-head span:first-child { color: #acb7c9; }
+    .ensemble-foot { padding-top: 8px; padding-bottom: 21px; }
+    .tiny-cross { color: #8b9bac; font-size: 16px; line-height: 0.7; }
+    .canvas-wrap { position: relative; flex: 1; min-height: 0; margin: 0 16px; }
+    .recording .canvas-wrap { cursor: none; }
+    #particles { position: absolute; width: 100%; height: 100%; display: block; }
+    .hud { display: flex; flex-direction: column; min-height: 0; padding: 2px 0 0; }
+    .hud-title { display: flex; align-items: center; justify-content: space-between; color: var(--muted); font: 10px var(--mono); letter-spacing: .13em; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+    .status-dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--thermal); }
+    .metric { padding: 14px 0; border-bottom: 1px solid var(--line); }
+    .metric-label { margin: 0 0 8px; font: 11px var(--mono); letter-spacing: 0.08em; color: #b5bdce; }
+    .metric-label .symbol { font-style: italic; padding-left: 4px; }
+    .metric-row { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+    .metric-value { display: block; font: 42px/1.15 var(--mono); letter-spacing: -0.055em; font-variant-numeric: tabular-nums; }
+    .metric-note { font: 10px/1.5 var(--mono); color: var(--muted); margin-top: 5px; }
+    #temperature { color: var(--thermal); }
+    #energy { color: var(--purple); }
+    #order { color: var(--green); }
+    .range-note { color: var(--dim); font: 10px var(--mono); }
+    .temperature-track { position: relative; height: 5px; background: #252a37; margin-top: 17px; border-radius: 2px; }
+    .temperature-fill { position: absolute; inset: 0; background: var(--thermal); border-radius: 2px; transform-origin: left; }
+    .temperature-marker { position: absolute; top: -3px; left: 100%; width: 2px; height: 11px; background: #f8f8f2; transform: translateX(-2px); }
+    .range-labels { display: flex; justify-content: space-between; margin-top: 8px; font: 9px var(--mono); color: var(--dim); }
+    .energy-chart { position: relative; height: 48px; margin-top: 12px; }
+    #energy-plot { display: block; width: 100%; height: 100%; }
+    .chart-caption { display: flex; justify-content: space-between; font: 9px var(--mono); color: var(--dim); margin-top: 6px; }
+    .order-track { position: relative; height: 7px; margin-top: 17px; background: #252e34; }
+    .order-track::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(to right, transparent 0, transparent calc(4.1667% - 3px), var(--background) calc(4.1667% - 3px), var(--background) 4.1667%); }
+    .order-fill { position: absolute; inset: 0; background: var(--green); transform: scaleX(0); transform-origin: left; }
+    .run-data { margin-top: auto; padding-top: 17px; }
+    .time-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; }
+    .time-label { font: 11px var(--mono); letter-spacing: .08em; color: var(--muted); }
+    .time-value { font: 24px var(--mono); font-variant-numeric: tabular-nums; letter-spacing: -.04em; }
+    .time-total { color: var(--dim); font: 12px var(--mono); }
+    .phase-card { border-left: 2px solid var(--thermal); padding: 2px 0 3px 14px; position: relative; }
+    .phase-label { font: 9px var(--mono); letter-spacing: .12em; color: var(--muted); margin-bottom: 8px; }
+    #phase { font: 13px var(--mono); letter-spacing: .05em; color: var(--thermal); display: block; }
+    .phase-card::before { content: ""; position: absolute; inset: -6px 0 -6px -2px; background: var(--thermal); opacity: var(--phase-pulse, 0); pointer-events: none; }
+    .timeline { flex-shrink: 0; margin-top: 27px; }
+    .timeline-track { height: 3px; position: relative; background: #292e3c; }
+    .timeline-progress { position: absolute; inset: 0; transform-origin: left; transform: scaleX(0); background: #b4cddd; }
+    .timeline-needle { position: absolute; left: 0; width: 2px; height: 11px; background: #f8f8f2; top: -4px; }
+    .timeline-tick { position: absolute; height: 7px; top: -2px; width: 1px; background: #798397; }
+    .timeline-labels { display: grid; grid-template-columns: 3.5fr 7fr 3fr 1.5fr; margin-top: 13px; gap: 14px; font: 9px var(--mono); letter-spacing: .06em; color: var(--dim); }
+    .timeline-labels span { transition: color 250ms; white-space: nowrap; }
+    .timeline-labels .active { color: #d9e7ee; }
+    .timeline-labels b { color: inherit; font-weight: normal; opacity: .6; margin-right: 8px; }
+    .concept-footer { flex-shrink: 0; min-height: 90px; display: flex; align-items: center; justify-content: space-between; gap: 22px; padding: 21px 0 15px; }
+    .concept-caption { color: #acb8ca; font-size: clamp(12px, 1vw, 18px); line-height: 1.6; margin: 0; letter-spacing: .01em; }
+    .concept-caption .t-down { color: var(--cyan); font: 20px var(--mono); margin-right: 12px; }
+    .concept-caption .arrow { color: #617286; margin: 0 12px; }
+    .bridge { opacity: 0; flex-shrink: 0; text-align: right; padding-left: 20px; font: 10px/1.8 var(--mono); letter-spacing: .1em; color: var(--muted); }
+    .bridge strong { display: block; font-weight: normal; font-size: 12px; color: var(--cyan); }
+    .bridge-arrow { display: inline-block; margin-left: 6px; color: var(--cyan); }
+    .transport { flex-shrink: 0; min-height: 52px; border-top: 1px solid #252b38; display: flex; justify-content: space-between; align-items: center; gap: 20px; padding-top: 14px; }
+    .controls { display: flex; gap: 8px; align-items: center; }
+    .controls button { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 35px; padding: 8px 15px; border-radius: 3px; border: 1px solid #333d4c; background: #181e2a; color: #c9d6e3; font: 10px var(--mono); letter-spacing: .06em; cursor: pointer; }
+    .controls button:hover { background: #242f3b; border-color: #667b8c; }
+    .controls button:disabled { opacity: .35; cursor: default; }
+    .controls #play:not(:disabled) { border-color: #668e9c; background: #20333d; color: #b2f0fa; }
+    .button-icon { width: 11px; height: 11px; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; line-height: 1; }
+    .play-icon { width: 0; height: 0; border-top: 4px solid transparent; border-bottom: 4px solid transparent; border-left: 6px solid currentColor; }
+    .pause-icon { width: 6px; height: 8px; border-left: 2px solid currentColor; border-right: 2px solid currentColor; }
+    .key-help { font: 9px var(--mono); color: #8793a7; letter-spacing: .04em; display: flex; gap: 22px; }
+    .key-help kbd { font: inherit; color: #bbc8d9; margin-right: 5px; }
+    .transport.controls-hidden { visibility: hidden; }
+    .transport.controls-hidden:focus-within { visibility: visible; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    noscript { display: block; padding: 20px; color: #ffb86c; }
+    @media (min-width: 1550px) and (min-height: 950px) {
+      .hud-title { font-size: 11px; padding-bottom: 20px; }
+      .metric-label { font-size: 12px; }
+      .metric-value { font-size: 48px; }
+      .metric-note { font-size: 11px; }
+      .ensemble-head, .ensemble-foot { font-size: 11px; }
+      .timeline-labels { font-size: 10px; }
+      .concept-footer { min-height: 103px; }
+      .concept-badge { font-size: 12px; }
+    }
+    @media (max-width: 1050px) {
+      .instrument { padding: 26px 28px 20px; }
+      .workspace { gap: 24px; grid-template-columns: minmax(0, 1fr) 230px; }
+      .metric-value { font-size: 35px; }
+      .concept-caption .arrow { margin: 0 5px; }
+      .concept-caption .t-down { margin-right: 3px; font-size: 16px; }
+      .bridge { font-size: 9px; }
+      .bridge strong { font-size: 10px; }
+      .timeline-labels { font-size: 8px; letter-spacing: 0; gap: 5px; }
+      .timeline-labels b { display: none; }
+      .key-help { gap: 12px; }
+    }
+    @media (min-width: 741px) and (max-height: 1000px) {
+      .hud-title { padding-bottom: 12px; }
+      .metric { padding: 10px 0; }
+      .metric-label { font-size: 10px; margin-bottom: 6px; }
+      .metric-value { font-size: 32px; }
+      .metric-note { font-size: 9px; }
+      .energy-chart { height: 36px; margin-top: 8px; }
+      .temperature-track, .order-track { margin-top: 12px; }
+      .run-data { padding-top: 12px; }
+      .time-row { margin-bottom: 12px; }
+    }
+    @media (max-width: 740px) {
+      .instrument { height: auto; min-height: 100svh; padding: 26px 20px 20px; overflow: visible; }
+      .masthead { align-items: flex-start; flex-direction: column; gap: 20px; padding-bottom: 24px; }
+      h1 { font-size: clamp(26px, 6vw, 38px); }
+      .subtitle { font-size: 10px; }
+      .eyebrow { font-size: 9px; }
+      .concept-badge { font-size: 10px; padding: 9px 11px; }
+      .workspace { display: flex; flex-direction: column; gap: 24px; }
+      .ensemble { height: auto; }
+      .canvas-wrap { flex: none; height: auto; aspect-ratio: 5 / 3; margin: 0 8px; }
+      .ensemble-head, .ensemble-foot { padding: 15px 14px; font-size: 8px; letter-spacing: .04em; }
+      .ensemble-foot { padding-top: 8px; }
+      .hud { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px 14px; }
+      .hud-title { grid-column: 1 / -1; padding-bottom: 11px; }
+      .metric { padding: 0 0 17px; }
+      .metric-label { font-size: 8px; letter-spacing: .02em; min-height: 12px; }
+      .metric-value { font-size: clamp(22px, 6vw, 35px); }
+      #energy.small-value { font-size: clamp(16px, 4.8vw, 28px); line-height: 1.44; }
+      .metric-note { font-size: 8px; }
+      .range-note { display: none; }
+      .temperature-track { margin-top: 19px; }
+      .energy-chart { height: 42px; margin-top: 7px; }
+      .chart-caption { font-size: 8px; }
+      .order-track { margin-top: 18px; }
+      .run-data { padding: 0; grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; gap: 15px; }
+      .time-row { margin: 0; gap: 14px; }
+      .time-value { font-size: 20px; }
+      .time-total { font-size: 9px; }
+      .phase-label { font-size: 8px; margin-bottom: 6px; }
+      #phase { font-size: 10px; }
+      .timeline-labels { grid-template-columns: repeat(4, 1fr) !important; font-size: 7px; white-space: normal; gap: 6px; }
+      .timeline-labels span { white-space: normal; }
+      .concept-footer { flex-direction: column; align-items: flex-start; gap: 10px; padding-top: 24px; }
+      .concept-caption { font-size: 11px; }
+      .bridge { min-height: 32px; padding-left: 0; text-align: left; }
+      .bridge strong { display: inline; padding-left: 5px; }
+      .transport { align-items: flex-start; flex-direction: column; gap: 16px; }
+      .controls { gap: 7px; }
+      .controls button { padding: 10px 12px; min-height: 38px; }
+      .key-help { flex-wrap: wrap; gap: 16px; font-size: 8px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .timeline-labels span { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="instrument" aria-label="Animação conceitual de recozimento físico">
+    <header class="masthead">
+      <div>
+        <div class="eyebrow">01 / RECOZIMENTO FÍSICO</div>
+        <h1>THERMAL ANNEALING</h1>
+        <p class="subtitle">Statistical Mechanics // Conceptual Model</p>
+      </div>
+      <span class="concept-badge">ANIMAÇÃO CONCEITUAL</span>
+    </header>
+
+    <section class="workspace" aria-label="Sistema de partículas e indicadores conceituais">
+      <div class="ensemble">
+        <div class="ensemble-head"><span>2D PARTICLE ENSEMBLE</span><span id="particle-count">N = 96</span></div>
+        <div class="canvas-wrap">
+          <canvas id="particles" role="img" aria-label="96 partículas: a agitação diminui e uma rede triangular emerge durante o resfriamento.">
+            Animação conceitual de partículas em um processo de recozimento. Utilize um navegador com suporte a Canvas 2D.
+          </canvas>
+        </div>
+        <div class="ensemble-foot"><span class="tiny-cross" aria-hidden="true">+</span><span>MODEL / CONCEPTUAL</span><span class="tiny-cross" aria-hidden="true">+</span></div>
+      </div>
+
+      <aside class="hud" aria-label="Indicadores calculados do estado atual">
+        <div class="hud-title"><span>THERMAL ANNEALING</span><span class="status-dot" aria-hidden="true"></span></div>
+        <section class="metric">
+          <h2 class="metric-label">TEMPERATURE <span class="symbol">T</span></h2>
+          <div class="metric-row"><output class="metric-value" id="temperature">1.000</output><span class="range-note">T ∈ [0, 1]</span></div>
+          <div class="metric-note">normalized temperature</div>
+          <div class="temperature-track" role="meter" aria-label="Temperatura normalizada" aria-valuemin="0" aria-valuemax="1" aria-valuenow="1" id="temperature-meter">
+            <div class="temperature-fill" id="temperature-fill"></div><div class="temperature-marker" id="temperature-marker"></div>
+          </div>
+          <div class="range-labels" aria-hidden="true"><span>0</span><span>1</span></div>
+        </section>
+        <section class="metric">
+          <h2 class="metric-label">RELATIVE ENERGY <span class="symbol">E</span></h2>
+          <output class="metric-value" id="energy">1.000</output>
+          <div class="metric-note">normalized conceptual metric</div>
+          <div class="energy-chart"><canvas id="energy-plot" role="img" aria-label="Histórico da energia relativa calculada das distâncias das partículas aos sítios-alvo."></canvas></div>
+          <div class="chart-caption" aria-hidden="true"><span>E(t)</span><span id="chart-duration">0 — 15 s</span></div>
+        </section>
+        <section class="metric">
+          <h2 class="metric-label">STRUCTURAL ORDER</h2>
+          <div class="metric-row"><output class="metric-value" id="order">0.100</output><span class="range-note">Q ∈ [0, 1]</span></div>
+          <div class="metric-note">conceptual indicator</div>
+          <div class="order-track" role="meter" aria-label="Ordem estrutural conceitual" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0.1" id="order-meter"><div class="order-fill" id="order-fill"></div></div>
+        </section>
+        <div class="run-data">
+          <div class="time-row"><span class="time-label">TIME</span><span><output class="time-value" id="time">00.0</output><span class="time-total" id="time-total"> / 15.0 s</span></span></div>
+          <div class="phase-card" id="phase-card"><div class="phase-label">PHASE</div><output id="phase">HIGH-T EXPLORATION</output></div>
+        </div>
+      </aside>
+    </section>
+
+    <div class="timeline" aria-label="Progresso da sequência de 15 segundos" role="progressbar" aria-valuemin="0" aria-valuemax="15" aria-valuenow="0" id="timeline">
+      <div class="timeline-track" aria-hidden="true">
+        <div class="timeline-progress" id="timeline-progress"></div>
+        <span class="timeline-tick" id="tick-cooling"></span><span class="timeline-tick" id="tick-ordering"></span><span class="timeline-tick" id="tick-hold"></span>
+        <span class="timeline-needle" id="timeline-needle"></span>
+      </div>
+      <div class="timeline-labels" aria-hidden="true" id="timeline-labels">
+        <span class="active"><b>01</b>HIGH-T EXPLORATION</span><span><b>02</b>COOLING</span><span><b>03</b>ORDERING</span><span><b>04</b>LOW-T STATE</span>
+      </div>
+    </div>
+
+    <footer class="concept-footer">
+      <p class="concept-caption"><span class="t-down">T ↓</span><span class="arrow">→</span> flutuações térmicas ↓ <span class="arrow">→</span> configurações de menor energia favorecidas</p>
+      <div class="bridge" id="bridge" aria-hidden="true">PHYSICAL IDEA <span class="bridge-arrow">↓</span><strong>SIMULATED ANNEALING</strong></div>
+    </footer>
+
+    <nav class="transport" id="transport" aria-label="Controles da animação">
+      <div class="controls">
+        <button id="play" type="button" aria-label="PLAY" title="Iniciar ou continuar (Espaço)"><span class="button-icon" aria-hidden="true"><span class="play-icon"></span></span>PLAY</button>
+        <button id="pause" type="button" aria-label="PAUSE" title="Pausar (Espaço)" disabled><span class="button-icon" aria-hidden="true"><span class="pause-icon"></span></span>PAUSE</button>
+        <button id="restart" type="button" aria-label="RESTART" title="Reproduzir desde o início, com a mesma seed (R)"><span class="button-icon" aria-hidden="true">↺</span>RESTART</button>
+        <button id="fullscreen" type="button" aria-label="Tela cheia" title="Tela cheia (F)"><span class="button-icon" aria-hidden="true">⛶</span></button>
+      </div>
+      <div class="key-help" aria-hidden="true"><span><kbd>SPACE</kbd> play / pause</span><span><kbd>R</kbd> restart</span><span><kbd>H</kbd> controls</span><span><kbd>F</kbd> fullscreen</span></div>
+    </nav>
+    <p class="sr-only" id="announcement" role="status" aria-live="polite">Pronto. Pressione Espaço para iniciar.</p>
+  </main>
+  <noscript>Ative o JavaScript para reproduzir esta animação conceitual.</noscript>
+
+  <script>
+  "use strict";
+
+  const AUTO_PLAY = false;
+const RANDOM_SEED = 20260910;
+const RECORDING_MODE = true;
+
+const CONFIG = Object.freeze({
+  duration: 15,
+  particleCount: 96,
+  physicsDt: 1 / 120,
+  worldWidth: 1200,
+  worldHeight: 720,
+  latticeColumns: 12,
+  particleRadius: 4.1,
+  temperatureMax: 1,
+  temperatureMin: 0.02,
+  // Tempos gráficos em uma sequência de referência de 15 s. Alterar duration
+  // redistribui todas as fases e rearranjos proporcionalmente.
+  referenceDuration: 15,
+  coolingStartFraction: 3.5 / 15,
+  coolingEndFraction: 10.5 / 15,
+  orderingEndFraction: 13.5 / 15,
+  get coolingStart() { return this.duration * this.coolingStartFraction; },
+  get coolingEnd() { return this.duration * this.coolingEndFraction; },
+  get orderingEnd() { return this.duration * this.orderingEndFraction; },
+  coolingShape: 3.1,
+  settlingStart: 4.5,
+  settlingDuration: 5.2,
+  defectReleaseStart: 10.15,
+  defectReleaseDuration: 1.9,
+  defectLagMin: 0.9,
+  defectLagSpread: 0.6,
+  regularLagMax: 0.38,
+  defectEvery: 9,
+  defectIndexOffset: 3,
+  defectSpacingAmplitude: 0.45,
+  wallRestitution: 0.74,
+  historyHz: 15,
+  maxFrameDelta: 0.1,
+  noiseStrength: 240,
+  noiseExponent: 1.15,
+  dampingHot: 1.1,
+  dampingCold: 7,
+  restoringHot: 0.035,
+  restoringCold: 8,
+  maxSpeed: 320,
+  repulsionRadius: 21,
+  repulsionStrength: 900,
+  initialSpeed: 150,
+  finalStrain: 4.3,
+  orderScale: 0.47
+});
+
+const clamp = (value, lo = 0, hi = 1) => Math.max(lo, Math.min(hi, value));
+const smoothstep = value => {
+  const x = clamp(value);
+  return x * x * (3 - 2 * x);
+};
+
+/** Mulberry32 com seed; sorteios gaussianos independem dos frames renderizados. */
+class PRNG {
+  constructor(seed) { this.state = seed >>> 0; this.spare = null; }
+  next() {
+    let value = this.state = (this.state + 0x6D2B79F5) >>> 0;
+    value = Math.imul(value ^ value >>> 15, value | 1);
+    value ^= value + Math.imul(value ^ value >>> 7, value | 61);
+    return ((value ^ value >>> 14) >>> 0) / 4294967296;
+  }
+  normal() {
+    if (this.spare !== null) {
+      const value = this.spare;
+      this.spare = null;
+      return value;
+    }
+    const radius = Math.sqrt(-2 * Math.log(Math.max(1e-12, this.next())));
+    const angle = 2 * Math.PI * this.next();
+    this.spare = radius * Math.sin(angle);
+    return radius * Math.cos(angle);
+  }
+}
+
+/**
+ * Mecanismo gráfico: dv = [k(t)(r_alvo − r) − γ(T)v]dt + σ(T)√dt ξ.
+ * Os sítios guiam a imagem; isto não é um modelo quantitativo de um material.
+ * Temperatura controla as flutuações estocásticas, sem ser igualada à velocidade.
+ */
+class AnnealingModel {
+  constructor(config = CONFIG) {
+    this.config = config;
+    // Fonte única para os limites temporais usados pela física e pelo HUD.
+    this.phaseTimes = Object.freeze({
+      coolingStart: config.duration * config.coolingStartFraction,
+      coolingEnd: config.duration * config.coolingEndFraction,
+      orderingEnd: config.duration * config.orderingEndFraction
+    });
+  }
+  temperatureAt(time) {
+    const c = this.config;
+    const phases = this.phaseTimes;
+    const fraction = smoothstep((time - phases.coolingStart) / (phases.coolingEnd - phases.coolingStart));
+    // Exponencial normalizada de smoothstep: inclinação nula nos dois extremos.
+    const decay = (Math.exp(-c.coolingShape * fraction) - Math.exp(-c.coolingShape)) / (1 - Math.exp(-c.coolingShape));
+    return c.temperatureMin + (c.temperatureMax - c.temperatureMin) * decay;
+  }
+  phaseAt(time) {
+    const phases = this.phaseTimes;
+    return time < phases.coolingStart ? 0 : time < phases.coolingEnd ? 1 : time < phases.orderingEnd ? 2 : 3;
+  }
+}
+
+/**
+ * E = distância quadrática média / valor inicial: métrica adimensional, sem joules.
+ * Q = exp(−RMS/L), com L calibrado pela desordem inicial: indicador conceitual,
+ * não uma medida cristalográfica. Ambos vêm das coordenadas reais, sem curvas
+ * impostas nem monotonicidade forçada; flutuações podem elevar E e reduzir Q.
+ */
+class Metrics {
+  constructor() { this.reference = 1; this.orderLength = 1; }
+  meanSquareDistance(particles) {
+    let sum = 0;
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i], dx = p.x - p.tx, dy = p.y - p.ty;
+      sum += dx * dx + dy * dy;
+    }
+    return sum / particles.length;
+  }
+  reset(particles, scale) {
+    this.reference = Math.max(1, this.meanSquareDistance(particles));
+    this.orderLength = Math.sqrt(this.reference) * scale;
+  }
+  read(system) {
+    const distance = this.meanSquareDistance(system.particles);
+    system.energy = distance / this.reference;
+    system.order = Math.exp(-Math.sqrt(distance) / this.orderLength);
+  }
+}
+
+class ParticleSystem {
+  constructor(config = CONFIG, seed = RANDOM_SEED) {
+    this.config = config;
+    this.seed = seed;
+    this.model = new AnnealingModel(config);
+    this.metrics = new Metrics();
+    this.bounds = {
+      left: config.worldWidth * 0.054,
+      right: config.worldWidth * 0.946,
+      top: config.worldHeight * 0.08,
+      bottom: config.worldHeight * 0.92
+    };
+    this.reset();
+  }
+  reset() {
+    const c = this.config, random = this.random = new PRNG(this.seed);
+    const cols = Math.max(1, Math.min(c.particleCount, c.latticeColumns));
+    const rows = Math.ceil(c.particleCount / cols);
+    const availableWidth = (this.bounds.right - this.bounds.left) * 0.82;
+    const availableHeight = (this.bounds.bottom - this.bounds.top) * 0.8;
+    this.spacing = Math.min(availableWidth / Math.max(1, cols - 0.5), availableHeight / Math.max(1, (rows - 1) * Math.sqrt(3) / 2));
+    const latticeWidth = (cols - 0.5) * this.spacing;
+    const latticeHeight = (rows - 1) * this.spacing * Math.sqrt(3) / 2;
+    const startX = (c.worldWidth - latticeWidth) / 2;
+    const startY = (c.worldHeight - latticeHeight) / 2;
+    this.particles = [];
+    for (let index = 0; index < c.particleCount; index++) {
+      const col = index % cols, row = Math.floor(index / cols);
+      const tx = startX + (col + (row % 2) * 0.5) * this.spacing;
+      const ty = startY + row * this.spacing * Math.sqrt(3) / 2;
+      let x = 0, y = 0;
+      // Rejeição apenas no estado inicial; a integração nunca salta aos sítios.
+      for (let attempt = 0; attempt < 60; attempt++) {
+        x = this.bounds.left + 20 + random.next() * (this.bounds.right - this.bounds.left - 40);
+        y = this.bounds.top + 20 + random.next() * (this.bounds.bottom - this.bounds.top - 40);
+        let separated = true;
+        for (let j = 0; j < this.particles.length; j++) {
+          const p = this.particles[j], dx = p.x - x, dy = p.y - y;
+          if (dx * dx + dy * dy < 24 * 24) { separated = false; break; }
+        }
+        if (separated) break;
+      }
+      const angle = random.next() * Math.PI * 2;
+      const defect = index % c.defectEvery === c.defectIndexOffset;
+      this.particles.push({
+        x, y, px: x, py: y, tx, ty,
+        vx: random.normal() * c.initialSpeed,
+        vy: random.normal() * c.initialSpeed,
+        lag: defect ? c.defectLagMin + random.next() * c.defectLagSpread : random.next() * c.regularLagMax,
+        strainX: Math.cos(angle) * c.finalStrain,
+        strainY: Math.sin(angle) * c.finalStrain,
+        defectX: defect ? Math.cos(angle) * this.spacing * c.defectSpacingAmplitude : 0,
+        defectY: defect ? Math.sin(angle) * this.spacing * c.defectSpacingAmplitude : 0,
+        ax: 0, ay: 0
+      });
+    }
+    // Velocidades iniciais obedecem ao mesmo limite usado durante a integração.
+    for (const p of this.particles) {
+      const speed = Math.hypot(p.vx, p.vy);
+      if (speed > c.maxSpeed) { p.vx *= c.maxSpeed / speed; p.vy *= c.maxSpeed / speed; }
+    }
+    this.tick = 0;
+    this.time = 0;
+    this.progress = 0;
+    this.temperature = this.model.temperatureAt(0);
+    this.phase = 0;
+    this.history = [];
+    this.metrics.reset(this.particles, c.orderScale);
+    this.metrics.read(this);
+    this.sampleHistory();
+  }
+  sampleHistory() {
+    this.history.push({ time: this.time, energy: this.energy, order: this.order, temperature: this.temperature });
+  }
+  step(dt = this.config.physicsDt) {
+    const c = this.config;
+    if (this.tick >= Math.ceil(c.duration / c.physicsDt)) return;
+    // Cada chamada avança um passo fixo. O acumulador do RAF decide quantas
+    // chamadas executar; o delta de renderização não entra neste integrador.
+    dt = c.physicsDt;
+    this.tick++;
+    this.time = Math.min(c.duration, this.tick * c.physicsDt);
+    this.progress = clamp(this.time / c.duration);
+    this.temperature = this.model.temperatureAt(this.time);
+    this.phase = this.model.phaseAt(this.time);
+    const annealed = 1 - (this.temperature - c.temperatureMin) / (c.temperatureMax - c.temperatureMin);
+    const damping = c.dampingHot + (c.dampingCold - c.dampingHot) * annealed;
+    const friction = Math.exp(-damping * dt);
+    // Incrementos brownianos escalam com √dt, independentemente do FPS da tela.
+    const kick = c.noiseStrength * Math.pow(this.temperature, c.noiseExponent) * Math.sqrt(dt);
+    const referenceTime = this.time * (c.referenceDuration / c.duration);
+    const defectEnvelope = 1 - smoothstep((referenceTime - c.defectReleaseStart) / c.defectReleaseDuration);
+    const particles = this.particles, count = particles.length;
+    for (let i = 0; i < count; i++) {
+      const p = particles[i];
+      const settling = smoothstep((referenceTime - c.settlingStart - p.lag) / c.settlingDuration);
+      const spring = c.restoringHot + (c.restoringCold - c.restoringHot) * settling;
+      // Rearranjos atrasados desaparecem continuamente. Uma pequena distorção
+      // residual permanece: a imagem não promete ordenação perfeita.
+      const aimX = p.tx + p.strainX + p.defectX * defectEnvelope;
+      const aimY = p.ty + p.strainY + p.defectY * defectEnvelope;
+      p.ax = (aimX - p.x) * spring;
+      p.ay = (aimY - p.y) * spring;
+    }
+    const cutoff = c.repulsionRadius, cutoff2 = cutoff * cutoff;
+    for (let i = 0; i < count; i++) {
+      const a = particles[i];
+      for (let j = i + 1; j < count; j++) {
+        const b = particles[j], dx = a.x - b.x, dy = a.y - b.y;
+        const distance2 = dx * dx + dy * dy;
+        if (distance2 < cutoff2 && distance2 > 1e-12) {
+          const distance = Math.sqrt(distance2);
+          const force = c.repulsionStrength * Math.pow(1 - distance / cutoff, 2) / distance;
+          const fx = dx * force, fy = dy * force;
+          a.ax += fx; a.ay += fy; b.ax -= fx; b.ay -= fy;
+        }
+      }
+    }
+    const bounds = this.bounds, radius = c.particleRadius;
+    for (let i = 0; i < count; i++) {
+      const p = particles[i];
+      p.px = p.x; p.py = p.y;
+      p.vx = (p.vx + p.ax * dt) * friction + this.random.normal() * kick;
+      p.vy = (p.vy + p.ay * dt) * friction + this.random.normal() * kick;
+      const speed2 = p.vx * p.vx + p.vy * p.vy;
+      if (speed2 > c.maxSpeed * c.maxSpeed) {
+        const limit = c.maxSpeed / Math.sqrt(speed2);
+        p.vx *= limit; p.vy *= limit;
+      }
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+      // Reflexões amortecidas espelham a pequena penetração no contorno.
+      const minX = bounds.left + radius, maxX = bounds.right - radius;
+      const minY = bounds.top + radius, maxY = bounds.bottom - radius;
+      if (p.x < minX) { p.x = minX + (minX - p.x); p.vx = Math.abs(p.vx) * c.wallRestitution; }
+      if (p.x > maxX) { p.x = maxX - (p.x - maxX); p.vx = -Math.abs(p.vx) * c.wallRestitution; }
+      if (p.y < minY) { p.y = minY + (minY - p.y); p.vy = Math.abs(p.vy) * c.wallRestitution; }
+      if (p.y > maxY) { p.y = maxY - (p.y - maxY); p.vy = -Math.abs(p.vy) * c.wallRestitution; }
+    }
+    this.metrics.read(this);
+    const sampleTicks = Math.max(1, Math.round(1 / (c.historyHz * c.physicsDt)));
+    if (this.tick % sampleTicks === 0 || this.time === c.duration) this.sampleHistory();
+  }
+}
+
+
+  // Presentation uses the same simulation state throughout; no decorative RNG,
+// independent metric tween, or frame-dependent particle motion is introduced.
+const VIEW = Object.freeze({
+  hudHz: 15,
+  phaseNames: ['HIGH-T EXPLORATION', 'COOLING', 'ORDERING', 'LOW-T STATE'],
+  thermalHot: [255, 184, 108],
+  thermalMid: [189, 147, 249],
+  thermalCold: [139, 233, 253],
+  trailSeconds: 0.115,
+  trailMaxLength: 30,
+  gridSpacing: 60,
+  bridgeFadeSeconds: 0.65,
+  bridgeLastSeconds: 1,
+  phasePulseSeconds: 0.65
+});
+
+/** Fixed world coordinates are uniformly mapped, never stretched on resize.
+ * Moving a window between displays also rebuilds its physical-pixel backing. */
+class CanvasManager {
+  constructor(canvas) {
+    this.canvas = canvas;
+    this.context = canvas.getContext('2d');
+    this.width = 1;
+    this.height = 1;
+    this.dpr = 1;
+    this.observer = new ResizeObserver(() => this.resize());
+    this.observer.observe(canvas);
+    this.resize();
+  }
+  resize() {
+    const rect = this.canvas.getBoundingClientRect();
+    this.width = Math.max(1, rect.width);
+    this.height = Math.max(1, rect.height);
+    this.dpr = Math.max(1, window.devicePixelRatio || 1);
+    this.canvas.width = Math.round(this.width * this.dpr);
+    this.canvas.height = Math.round(this.height * this.dpr);
+    this.context.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+  }
+  clear() {
+    if (this.dpr !== Math.max(1, window.devicePixelRatio || 1)) this.resize();
+    this.context.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+    this.context.clearRect(0, 0, this.width, this.height);
+  }
+}
+
+class Renderer {
+  constructor(canvas, system) {
+    this.surface = new CanvasManager(canvas);
+    this.system = system;
+    this.neighbors = [];
+    const particles = system.particles;
+    const neighborRadius2 = Math.pow(system.spacing * 1.05, 2);
+    // Connectivity only determines which near-neighbor pairs may be shown.
+    // Every endpoint is an actual particle, never an independently drawn site.
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].tx - particles[j].tx;
+        const dy = particles[i].ty - particles[j].ty;
+        if (dx * dx + dy * dy < neighborRadius2) this.neighbors.push([i, j]);
+      }
+    }
+  }
+  draw() {
+    const surface = this.surface, ctx = surface.context, s = this.system;
+    surface.clear();
+    const scale = Math.min(surface.width / s.config.worldWidth, surface.height / s.config.worldHeight);
+    const offsetX = (surface.width - s.config.worldWidth * scale) / 2;
+    const offsetY = (surface.height - s.config.worldHeight * scale) / 2;
+    ctx.translate(offsetX, offsetY);
+    ctx.scale(scale, scale);
+    const b = s.bounds;
+
+    // A faint instrument grid, unrelated to the triangular destination lattice.
+    ctx.lineWidth = 0.7 / scale;
+    ctx.strokeStyle = 'rgba(142, 166, 194, 0.045)';
+    ctx.beginPath();
+    for (let x = b.left; x <= b.right; x += VIEW.gridSpacing) {
+      ctx.moveTo(x, b.top); ctx.lineTo(x, b.bottom);
+    }
+    for (let y = b.top; y <= b.bottom; y += VIEW.gridSpacing) {
+      ctx.moveTo(b.left, y); ctx.lineTo(b.right, y);
+    }
+    ctx.stroke();
+    ctx.strokeStyle = 'rgba(153, 181, 210, 0.13)';
+    ctx.strokeRect(b.left, b.top, b.right - b.left, b.bottom - b.top);
+    ctx.strokeStyle = 'rgba(151, 190, 210, 0.34)';
+    ctx.lineWidth = 1 / scale;
+    ctx.beginPath();
+    const arm = 12;
+    ctx.moveTo(b.left, b.top + arm); ctx.lineTo(b.left, b.top); ctx.lineTo(b.left + arm, b.top);
+    ctx.moveTo(b.right - arm, b.top); ctx.lineTo(b.right, b.top); ctx.lineTo(b.right, b.top + arm);
+    ctx.moveTo(b.right, b.bottom - arm); ctx.lineTo(b.right, b.bottom); ctx.lineTo(b.right - arm, b.bottom);
+    ctx.moveTo(b.left + arm, b.bottom); ctx.lineTo(b.left, b.bottom); ctx.lineTo(b.left, b.bottom - arm);
+    ctx.stroke();
+
+    ctx.save();
+    ctx.beginPath(); ctx.rect(b.left, b.top, b.right - b.left, b.bottom - b.top); ctx.clip();
+    const particles = s.particles;
+    const coherence = smoothstep((s.order - 0.42) / 0.5);
+    if (coherence > 0) {
+      ctx.lineWidth = 0.85 / scale;
+      for (let index = 0; index < this.neighbors.length; index++) {
+        const pair = this.neighbors[index], a = particles[pair[0]], z = particles[pair[1]];
+        const dx = a.x - z.x, dy = a.y - z.y;
+        const mismatch = Math.abs(Math.hypot(dx, dy) / s.spacing - 1);
+        const proximity = clamp(1 - mismatch / 0.22);
+        if (proximity > 0) {
+          ctx.strokeStyle = `rgba(139, 233, 253, ${0.14 * coherence * proximity})`;
+          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(z.x, z.y); ctx.stroke();
+        }
+      }
+    }
+    const thermalFraction = clamp((s.temperature - s.config.temperatureMin) / (s.config.temperatureMax - s.config.temperatureMin));
+    const radius = s.config.particleRadius;
+    if (thermalFraction > 0.002) {
+      // Short velocity-directed exposures. Both their extent and opacity are
+      // derived from the current velocity and the actual controlled temperature.
+      ctx.lineCap = 'round';
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        const speed = Math.hypot(p.vx, p.vy);
+        if (speed < 1e-9) continue;
+        const length = Math.min(VIEW.trailMaxLength, speed * VIEW.trailSeconds) * Math.sqrt(thermalFraction);
+        const dx = p.vx / speed * length, dy = p.vy / speed * length;
+        ctx.strokeStyle = `rgba(139, 233, 253, ${0.08 * thermalFraction})`;
+        ctx.lineWidth = 3.1;
+        ctx.beginPath(); ctx.moveTo(p.x - dx, p.y - dy); ctx.lineTo(p.x, p.y); ctx.stroke();
+        ctx.strokeStyle = `rgba(180, 233, 246, ${0.27 * thermalFraction})`;
+        ctx.lineWidth = 1.25;
+        ctx.beginPath(); ctx.moveTo(p.x - dx * 0.64, p.y - dy * 0.64); ctx.lineTo(p.x, p.y); ctx.stroke();
+      }
+    }
+    // Batched translucent discs supply a restrained halo without shadowBlur,
+    // per-particle gradients, images, or expensive whole-canvas blur passes.
+    ctx.fillStyle = 'rgba(139, 233, 253, 0.035)';
+    ctx.beginPath();
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i]; ctx.moveTo(p.x + radius * 3, p.y); ctx.arc(p.x, p.y, radius * 3, 0, 2 * Math.PI);
+    }
+    ctx.fill();
+    ctx.fillStyle = 'rgba(139, 233, 253, 0.09)';
+    ctx.beginPath();
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i]; ctx.moveTo(p.x + radius * 1.8, p.y); ctx.arc(p.x, p.y, radius * 1.8, 0, 2 * Math.PI);
+    }
+    ctx.fill();
+    ctx.fillStyle = '#a5dfeb';
+    ctx.beginPath();
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i]; ctx.moveTo(p.x + radius, p.y); ctx.arc(p.x, p.y, radius, 0, 2 * Math.PI);
+    }
+    ctx.fill();
+    ctx.fillStyle = '#effafd';
+    ctx.beginPath();
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i]; ctx.moveTo(p.x + radius * 0.58, p.y); ctx.arc(p.x, p.y, radius * 0.58, 0, 2 * Math.PI);
+    }
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+class EnergyChart {
+  constructor(canvas) { this.surface = new CanvasManager(canvas); }
+  draw(system) {
+    const surface = this.surface, ctx = surface.context;
+    surface.clear();
+    const w = surface.width, h = surface.height;
+    const history = system.history;
+    // Never clip a high-temperature increase or force a descending envelope.
+    let ymax = 1.2;
+    for (let i = 0; i < history.length; i++) ymax = Math.max(ymax, history[i].energy * 1.12);
+    const left = 2, top = 4, width = w - 4, height = h - 8;
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = '#283040';
+    ctx.beginPath();
+    ctx.moveTo(left, top + height); ctx.lineTo(left + width, top + height);
+    ctx.stroke();
+    ctx.setLineDash([2, 5]);
+    ctx.strokeStyle = '#252d3c';
+    ctx.beginPath(); ctx.moveTo(left, top + height * 0.5); ctx.lineTo(left + width, top + height * 0.5); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.strokeStyle = '#bd93f9';
+    ctx.lineWidth = 1.5;
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    for (let i = 0; i < history.length; i++) {
+      const point = history[i];
+      const x = left + width * point.time / system.config.duration;
+      const y = top + height * (1 - point.energy / ymax);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    const last = history[history.length - 1];
+    if (last) {
+      const x = left + width * last.time / system.config.duration;
+      const y = top + height * (1 - last.energy / ymax);
+      ctx.fillStyle = '#d7b9ff'; ctx.beginPath(); ctx.arc(x, y, 2, 0, Math.PI * 2); ctx.fill();
+    }
+  }
+}
+
+class HUD {
+  constructor(system) {
+    this.system = system;
+    this.nodes = {};
+    const ids = ['temperature', 'energy', 'order', 'time', 'time-total', 'phase', 'phase-card',
+      'temperature-fill', 'temperature-marker', 'temperature-meter', 'order-fill', 'order-meter',
+      'timeline', 'timeline-progress', 'timeline-needle', 'timeline-labels', 'bridge', 'announcement'];
+    for (const id of ids) this.nodes[id] = document.getElementById(id);
+    this.chart = new EnergyChart(document.getElementById('energy-plot'));
+    this.lastTime = -Infinity;
+    this.lastPhase = -1;
+    const c = system.config;
+    this.nodes['time-total'].textContent = ` / ${c.duration.toFixed(1)} s`;
+    this.nodes.timeline.setAttribute('aria-valuemax', c.duration);
+    this.nodes.timeline.setAttribute('aria-label', `Progresso da sequência de ${c.duration} segundos`);
+    document.getElementById('chart-duration').textContent = `0 — ${c.duration} s`;
+    document.getElementById('particle-count').textContent = `N = ${c.particleCount}`;
+    document.getElementById('particles').setAttribute('aria-label', `${c.particleCount} partículas: a agitação diminui e uma rede triangular emerge durante o resfriamento.`);
+    const phases = system.model.phaseTimes;
+    const boundaries = [phases.coolingStart, phases.coolingEnd, phases.orderingEnd];
+    const ticks = ['tick-cooling', 'tick-ordering', 'tick-hold'];
+    for (let i = 0; i < ticks.length; i++) document.getElementById(ticks[i]).style.left = `${boundaries[i] / c.duration * 100}%`;
+    this.nodes['timeline-labels'].style.gridTemplateColumns = `${phases.coolingStart}fr ${phases.coolingEnd - phases.coolingStart}fr ${phases.orderingEnd - phases.coolingEnd}fr ${c.duration - phases.orderingEnd}fr`;
+  }
+  temperatureColor(value) {
+    const low = value < 0.5;
+    const from = low ? VIEW.thermalCold : VIEW.thermalMid;
+    const to = low ? VIEW.thermalMid : VIEW.thermalHot;
+    const weight = low ? value * 2 : (value - 0.5) * 2;
+    return `rgb(${Math.round(from[0] + (to[0] - from[0]) * weight)}, ${Math.round(from[1] + (to[1] - from[1]) * weight)}, ${Math.round(from[2] + (to[2] - from[2]) * weight)})`;
+  }
+  update(force = false) {
+    const s = this.system, n = this.nodes;
+    if (!force && s.time >= this.lastTime && s.time - this.lastTime < 1 / VIEW.hudHz && this.lastPhase === s.phase) return;
+    this.lastTime = s.time;
+    const color = this.temperatureColor(s.temperature);
+    document.documentElement.style.setProperty('--thermal', color);
+    // Exact sampled values, rounded only for typography. Scientific notation
+    // retains a nonzero small energy; interpolation would detach E/Q from state.
+    n.temperature.textContent = s.temperature.toFixed(3);
+    n.energy.textContent = s.energy >= 0.001 ? s.energy.toFixed(3) : s.energy.toExponential(2).replace('e-', 'e−');
+    n.energy.classList.toggle('small-value', s.energy < 0.001);
+    n.order.textContent = s.order.toFixed(3);
+    n.time.textContent = s.time.toFixed(1).padStart(4, '0');
+    n['temperature-fill'].style.transform = `scaleX(${s.temperature})`;
+    n['temperature-marker'].style.left = `${s.temperature * 100}%`;
+    n['temperature-meter'].setAttribute('aria-valuenow', s.temperature.toFixed(6));
+    n['order-fill'].style.transform = `scaleX(${s.order})`;
+    n['order-meter'].setAttribute('aria-valuenow', s.order.toFixed(6));
+    n.timeline.setAttribute('aria-valuenow', s.time.toFixed(3));
+    n.timeline.setAttribute('aria-valuetext', `${s.time.toFixed(1)} de ${s.config.duration.toFixed(1)} segundos; ${VIEW.phaseNames[s.phase]}`);
+    this.chart.draw(s);
+    if (s.phase !== this.lastPhase) {
+      this.lastPhase = s.phase;
+      n.phase.textContent = VIEW.phaseNames[s.phase];
+      const labels = n['timeline-labels'].children;
+      for (let i = 0; i < labels.length; i++) labels[i].classList.toggle('active', i === s.phase);
+      n.announcement.textContent = `Fase ${s.phase + 1}: ${VIEW.phaseNames[s.phase]}.`;
+    }
+  }
+  animate() {
+    const s = this.system, n = this.nodes;
+    // These are camera-overlay effects, all tied to simulation time so pause,
+    // restart, and capture preserve the exact same composited sequence.
+    n['timeline-progress'].style.transform = `scaleX(${s.progress})`;
+    n['timeline-needle'].style.left = `${s.progress * 100}%`;
+    const phases = s.model.phaseTimes;
+    const starts = [0, phases.coolingStart, phases.coolingEnd, phases.orderingEnd];
+    const phaseAge = s.time - starts[s.phase];
+    const pulse = s.phase > 0 ? 0.055 * Math.pow(1 - clamp(phaseAge / VIEW.phasePulseSeconds), 2) : 0;
+    n['phase-card'].style.setProperty('--phase-pulse', pulse);
+    const bridge = smoothstep((s.time - (s.config.duration - VIEW.bridgeLastSeconds)) / VIEW.bridgeFadeSeconds);
+    n.bridge.style.opacity = bridge;
+    n.bridge.setAttribute('aria-hidden', bridge === 0 ? 'true' : 'false');
+  }
+}
+
+/** Render timestamps never enter the stochastic dynamics. Pausing keeps the
+ * residual accumulator; hiding the tab freezes the clock instead of fast-forwarding. */
+class Timeline {
+  constructor(system) {
+    this.system = system;
+    this.playing = false;
+    this.accumulator = 0;
+    this.lastTimestamp = null;
+  }
+  play() { this.playing = true; this.lastTimestamp = null; }
+  pause() { this.playing = false; this.lastTimestamp = null; }
+  restart() { this.system.reset(); this.accumulator = 0; this.lastTimestamp = null; }
+  advance(timestamp) {
+    if (!this.playing) return;
+    if (this.lastTimestamp === null) { this.lastTimestamp = timestamp; return; }
+    const delta = clamp((timestamp - this.lastTimestamp) / 1000, 0, this.system.config.maxFrameDelta);
+    this.lastTimestamp = timestamp;
+    this.accumulator += delta;
+    const dt = this.system.config.physicsDt;
+    while (this.accumulator + 1e-10 >= dt && this.system.time < this.system.config.duration) {
+      this.system.step();
+      this.accumulator = Math.max(0, this.accumulator - dt);
+    }
+    if (this.system.time >= this.system.config.duration) { this.accumulator = 0; this.pause(); }
+  }
+}
+
+class Controls {
+  constructor(timeline, redraw) {
+    this.timeline = timeline;
+    this.redraw = redraw;
+    this.playButton = document.getElementById('play');
+    this.pauseButton = document.getElementById('pause');
+    this.transport = document.getElementById('transport');
+    this.playButton.addEventListener('click', () => this.play());
+    this.pauseButton.addEventListener('click', () => this.pause());
+    document.getElementById('restart').addEventListener('click', () => this.restart());
+    document.getElementById('fullscreen').addEventListener('click', () => this.fullscreen());
+    document.addEventListener('keydown', event => {
+      if (event.repeat || event.altKey || event.ctrlKey || event.metaKey) return;
+      const target = event.target;
+      if (target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName)) return;
+      if (event.code === 'Space') {
+        event.preventDefault();
+        this.timeline.playing ? this.pause() : this.play();
+      } else if (event.code === 'KeyR') {
+        event.preventDefault(); this.restart();
+      } else if (event.code === 'KeyH') {
+        event.preventDefault();
+        // A focused button must not keep hidden capture controls visible.
+        if (this.transport.contains(document.activeElement)) document.activeElement.blur();
+        const hidden = this.transport.classList.toggle('controls-hidden');
+        this.transport.inert = hidden;
+      } else if (event.code === 'KeyF') {
+        event.preventDefault(); this.fullscreen();
+      }
+    });
+    document.addEventListener('visibilitychange', () => {
+      // Freeze elapsed time in a background tab, including AUTO_PLAY on load.
+      this.timeline.lastTimestamp = null;
+    });
+  }
+  play() {
+    if (this.timeline.system.time >= this.timeline.system.config.duration) this.timeline.restart();
+    this.timeline.play(); this.sync(); this.redraw();
+  }
+  pause() {
+    this.timeline.pause(); this.sync(); this.redraw();
+    document.getElementById('announcement').textContent = 'Pausado. Pressione Espaço para continuar.';
+  }
+  restart() {
+    this.timeline.restart(); this.timeline.play(); this.sync(); this.redraw();
+  }
+  sync() {
+    this.playButton.disabled = this.timeline.playing;
+    this.pauseButton.disabled = !this.timeline.playing;
+  }
+  async fullscreen() {
+    try {
+      if (document.fullscreenElement) await document.exitFullscreen();
+      else if (document.documentElement.requestFullscreen) await document.documentElement.requestFullscreen();
+    } catch (_) {
+      // Embedded previews may deny fullscreen; ordinary playback stays available.
+      document.getElementById('announcement').textContent = 'Tela cheia indisponível nesta janela. Abra o arquivo em uma janela do navegador.';
+    }
+  }
+}
+
+// Bootstrap: everything is offline and self-contained. No network, audio,
+// animation libraries, modules, fonts, or timer intervals are required.
+(() => {
+  document.body.classList.toggle('recording', RECORDING_MODE);
+  const system = new ParticleSystem();
+  const renderer = new Renderer(document.getElementById('particles'), system);
+  const hud = new HUD(system);
+  const timeline = new Timeline(system);
+  const redraw = () => { renderer.draw(); hud.update(true); hud.animate(); };
+  const controls = new Controls(timeline, redraw);
+  let lastTick = -1;
+  let wasPlaying = false;
+  function frame(timestamp) {
+    if (!document.hidden) timeline.advance(timestamp);
+    renderer.draw();
+    if (lastTick !== system.tick || wasPlaying !== timeline.playing) {
+      hud.update(!timeline.playing);
+      hud.animate();
+      lastTick = system.tick;
+    }
+    if (wasPlaying !== timeline.playing) {
+      controls.sync();
+      if (!timeline.playing && system.time === CONFIG.duration) {
+        document.getElementById('announcement').textContent = 'Sequência concluída. Configuração mais ordenada e de menor energia relativa. Pressione R para reproduzir novamente.';
+      }
+      wasPlaying = timeline.playing;
+    }
+    requestAnimationFrame(frame);
+  }
+  window.addEventListener('resize', () => { renderer.surface.resize(); hud.chart.surface.resize(); redraw(); });
+  // ResizeObserver can fire without window.resize (for example, panel resizing).
+  const resizeChart = new ResizeObserver(() => hud.chart.draw(system));
+  resizeChart.observe(document.getElementById('energy-plot'));
+  redraw();
+  if (AUTO_PLAY) controls.play();
+  requestAnimationFrame(frame);
+})();
+
+  </script>
+</body>
+</html>
