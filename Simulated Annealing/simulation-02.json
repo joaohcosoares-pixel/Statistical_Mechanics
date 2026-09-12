@@ -1,0 +1,1275 @@
+{
+  "schemaVersion": 1,
+  "model": "Modelo urbano reduzido, sintético, não georreferenciado",
+  "config": {
+    "seed": 20260911,
+    "duration": 15,
+    "targetFPS": 60,
+    "physicsDt": 0.008333333333333333,
+    "timeScale": 4,
+    "traffic": {
+      "vehicleLength": 10,
+      "vehicleWidth": 5,
+      "safeGap": 4,
+      "laneOffset": 8,
+      "freeSpeed": 23,
+      "acceleration": 8,
+      "braking": 16,
+      "queueSpeed": 2.2,
+      "stoppedSpeed": 0.5,
+      "queueRadius": 72,
+      "junctionRadius": 26,
+      "maxVehicles": 120,
+      "warmupTime": 120,
+      "arrivalRates": [
+        0.242,
+        0.198,
+        0.209,
+        0.176,
+        0.187,
+        0.176,
+        0.209,
+        0.176
+      ]
+    },
+    "signals": {
+      "yellow": 2,
+      "allRed": 1.5,
+      "minGreen": 10,
+      "maxGreen": 38
+    },
+    "optimization": {
+      "initialTemperature": 0.95,
+      "finalTemperatureScene": 0.88,
+      "proposalTimes": [
+        6,
+        7.5,
+        9,
+        10.5,
+        12,
+        13.3
+      ],
+      "evaluationWindow": 64,
+      "evaluationDt": 0.06666666666666667,
+      "evaluationStepsPerTick": 24,
+      "maxOffsetChange": 6,
+      "maxGreenChange": 3
+    },
+    "objective": {
+      "delayWeight": 0.55,
+      "queueWeight": 0.3,
+      "stopWeight": 0.15,
+      "delayReference": 20
+    }
+  },
+  "network": {
+    "intersections": [
+      {
+        "id": "I1",
+        "x": 425,
+        "y": 450
+      },
+      {
+        "id": "I2",
+        "x": 925,
+        "y": 415
+      },
+      {
+        "id": "I3",
+        "x": 480,
+        "y": 730
+      },
+      {
+        "id": "I4",
+        "x": 965,
+        "y": 765
+      }
+    ],
+    "corridors": [
+      {
+        "id": "A",
+        "name": "CORREDOR A · referência T-7",
+        "axis": "EW",
+        "width": 44,
+        "points": [
+          {
+            "x": 90,
+            "y": 480
+          },
+          {
+            "id": "I1",
+            "x": 425,
+            "y": 450
+          },
+          {
+            "id": "I2",
+            "x": 925,
+            "y": 415
+          },
+          {
+            "x": 1330,
+            "y": 450
+          }
+        ],
+        "nodes": [
+          0,
+          1
+        ]
+      },
+      {
+        "id": "B",
+        "name": "CORREDOR B · referência T-63",
+        "axis": "EW",
+        "width": 34,
+        "points": [
+          {
+            "x": 145,
+            "y": 800
+          },
+          {
+            "id": "I3",
+            "x": 480,
+            "y": 730
+          },
+          {
+            "id": "I4",
+            "x": 965,
+            "y": 765
+          },
+          {
+            "x": 1310,
+            "y": 720
+          }
+        ],
+        "nodes": [
+          2,
+          3
+        ]
+      },
+      {
+        "id": "C",
+        "name": "CONEXÃO LOCAL",
+        "axis": "NS",
+        "width": 34,
+        "points": [
+          {
+            "x": 380,
+            "y": 185
+          },
+          {
+            "id": "I1",
+            "x": 425,
+            "y": 450
+          },
+          {
+            "id": "I3",
+            "x": 480,
+            "y": 730
+          },
+          {
+            "x": 515,
+            "y": 925
+          }
+        ],
+        "nodes": [
+          0,
+          2
+        ]
+      },
+      {
+        "id": "D",
+        "name": "EIXO NORTE–SUL",
+        "axis": "NS",
+        "width": 40,
+        "points": [
+          {
+            "x": 970,
+            "y": 175
+          },
+          {
+            "id": "I2",
+            "x": 925,
+            "y": 415
+          },
+          {
+            "id": "I4",
+            "x": 965,
+            "y": 765
+          },
+          {
+            "x": 1040,
+            "y": 930
+          }
+        ],
+        "nodes": [
+          1,
+          3
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "id": "A1",
+        "a": {
+          "x": 90,
+          "y": 480
+        },
+        "b": {
+          "id": "I1",
+          "x": 425,
+          "y": 450
+        },
+        "corridor": 0
+      },
+      {
+        "id": "A2",
+        "a": {
+          "id": "I1",
+          "x": 425,
+          "y": 450
+        },
+        "b": {
+          "id": "I2",
+          "x": 925,
+          "y": 415
+        },
+        "corridor": 0
+      },
+      {
+        "id": "A3",
+        "a": {
+          "id": "I2",
+          "x": 925,
+          "y": 415
+        },
+        "b": {
+          "x": 1330,
+          "y": 450
+        },
+        "corridor": 0
+      },
+      {
+        "id": "B1",
+        "a": {
+          "x": 145,
+          "y": 800
+        },
+        "b": {
+          "id": "I3",
+          "x": 480,
+          "y": 730
+        },
+        "corridor": 1
+      },
+      {
+        "id": "B2",
+        "a": {
+          "id": "I3",
+          "x": 480,
+          "y": 730
+        },
+        "b": {
+          "id": "I4",
+          "x": 965,
+          "y": 765
+        },
+        "corridor": 1
+      },
+      {
+        "id": "B3",
+        "a": {
+          "id": "I4",
+          "x": 965,
+          "y": 765
+        },
+        "b": {
+          "x": 1310,
+          "y": 720
+        },
+        "corridor": 1
+      },
+      {
+        "id": "C1",
+        "a": {
+          "x": 380,
+          "y": 185
+        },
+        "b": {
+          "id": "I1",
+          "x": 425,
+          "y": 450
+        },
+        "corridor": 2
+      },
+      {
+        "id": "C2",
+        "a": {
+          "id": "I1",
+          "x": 425,
+          "y": 450
+        },
+        "b": {
+          "id": "I3",
+          "x": 480,
+          "y": 730
+        },
+        "corridor": 2
+      },
+      {
+        "id": "C3",
+        "a": {
+          "id": "I3",
+          "x": 480,
+          "y": 730
+        },
+        "b": {
+          "x": 515,
+          "y": 925
+        },
+        "corridor": 2
+      },
+      {
+        "id": "D1",
+        "a": {
+          "x": 970,
+          "y": 175
+        },
+        "b": {
+          "id": "I2",
+          "x": 925,
+          "y": 415
+        },
+        "corridor": 3
+      },
+      {
+        "id": "D2",
+        "a": {
+          "id": "I2",
+          "x": 925,
+          "y": 415
+        },
+        "b": {
+          "id": "I4",
+          "x": 965,
+          "y": 765
+        },
+        "corridor": 3
+      },
+      {
+        "id": "D3",
+        "a": {
+          "id": "I4",
+          "x": 965,
+          "y": 765
+        },
+        "b": {
+          "x": 1040,
+          "y": 930
+        },
+        "corridor": 3
+      }
+    ],
+    "routes": [
+      {
+        "id": 0,
+        "corridor": 0,
+        "direction": 0,
+        "axis": "EW",
+        "points": [
+          {
+            "x": 90.71356238039728,
+            "y": 487.9681132477696
+          },
+          {
+            "x": 425.6361577280425,
+            "y": 457.975045007682
+          },
+          {
+            "x": 924.9345231228533,
+            "y": 423.02415943004524
+          },
+          {
+            "x": 1329.3112092641732,
+            "y": 457.9702928002828
+          }
+        ],
+        "cumulative": [
+          0,
+          336.26288676697146,
+          836.7830382979473,
+          1242.666933682041
+        ],
+        "length": 1242.666933682041,
+        "intersections": [
+          {
+            "index": 0,
+            "s": 336.26288676697146
+          },
+          {
+            "index": 1,
+            "s": 836.7830382979473
+          }
+        ]
+      },
+      {
+        "id": 1,
+        "corridor": 0,
+        "direction": 1,
+        "axis": "EW",
+        "points": [
+          {
+            "x": 1330.6887907358268,
+            "y": 442.0297071997172
+          },
+          {
+            "x": 925.0654768771467,
+            "y": 406.97584056995476
+          },
+          {
+            "x": 424.3638422719575,
+            "y": 442.024954992318
+          },
+          {
+            "x": 89.28643761960272,
+            "y": 472.0318867522304
+          }
+        ],
+        "cumulative": [
+          0,
+          407.1351695830201,
+          909.062024132665,
+          1245.4803397193791
+        ],
+        "length": 1245.4803397193791,
+        "intersections": [
+          {
+            "index": 1,
+            "s": 407.1351695830201
+          },
+          {
+            "index": 0,
+            "s": 909.062024132665
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "corridor": 1,
+        "direction": 0,
+        "axis": "EW",
+        "points": [
+          {
+            "x": 146.63630111023994,
+            "y": 807.8308695990054
+          },
+          {
+            "x": 480.54062002739903,
+            "y": 738.0598178849722
+          },
+          {
+            "x": 965.2317961999994,
+            "y": 773.0375316293866
+          },
+          {
+            "x": 1311.034713472542,
+            "y": 727.9328032894898
+          }
+        ],
+        "cumulative": [
+          0,
+          341.11595367090973,
+          827.0675734010686,
+          1175.7996971189975
+        ],
+        "length": 1175.7996971189975,
+        "intersections": [
+          {
+            "index": 2,
+            "s": 341.11595367090973
+          },
+          {
+            "index": 3,
+            "s": 827.0675734010686
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "corridor": 1,
+        "direction": 1,
+        "axis": "EW",
+        "points": [
+          {
+            "x": 1308.965286527458,
+            "y": 712.0671967105102
+          },
+          {
+            "x": 964.7682038000006,
+            "y": 756.9624683706134
+          },
+          {
+            "x": 479.45937997260097,
+            "y": 721.9401821150278
+          },
+          {
+            "x": 143.36369888976006,
+            "y": 792.1691304009946
+          }
+        ],
+        "cumulative": [
+          0,
+          347.11268656666317,
+          833.6835601496409,
+          1177.0382048246354
+        ],
+        "length": 1177.0382048246354,
+        "intersections": [
+          {
+            "index": 3,
+            "s": 347.11268656666317
+          },
+          {
+            "index": 2,
+            "s": 833.6835601496409
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "corridor": 2,
+        "direction": 0,
+        "axis": "NS",
+        "points": [
+          {
+            "x": 372.11290748287416,
+            "y": 186.33931759724777
+          },
+          {
+            "x": 417.13015374078003,
+            "y": 451.44087889380467
+          },
+          {
+            "x": 472.1373936041407,
+            "y": 731.4777363800044
+          },
+          {
+            "x": 507.12583034404895,
+            "y": 926.4133125023502
+          }
+        ],
+        "cumulative": [
+          0,
+          268.89661630916265,
+          554.2848395912937,
+          752.3355137725582
+        ],
+        "length": 752.3355137725582,
+        "intersections": [
+          {
+            "index": 0,
+            "s": 268.89661630916265
+          },
+          {
+            "index": 2,
+            "s": 554.2848395912937
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "corridor": 2,
+        "direction": 1,
+        "axis": "NS",
+        "points": [
+          {
+            "x": 522.874169655951,
+            "y": 923.5866874976498
+          },
+          {
+            "x": 487.8626063958593,
+            "y": 728.5222636199956
+          },
+          {
+            "x": 432.86984625921997,
+            "y": 448.55912110619533
+          },
+          {
+            "x": 387.88709251712584,
+            "y": 183.66068240275223
+          }
+        ],
+        "cumulative": [
+          0,
+          198.1815809419144,
+          483.4946805949944,
+          752.1852665144562
+        ],
+        "length": 752.1852665144562,
+        "intersections": [
+          {
+            "index": 2,
+            "s": 198.1815809419144
+          },
+          {
+            "index": 0,
+            "s": 483.4946805949944
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "corridor": 3,
+        "direction": 0,
+        "axis": "NS",
+        "points": [
+          {
+            "x": 962.1370225045255,
+            "y": 173.5256917195985
+          },
+          {
+            "x": 916.9148510245088,
+            "y": 414.7106062796868
+          },
+          {
+            "x": 957.1949944645064,
+            "y": 767.1618613796654
+          },
+          {
+            "x": 1032.717068180299,
+            "y": 933.3104235544095
+          }
+        ],
+        "cumulative": [
+          0,
+          245.3878721630821,
+          600.133382602745,
+          782.6407203485693
+        ],
+        "length": 782.6407203485693,
+        "intersections": [
+          {
+            "index": 1,
+            "s": 245.3878721630821
+          },
+          {
+            "index": 3,
+            "s": 600.133382602745
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "corridor": 3,
+        "direction": 1,
+        "axis": "NS",
+        "points": [
+          {
+            "x": 1047.282931819701,
+            "y": 926.6895764455905
+          },
+          {
+            "x": 972.8050055354936,
+            "y": 762.8381386203346
+          },
+          {
+            "x": 933.0851489754912,
+            "y": 415.2893937203132
+          },
+          {
+            "x": 977.8629774954745,
+            "y": 176.4743082804015
+          }
+        ],
+        "cumulative": [
+          0,
+          179.98404146201278,
+          529.7951291746913,
+          772.7718748946004
+        ],
+        "length": 772.7718748946004,
+        "intersections": [
+          {
+            "index": 3,
+            "s": 179.98404146201278
+          },
+          {
+            "index": 1,
+            "s": 529.7951291746913
+          }
+        ]
+      }
+    ]
+  },
+  "initialState": {
+    "intersections": [
+      {
+        "greenEW": 15,
+        "greenNS": 34,
+        "offset": 0,
+        "cycleLength": 56
+      },
+      {
+        "greenEW": 34,
+        "greenNS": 15,
+        "offset": 24,
+        "cycleLength": 56
+      },
+      {
+        "greenEW": 16,
+        "greenNS": 33,
+        "offset": 11,
+        "cycleLength": 56
+      },
+      {
+        "greenEW": 31,
+        "greenNS": 18,
+        "offset": 37,
+        "cycleLength": 56
+      }
+    ]
+  },
+  "currentState": {
+    "intersections": [
+      {
+        "greenEW": 15.480009065475315,
+        "greenNS": 33.519990934524685,
+        "offset": 55.01623652409762,
+        "cycleLength": 56
+      },
+      {
+        "greenEW": 34,
+        "greenNS": 15,
+        "offset": 24,
+        "cycleLength": 56
+      },
+      {
+        "greenEW": 17.356838599778712,
+        "greenNS": 31.643161400221288,
+        "offset": 13.940619968809187,
+        "cycleLength": 56
+      },
+      {
+        "greenEW": 31,
+        "greenNS": 18,
+        "offset": 35.1257617501542,
+        "cycleLength": 56
+      }
+    ]
+  },
+  "sceneTime": 15,
+  "metrics": {
+    "D": 0.8303106719485704,
+    "Q": 0.17307692307692307,
+    "S": 0.17307692307692307,
+    "energy": 0.5345554849563292,
+    "meanDelay": 16.60621343897141,
+    "queueCount": 18,
+    "stoppedCount": 18,
+    "activeCount": 104,
+    "meanSpeed": 18.107833990871526,
+    "meanQueueLength": 1.125,
+    "queueByIntersection": [
+      3,
+      9,
+      3,
+      3
+    ],
+    "stopEvents": 319,
+    "pendingArrivals": 0
+  },
+  "samples": [
+    {
+      "sceneTime": 0,
+      "simulationTime": 119.99999999999575,
+      "D": 0.8176766894799063,
+      "Q": 0.2169811320754717,
+      "S": 0.2169811320754717,
+      "energy": 0.5473636886479109,
+      "meanDelay": 16.353533789598128,
+      "queueCount": 23,
+      "stoppedCount": 23,
+      "activeCount": 106,
+      "meanSpeed": 16.973888258857887,
+      "meanQueueLength": 1.4375,
+      "queueByIntersection": [
+        3,
+        7,
+        10,
+        3
+      ],
+      "stopEvents": 180,
+      "pendingArrivals": 0
+    },
+    {
+      "sceneTime": 1,
+      "simulationTime": 123.99999999999893,
+      "D": 0.7068243802116416,
+      "Q": 0.18095238095238095,
+      "S": 0.18095238095238095,
+      "energy": 0.47018198054497434,
+      "meanDelay": 14.136487604232833,
+      "queueCount": 19,
+      "stoppedCount": 19,
+      "activeCount": 105,
+      "meanSpeed": 17.779712677052053,
+      "meanQueueLength": 1.1875,
+      "queueByIntersection": [
+        4,
+        9,
+        3,
+        3
+      ],
+      "stopEvents": 184,
+      "pendingArrivals": 0
+    },
+    {
+      "sceneTime": 2,
+      "simulationTime": 128.0000000000021,
+      "D": 0.6782523877705307,
+      "Q": 0.25,
+      "S": 0.25,
+      "energy": 0.4855388132737919,
+      "meanDelay": 13.565047755410612,
+      "queueCount": 26,
+      "stoppedCount": 26,
+      "activeCount": 104,
+      "meanSpeed": 15.746186652124083,
+      "meanQueueLength": 1.625,
+      "queueByIntersection": [
+        5,
+        1,
+        4,
+        16
+      ],
+      "stopEvents": 200,
+      "pendingArrivals": 0
+    },
+    {
+      "sceneTime": 3,
+      "simulationTime": 131.99999999999847,
+      "D": 0.6640858919903557,
+      "Q": 0.18446601941747573,
+      "S": 0.1553398058252427,
+      "energy": 0.4438880172937248,
+      "meanDelay": 13.281717839807115,
+      "queueCount": 19,
+      "stoppedCount": 16,
+      "activeCount": 103,
+      "meanSpeed": 16.05884839528438,
+      "meanQueueLength": 1.1875,
+      "queueByIntersection": [
+        2,
+        3,
+        5,
+        9
+      ],
+      "stopEvents": 207,
+      "pendingArrivals": 0
+    },
+    {
+      "sceneTime": 4,
+      "simulationTime": 135.99999999999483,
+      "D": 0.6590554457289743,
+      "Q": 0.16,
+      "S": 0.16,
+      "energy": 0.43448049515093595,
+      "meanDelay": 13.181108914579486,
+      "queueCount": 16,
+      "stoppedCount": 16,
+      "activeCount": 100,
+      "meanSpeed": 18.265021590198714,
+      "meanQueueLength": 1,
+      "queueByIntersection": [
+        3,
+        5,
+        6,
+        2
+      ],
+      "stopEvents": 212,
+      "pendingArrivals": 0
+    },
+    {
+      "sceneTime": 5,
+      "simulationTime": 139.9999999999912,
+      "D": 0.6614934764357293,
+      "Q": 0.3465346534653465,
+      "S": 0.3465346534653465,
+      "energy": 0.5197620060990571,
+      "meanDelay": 13.229869528714586,
+      "queueCount": 35,
+      "stoppedCount": 35,
+      "activeCount": 101,
+      "meanSpeed": 14.174659621364077,
+      "meanQueueLength": 2.1875,
+      "queueByIntersection": [
+        7,
+        18,
+        7,
+        3
+      ],
+      "stopEvents": 231,
+      "pendingArrivals": 0
+    },
+    {
+      "sceneTime": 6,
+      "simulationTime": 143.99999999998755,
+      "D": 0.7107149360950752,
+      "Q": 0.4077669902912621,
+      "S": 0.4077669902912621,
+      "energy": 0.5743883604833594,
+      "meanDelay": 14.214298721901503,
+      "queueCount": 42,
+      "stoppedCount": 42,
+      "activeCount": 103,
+      "meanSpeed": 12.716914492642244,
+      "meanQueueLength": 2.625,
+      "queueByIntersection": [
+        8,
+        19,
+        8,
+        7
+      ],
+      "stopEvents": 238,
+      "pendingArrivals": 0
+    },
+    {
+      "sceneTime": 7,
+      "simulationTime": 147.9999999999839,
+      "D": 0.7407601056118848,
+      "Q": 0.33962264150943394,
+      "S": 0.33962264150943394,
+      "energy": 0.5602482467657819,
+      "meanDelay": 14.815202112237696,
+      "queueCount": 36,
+      "stoppedCount": 36,
+      "activeCount": 106,
+      "meanSpeed": 13.578355041110974,
+      "meanQueueLength": 2.25,
+      "queueByIntersection": [
+        9,
+        1,
+        12,
+        14
+      ],
+      "stopEvents": 253,
+      "pendingArrivals": 0
+    },
+    {
+      "sceneTime": 8,
+      "simulationTime": 151.99999999998028,
+      "D": 0.7332084422690893,
+      "Q": 0.3584905660377358,
+      "S": 0.3584905660377358,
+      "energy": 0.5645853979649803,
+      "meanDelay": 14.664168845381786,
+      "queueCount": 38,
+      "stoppedCount": 38,
+      "activeCount": 106,
+      "meanSpeed": 13.754692086993247,
+      "meanQueueLength": 2.375,
+      "queueByIntersection": [
+        10,
+        2,
+        10,
+        16
+      ],
+      "stopEvents": 259,
+      "pendingArrivals": 0
+    },
+    {
+      "sceneTime": 9,
+      "simulationTime": 155.99999999997664,
+      "D": 0.7622123024491227,
+      "Q": 0.46078431372549017,
+      "S": 0.46078431372549017,
+      "energy": 0.6265697075234881,
+      "meanDelay": 15.244246048982454,
+      "queueCount": 47,
+      "stoppedCount": 47,
+      "activeCount": 102,
+      "meanSpeed": 11.236263532410426,
+      "meanQueueLength": 2.9375,
+      "queueByIntersection": [
+        11,
+        3,
+        17,
+        16
+      ],
+      "stopEvents": 268,
+      "pendingArrivals": 0
+    },
+    {
+      "sceneTime": 10,
+      "simulationTime": 159.999999999973,
+      "D": 0.8153311127132172,
+      "Q": 0.34285714285714286,
+      "S": 0.34285714285714286,
+      "energy": 0.6027178262779838,
+      "meanDelay": 16.306622254264344,
+      "queueCount": 36,
+      "stoppedCount": 36,
+      "activeCount": 105,
+      "meanSpeed": 13.28531558548666,
+      "meanQueueLength": 2.25,
+      "queueByIntersection": [
+        13,
+        3,
+        3,
+        17
+      ],
+      "stopEvents": 275,
+      "pendingArrivals": 0
+    },
+    {
+      "sceneTime": 11,
+      "simulationTime": 163.99999999996936,
+      "D": 0.8629652549732791,
+      "Q": 0.4854368932038835,
+      "S": 0.4854368932038835,
+      "energy": 0.6930774921770511,
+      "meanDelay": 17.259305099465582,
+      "queueCount": 50,
+      "stoppedCount": 50,
+      "activeCount": 103,
+      "meanSpeed": 11.012233035200508,
+      "meanQueueLength": 3.125,
+      "queueByIntersection": [
+        14,
+        5,
+        13,
+        18
+      ],
+      "stopEvents": 289,
+      "pendingArrivals": 0
+    },
+    {
+      "sceneTime": 12,
+      "simulationTime": 167.99999999996572,
+      "D": 0.878452298048558,
+      "Q": 0.4339622641509434,
+      "S": 0.39622641509433965,
+      "energy": 0.6727714054361409,
+      "meanDelay": 17.56904596097116,
+      "queueCount": 46,
+      "stoppedCount": 42,
+      "activeCount": 106,
+      "meanSpeed": 10.376894683471974,
+      "meanQueueLength": 2.875,
+      "queueByIntersection": [
+        20,
+        5,
+        6,
+        15
+      ],
+      "stopEvents": 300,
+      "pendingArrivals": 0
+    },
+    {
+      "sceneTime": 13,
+      "simulationTime": 171.99999999996209,
+      "D": 0.8909336422763602,
+      "Q": 0.34579439252336447,
+      "S": 0.34579439252336447,
+      "energy": 0.6456209798875121,
+      "meanDelay": 17.818672845527203,
+      "queueCount": 37,
+      "stoppedCount": 37,
+      "activeCount": 107,
+      "meanSpeed": 14.085688008401306,
+      "meanQueueLength": 2.3125,
+      "queueByIntersection": [
+        22,
+        6,
+        7,
+        2
+      ],
+      "stopEvents": 308,
+      "pendingArrivals": 0
+    },
+    {
+      "sceneTime": 14,
+      "simulationTime": 175.99999999995845,
+      "D": 0.8993175928831348,
+      "Q": 0.205607476635514,
+      "S": 0.205607476635514,
+      "energy": 0.5871480405717056,
+      "meanDelay": 17.986351857662697,
+      "queueCount": 22,
+      "stoppedCount": 22,
+      "activeCount": 107,
+      "meanSpeed": 17.3093088903098,
+      "meanQueueLength": 1.375,
+      "queueByIntersection": [
+        2,
+        7,
+        11,
+        2
+      ],
+      "stopEvents": 314,
+      "pendingArrivals": 0
+    },
+    {
+      "sceneTime": 15,
+      "simulationTime": 179.9999999999548,
+      "D": 0.8303106719485704,
+      "Q": 0.17307692307692307,
+      "S": 0.17307692307692307,
+      "energy": 0.5345554849563292,
+      "meanDelay": 16.60621343897141,
+      "queueCount": 18,
+      "stoppedCount": 18,
+      "activeCount": 104,
+      "meanSpeed": 18.107833990871526,
+      "meanQueueLength": 1.125,
+      "queueByIntersection": [
+        3,
+        9,
+        3,
+        3
+      ],
+      "stopEvents": 319,
+      "pendingArrivals": 0
+    }
+  ],
+  "optimizer": {
+    "temperature": 0.88,
+    "attempted": 6,
+    "accepted": 6,
+    "decisions": [
+      {
+        "index": 1,
+        "intersection": 2,
+        "intersectionId": "I3",
+        "parameter": "greenEW",
+        "before": 16,
+        "after": 14.658028894569725,
+        "deltaParameter": -1.3419711054302752,
+        "sceneTime": 6,
+        "temperature": 0.9219999999999999,
+        "status": "ACCEPTED",
+        "accepted": true,
+        "currentEnergy": 0.5424570915515446,
+        "candidateEnergy": 0.5409415800849479,
+        "deltaEnergy": -0.0015155114665967861,
+        "probability": 1,
+        "u": 0.8302538790740073,
+        "window": 64,
+        "progress": 1,
+        "decidedAt": 6.08125
+      },
+      {
+        "index": 2,
+        "intersection": 0,
+        "intersectionId": "I1",
+        "parameter": "offset",
+        "before": 0,
+        "after": 55.01623652409762,
+        "deltaParameter": -0.9837634759023786,
+        "sceneTime": 7.5,
+        "temperature": 0.915,
+        "status": "ACCEPTED",
+        "accepted": true,
+        "currentEnergy": 0.5454762178655967,
+        "candidateEnergy": 0.5488315218928582,
+        "deltaEnergy": 0.0033553040272614743,
+        "probability": 0.9963397162929493,
+        "u": 0.9042821656912565,
+        "window": 64,
+        "progress": 1,
+        "decidedAt": 7.58125
+      },
+      {
+        "index": 3,
+        "intersection": 3,
+        "intersectionId": "I4",
+        "parameter": "offset",
+        "before": 37,
+        "after": 35.1257617501542,
+        "deltaParameter": -1.8742382498458028,
+        "sceneTime": 9,
+        "temperature": 0.908,
+        "status": "ACCEPTED",
+        "accepted": true,
+        "currentEnergy": 0.5521675443232338,
+        "candidateEnergy": 0.5642768570035311,
+        "deltaEnergy": 0.012109312680297357,
+        "probability": 0.9867522862963984,
+        "u": 0.30597755196504295,
+        "window": 64,
+        "progress": 1,
+        "decidedAt": 9.08125
+      },
+      {
+        "index": 4,
+        "intersection": 2,
+        "intersectionId": "I3",
+        "parameter": "greenEW",
+        "before": 14.658028894569725,
+        "after": 17.356838599778712,
+        "deltaParameter": 2.698809705208987,
+        "sceneTime": 10.5,
+        "temperature": 0.901,
+        "status": "ACCEPTED",
+        "accepted": true,
+        "currentEnergy": 0.5686201663797046,
+        "candidateEnergy": 0.5672291153818969,
+        "deltaEnergy": -0.0013910509978076746,
+        "probability": 1,
+        "u": 0.6494502439163625,
+        "window": 64,
+        "progress": 1,
+        "decidedAt": 10.58125
+      },
+      {
+        "index": 5,
+        "intersection": 0,
+        "intersectionId": "I1",
+        "parameter": "greenEW",
+        "before": 15,
+        "after": 15.480009065475315,
+        "deltaParameter": 0.48000906547531486,
+        "sceneTime": 12,
+        "temperature": 0.894,
+        "status": "ACCEPTED",
+        "accepted": true,
+        "currentEnergy": 0.5548250755950512,
+        "candidateEnergy": 0.5551904242988109,
+        "deltaEnergy": 0.00036534870375970474,
+        "probability": 0.9995914160393,
+        "u": 0.07988944067619741,
+        "window": 64,
+        "progress": 1,
+        "decidedAt": 12.08125
+      },
+      {
+        "index": 6,
+        "intersection": 2,
+        "intersectionId": "I3",
+        "parameter": "offset",
+        "before": 11,
+        "after": 13.940619968809187,
+        "deltaParameter": 2.9406199688091874,
+        "sceneTime": 13.299999999999999,
+        "temperature": 0.8879333333333334,
+        "status": "ACCEPTED",
+        "accepted": true,
+        "currentEnergy": 0.5475397630457499,
+        "candidateEnergy": 0.5528451331277395,
+        "deltaEnergy": 0.005305370081989613,
+        "probability": 0.9940428501727679,
+        "u": 0.12479397025890648,
+        "window": 64,
+        "progress": 1,
+        "decidedAt": 13.38125
+      }
+    ]
+  },
+  "notes": {
+    "state": "x = tempos de verde e offsets; somente os sinais são otimizados",
+    "delay": "Integral de max(0,1-v/v_livre) dt, média entre veículos ativos, em segundos simulados",
+    "energy": "0.55 clamp(atraso_medio/20,0,1) + 0.30 fração_em_fila + 0.15 fração_parada",
+    "evaluation": "Médias pareadas de 64 s com snapshots e chegadas idênticos; passo de avaliação de 1/15 s para ambas as alternativas.",
+    "temperature": "Parâmetro computacional adimensional; k_B=1",
+    "scope": "Trajetos fixos, sem conversões; modelo sem calibração para Goiânia. A cena não representa uma solução ótima."
+  }
+}

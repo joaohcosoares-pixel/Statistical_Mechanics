@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Modelo urbano reduzido: tráfego sintético e exploração semafórica por recozimento simulado.">
+<title>02 · Rede urbana / Estado inicial — XLIII Semana da Física</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230f111a'/%3E%3Cpath d='M4 12h24M10 4v24M23 4v24M4 24h24' stroke='%23343849' stroke-width='4'/%3E%3Ccircle cx='10' cy='12' r='3' fill='%238be9fd'/%3E%3Ccircle cx='23' cy='24' r='3' fill='%23ffb86c'/%3E%3C/svg%3E">
+<style>
+:root { color-scheme:dark; --bg:#0f111a; --panel:#151823; --line:#2a2e3c; --text:#f8f8f2; --muted:#929bad; --cyan:#8be9fd; --purple:#bd93f9; --green:#50fa7b; --orange:#ffb86c; --red:#ff6868; }
+* { box-sizing:border-box; }
+html,body { margin:0; width:100%; height:100%; overflow:hidden; background:#090b11; color:var(--text); font-family:Arial,Helvetica,sans-serif; }
+button { font:inherit; }
+#stage { width:1920px; height:1080px; position:absolute; transform-origin:top left; overflow:hidden; background:var(--bg); }
+canvas#network { position:absolute; inset:0; width:1920px; height:1080px; }
+.mono { font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace; font-variant-numeric:tabular-nums; }
+.eyebrow { font-size:13px; letter-spacing:2.4px; font-weight:600; }
+.muted { color:var(--muted); }
+header { position:absolute; top:50px; left:72px; right:72px; display:flex; justify-content:space-between; border-bottom:1px solid var(--line); padding-bottom:31px; }
+header .eyebrow { color:var(--purple); margin-bottom:17px; }
+h1 { font-size:40px; font-weight:500; letter-spacing:-1.4px; margin:0; }
+h1 span { color:#747d93; font-weight:400; }
+.subtitle { color:var(--muted); font-size:16px; margin-top:14px; letter-spacing:.3px; }
+.event { text-align:right; padding-top:4px; font-size:14px; line-height:1.8; letter-spacing:1.3px; }
+.event strong { font-size:32px; font-weight:400; letter-spacing:5px; color:var(--cyan); }
+#mapLabel { position:absolute; left:76px; top:209px; color:#6c768d; font-size:12px; letter-spacing:1.8px; }
+#narrative { position:absolute; left:76px; top:263px; width:294px; }
+#phaseIndex { display:block; color:var(--orange); font-size:12px; letter-spacing:2px; margin-bottom:13px; }
+#narrativeTitle { font-size:28px; font-weight:400; line-height:1.17; letter-spacing:-.6px; margin:0 0 13px; }
+#narrativeDetail { color:var(--muted); font-size:15px; line-height:1.6; margin:0; max-width:270px; }
+#focusNote { position:absolute; left:564px; top:546px; width:294px; opacity:0; transition:opacity .4s; pointer-events:none; }
+#focusNote.visible { opacity:1; }
+#focusNote .rule { width:35px; height:2px; background:var(--purple); margin-bottom:17px; }
+#focusKind { color:var(--purple); font-size:12px; letter-spacing:1.8px; }
+#focusTitle { font-size:25px; margin:12px 0 8px; letter-spacing:-.7px; }
+#focusDetail { color:var(--muted); font-size:14px; line-height:1.6; }
+#hud { position:absolute; left:1420px; top:211px; width:424px; height:728px; padding-left:28px; border-left:1px solid var(--line); }
+.hud-head { font-size:12px; letter-spacing:2px; color:var(--muted); display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; }
+.live-dot { display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--green); margin-right:8px; }
+.metric-label { font-size:13px; letter-spacing:1.5px; color:#c2c8d4; }
+.metric-number { font-size:49px; font-weight:400; letter-spacing:-2.2px; line-height:1.15; }
+.metric-top { display:flex; align-items:center; justify-content:space-between; }
+.badge { font-size:10px; font-weight:600; letter-spacing:1.5px; padding:4px 7px; color:var(--orange); background:#ffb86c0d; border:1px solid #ffb86c28; border-radius:3px; }
+.temperature { padding-bottom:20px; border-bottom:1px solid var(--line); }
+.temperature .metric-number { color:var(--orange); margin-top:8px; }
+.temperature-line { display:flex; align-items:baseline; gap:15px; }
+.temperature-line small { color:var(--muted); font-size:12px; }
+.bar { height:3px; background:#30303a; margin-top:14px; }
+#temperatureBar { height:100%; background:var(--orange); width:95%; }
+.energy { position:relative; padding-top:20px; padding-bottom:16px; border-bottom:1px solid var(--line); }
+.energy .metric-number { color:var(--text); margin-top:9px; }
+#energyGraph { width:206px; height:56px; position:absolute; right:0; top:57px; }
+.energy-caption { font-size:10px; color:var(--muted); display:flex; justify-content:space-between; margin-top:7px; }
+.acceptance { padding-top:19px; padding-bottom:17px; border-bottom:1px solid var(--line); }
+.acceptance .metric-number { color:var(--green); font-size:38px; margin-top:9px; letter-spacing:-1px; }
+#acceptanceValue small { font-size:19px; }
+.acceptance-values { display:flex; align-items:baseline; justify-content:space-between; }
+#acceptanceCount { font-size:12px; color:var(--muted); }
+.secondary { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; padding:22px 0; border-bottom:1px solid var(--line); }
+.secondary .metric-label { font-size:10px; letter-spacing:1px; white-space:nowrap; }
+.secondary .value { font-size:24px; margin-top:10px; }
+.secondary small { color:var(--muted); font-size:12px; }
+#proposal { padding-top:21px; }
+.proposal-heading { display:flex; justify-content:space-between; color:var(--purple); font-size:11px; letter-spacing:1.6px; margin-bottom:13px; }
+#proposalChange { font-size:19px; margin-bottom:12px; }
+#proposalChange span { color:var(--muted); }
+.proposal-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:11px; }
+.proposal-grid span { display:block; font-size:10px; color:var(--muted); margin-bottom:5px; }
+.proposal-grid b { font-weight:400; font-size:14px; }
+#decision { display:flex; justify-content:space-between; align-items:center; padding:12px 0 9px; color:var(--muted); font-size:12px; }
+#decision.accepted { color:var(--green); }
+#decision.rejected { color:var(--red); }
+#decisionExplanation { font-size:11px; color:var(--muted); }
+#moveLog { display:flex; gap:6px; padding-top:6px; }
+.move { font-size:10px; color:var(--green); border:1px solid #50fa7b30; padding:5px 7px; border-radius:3px; }
+.move.rejected { color:var(--red); border-color:#ff686830; }
+.proposal-empty { color:var(--muted); font-size:14px; line-height:1.7; padding:8px 0; }
+#scientificLabel { position:absolute; left:76px; top:855px; line-height:1.7; font-size:12px; color:var(--muted); }
+#scientificLabel strong { display:block; font-size:11px; font-weight:500; letter-spacing:1.4px; color:#b5becc; }
+#legend { position:absolute; left:1100px; top:867px; color:var(--muted); font-size:11px; line-height:2; }
+.legend-dot { width:5px; height:5px; display:inline-block; border-radius:50%; margin-right:8px; }
+footer { position:absolute; left:72px; right:72px; top:964px; border-top:1px solid var(--line); padding-top:20px; }
+.footer-top { display:flex; justify-content:space-between; align-items:center; }
+.equation { font-size:20px; letter-spacing:.2px; }
+.equation small { font-size:12px; color:var(--muted); margin-left:20px; }
+#physicsCaption { font-size:15px; color:var(--purple); }
+.footer-bottom { display:flex; justify-content:space-between; margin-top:21px; align-items:center; }
+.timeline { display:flex; align-items:center; gap:15px; width:760px; color:var(--muted); font-size:11px; }
+#playStatus { color:var(--cyan); width:116px; letter-spacing:1px; }
+.timeline-track { height:2px; width:350px; background:#303442; }
+#timelineProgress { height:100%; width:0; background:var(--cyan); }
+#controls { display:flex; align-items:center; gap:8px; }
+#controls button { cursor:pointer; background:transparent; border:1px solid #303543; color:#b1bacb; border-radius:4px; padding:7px 10px; font-size:11px; }
+#controls button:hover { background:#212634; color:var(--text); }
+#controls button:focus-visible { outline:2px solid var(--cyan); outline-offset:3px; }
+#controls kbd { font:10px Consolas,monospace; color:#66738a; margin-right:7px; }
+.capture #controls { opacity:.35; transition:opacity .2s; }
+.capture #controls:hover,.capture #controls:focus-within { opacity:1; }
+.cursor-idle { cursor:none; }
+.hide-hud #hud,.hide-hud #focusNote,.hide-hud #narrative,.hide-hud #legend,.hide-hud #mapLabel { visibility:hidden; }
+#debugPanel { position:absolute; left:560px; top:207px; padding:16px; background:#10141def; border:1px solid #3c4862; font-size:12px; line-height:1.6; color:var(--cyan); white-space:pre; display:none; }
+#error { position:absolute; left:500px; top:400px; width:700px; padding:30px; background:#201922; border:1px solid var(--red); color:var(--text); display:none; }
+@media (prefers-reduced-motion:reduce) { * { transition:none!important; } }
+</style>
+</head>
+<body>
+<main id="stage" aria-label="Simulação 02: rede urbana e recozimento simulado">
+  <canvas id="network" aria-label="Rede esquemática com quatro interseções, veículos e semáforos">Visualização de tráfego sintético em Canvas 2D.</canvas>
+  <header>
+    <div><div class="eyebrow mono">SIMULAÇÃO 02 / RECOZIMENTO SIMULADO</div><h1>Rede urbana <span>// Estado inicial</span></h1><div class="subtitle">Mecânica estatística × mobilidade urbana</div></div>
+    <div class="event"><strong>UFG</strong><br>XLIII SEMANA DA FÍSICA</div>
+  </header>
+  <div id="mapLabel" class="mono">04 INTERSEÇÕES &nbsp; / &nbsp; 12 SEGMENTOS</div>
+  <section id="narrative"><span id="phaseIndex" class="mono">01 / OBSERVAÇÃO</span><h2 id="narrativeTitle">Um estado<br>longe do ótimo.</h2><p id="narrativeDetail">Sinais fora de fase.<br>O atraso se acumula.</p></section>
+  <div id="focusNote"><div class="rule"></div><div id="focusKind" class="mono"></div><div id="focusTitle"></div><div id="focusDetail"></div></div>
+  <aside id="hud" aria-label="Métricas reais da simulação; energia e atraso com média móvel">
+    <div class="hud-head mono"><span>ESTADO OBSERVADO</span><span><i class="live-dot"></i><span id="liveLabel">AO VIVO</span></span></div>
+    <section class="temperature"><div class="metric-top"><span class="metric-label">TEMPERATURA T</span><span class="badge">ALTA</span></div><div class="temperature-line"><div class="metric-number mono" id="temperatureValue">—</div><small>parâmetro computacional</small></div><div class="bar"><div id="temperatureBar"></div></div></section>
+    <section class="energy"><div class="metric-top"><span class="metric-label">ENERGIA E</span><span class="badge" id="energyBadge" title="Alta: E ≥ 0,50; moderada: 0,30 ≤ E < 0,50">—</span></div><div class="metric-number mono" id="energyValue">—</div><canvas id="energyGraph" width="412" height="112" aria-label="Histórico medido da energia"></canvas><div class="energy-caption mono"><span>CUSTO NORMALIZADO · 0–1</span><span>E(t)</span></div></section>
+    <section class="acceptance"><div class="metric-top"><span class="metric-label">ACEITAÇÃO</span><span id="acceptanceBadge" class="badge">—</span></div><div class="acceptance-values"><div id="acceptanceValue" class="metric-number mono">—</div><div id="acceptanceCount" class="mono">0 / 0 propostas</div></div></section>
+    <section class="secondary"><div><div class="metric-label">ATRASO MÉDIO</div><div class="value mono"><span id="delayValue">—</span><small> s</small></div></div><div><div class="metric-label">EM FILA</div><div class="value mono" id="queueValue">—</div></div><div><div class="metric-label">VEÍCULOS</div><div class="value mono" id="vehicleValue">—</div></div></section>
+    <section id="proposal" aria-label="Proposta e decisão de Metropolis"><div class="proposal-heading mono"><span id="proposalNumber">EXPLORAÇÃO SEMAFÓRICA</span><span id="proposalIntersection">x → x′</span></div><div id="proposalEmpty" class="proposal-empty">Pequenos ajustes de verde e offset.<br>A exploração começa em 6 segundos.</div><div id="proposalData" hidden><div id="proposalChange" class="mono"></div><div class="proposal-grid mono"><div><span>Ē ATUAL</span><b id="currentEnergy">—</b></div><div><span>Ē CANDIDATA</span><b id="candidateEnergy">—</b></div><div><span>ΔE</span><b id="deltaEnergy">—</b></div><div><span>T DA DECISÃO</span><b id="decisionT">—</b></div><div><span>P(ACEITAR)</span><b id="probability">—</b></div><div><span>SORTEIO u</span><b id="randomU">—</b></div></div><div id="decision" class="mono"><span id="decisionText"></span><span id="decisionExplanation"></span></div></div><div id="evaluationNote" class="mono" style="font-size:10px;color:var(--muted);margin-top:5px">Avaliação pareada · janela de 64 s simulados</div><div id="moveLog" aria-label="Últimas decisões"></div></section>
+  </aside>
+  <div id="scientificLabel"><strong>MODELO URBANO REDUZIDO</strong>inspirado qualitativamente na malha urbana de Goiânia<br>dados sintéticos · rede esquemática · não georreferenciada</div>
+  <div id="legend"><div><i class="legend-dot" style="background:#d5dce4"></i>veículo em movimento</div><div><i class="legend-dot" style="background:#ff6868"></i>veículo em fila</div></div>
+  <footer><div class="footer-top"><div class="equation">E(x) = w₁D + w₂Q + w₃S <small>x = configuração semafórica</small></div><div id="physicsCaption">alta T → exploração do espaço de configurações</div></div><div class="footer-bottom"><div class="timeline mono"><span id="playStatus">EM EXECUÇÃO</span><span id="sceneTime">00.0</span><div class="timeline-track"><div id="timelineProgress"></div></div><span id="durationLabel">15.0 s</span><span id="timeScaleLabel">TRÁFEGO ×4</span></div><nav id="controls" aria-label="Controles da simulação"><button id="playButton" aria-label="Pausar"><kbd>SPACE</kbd><span>Pausar</span></button><button id="restartButton"><kbd>R</kbd>Reiniciar</button><button id="hudButton" aria-pressed="true"><kbd>H</kbd>Painel</button><button id="gridButton" aria-pressed="false"><kbd>G</kbd>Malha</button><button id="exportButton" title="Exportar configuração e medidas desta execução">JSON ↓</button><button id="debugButton" aria-pressed="false"><kbd>D</kbd>Inspeção</button></nav></div></footer>
+  <pre id="debugPanel" aria-label="Inspeção do modelo"></pre><div id="error" role="alert"></div>
+</main>
+<script>
+/* Núcleo científico independente da apresentação. Coordenadas e tempos são
+ * esquemáticos; nenhuma grandeza foi calibrada com o trânsito de Goiânia. */
+const UrbanCore = (() => {
+  'use strict';
+  const RANDOM_SEED = 20260911;
+  const CONFIG = {
+    seed: RANDOM_SEED, duration: 15, targetFPS: 60, physicsDt: 1 / 120, timeScale: 4,
+    traffic: {
+      vehicleLength: 10, vehicleWidth: 5, safeGap: 4, laneOffset: 8,
+      freeSpeed: 23, acceleration: 8, braking: 16, queueSpeed: 2.2,
+      stoppedSpeed: 0.5, queueRadius: 72, junctionRadius: 26,
+      maxVehicles: 120, warmupTime: 120,
+      arrivalRates: [0.242, 0.198, 0.209, 0.176, 0.187, 0.176, 0.209, 0.176]
+    },
+    signals: {yellow: 2, allRed: 1.5, minGreen: 10, maxGreen: 38},
+    optimization: {
+      initialTemperature: 0.95, finalTemperatureScene: 0.88,
+      proposalTimes: [6, 7.5, 9, 10.5, 12, 13.3],
+      evaluationWindow: 64, evaluationDt: 1 / 15, evaluationStepsPerTick: 24,
+      maxOffsetChange: 6, maxGreenChange: 3
+    },
+    objective: {delayWeight: 0.55, queueWeight: 0.30, stopWeight: 0.15, delayReference: 20}
+  };
+  const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+  const modulo = (x, n) => ((x % n) + n) % n;
+  class PRNG {
+    constructor(seed) { this.state = seed >>> 0; }
+    next() {
+      let t = this.state += 0x6D2B79F5;
+      this.state >>>= 0;
+      t = Math.imul(t ^ t >>> 15, t | 1);
+      t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    }
+    clone() { const copy = new PRNG(0); copy.state = this.state; return copy; }
+  }
+
+  class RoadNetwork {
+    constructor() {
+      this.intersections = [
+        {id: 'I1', x: 425, y: 450}, {id: 'I2', x: 925, y: 415},
+        {id: 'I3', x: 480, y: 730}, {id: 'I4', x: 965, y: 765}
+      ];
+      const p = this.intersections;
+      this.corridors = [
+        {id: 'A', name: 'CORREDOR A · referência T-7', axis: 'EW', width: 44,
+          points: [{x:90,y:480},p[0],p[1],{x:1330,y:450}], nodes: [0,1]},
+        {id: 'B', name: 'CORREDOR B · referência T-63', axis: 'EW', width: 34,
+          points: [{x:145,y:800},p[2],p[3],{x:1310,y:720}], nodes: [2,3]},
+        {id: 'C', name: 'CONEXÃO LOCAL', axis: 'NS', width: 34,
+          points: [{x:380,y:185},p[0],p[2],{x:515,y:925}], nodes: [0,2]},
+        {id: 'D', name: 'EIXO NORTE–SUL', axis: 'NS', width: 40,
+          points: [{x:970,y:175},p[1],p[3],{x:1040,y:930}], nodes: [1,3]}
+      ];
+      this.routes = [];
+      this.edges = [];
+      this.corridors.forEach((c, corridor) => {
+        for (let i=0;i<c.points.length-1;i++) this.edges.push({id:c.id+(i+1),a:c.points[i],b:c.points[i+1],corridor});
+        for (let direction=0;direction<2;direction++) {
+          const centers = direction ? [...c.points].reverse() : [...c.points];
+          const nodes = direction ? [...c.nodes].reverse() : [...c.nodes];
+          const normals = [];
+          for (let i=0;i<centers.length-1;i++) {
+            const dx=centers[i+1].x-centers[i].x,dy=centers[i+1].y-centers[i].y,d=Math.hypot(dx,dy);
+            normals.push({x:-dy/d,y:dx/d});
+          }
+          const points=centers.map((point,i)=> {
+            const a=normals[Math.max(0,i-1)],b=normals[Math.min(normals.length-1,i)];
+            const nx=a.x+b.x,ny=a.y+b.y,denom=1+a.x*b.x+a.y*b.y;
+            return {x:point.x+CONFIG.traffic.laneOffset*nx/denom,y:point.y+CONFIG.traffic.laneOffset*ny/denom};
+          });
+          const cumulative=[0];
+          for(let i=1;i<points.length;i++) cumulative.push(cumulative[i-1]+Math.hypot(points[i].x-points[i-1].x,points[i].y-points[i-1].y));
+          this.routes.push({id:this.routes.length,corridor,direction,axis:c.axis,points,cumulative,
+            length:cumulative[cumulative.length-1],intersections:nodes.map((index,i)=>({index,s:cumulative[i+1]}))});
+        }
+      });
+    }
+    pose(routeId, s) {
+      const r=this.routes[routeId];
+      const q=clamp(s,0,r.length); let segment=0;
+      while(segment<r.points.length-2 && q>r.cumulative[segment+1]) segment++;
+      const a=r.points[segment],b=r.points[segment+1],length=r.cumulative[segment+1]-r.cumulative[segment];
+      const t=(q-r.cumulative[segment])/length;
+      return {x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t,angle:Math.atan2(b.y-a.y,b.x-a.x)};
+    }
+    validate() {
+      const errors=[];
+      if(this.intersections.length!==4 || this.edges.length!==12) errors.push('Topologia inválida');
+      const adjacency=this.intersections.map(()=>new Set());
+      for(const c of this.corridors){adjacency[c.nodes[0]].add(c.nodes[1]);adjacency[c.nodes[1]].add(c.nodes[0]);}
+      const visited=new Set([0]),pending=[0];
+      while(pending.length){for(const v of adjacency[pending.pop()])if(!visited.has(v)){visited.add(v);pending.push(v);}}
+      if(visited.size!==this.intersections.length) errors.push('Rede desconectada');
+      for(const r of this.routes)if(!(r.length>0)||r.points.some(p=>!Number.isFinite(p.x+p.y)))errors.push('Rota inválida');
+      return errors;
+    }
+  }
+
+  function initialState() {
+    // Verdes desbalanceados e offsets sem coordenação; ambos os eixos têm serviço.
+    return {intersections:[
+      {greenEW:15,greenNS:34,offset:0}, {greenEW:34,greenNS:15,offset:24},
+      {greenEW:16,greenNS:33,offset:11}, {greenEW:31,greenNS:18,offset:37}
+    ].map(s=>({...s,cycleLength:s.greenEW+s.greenNS+2*(CONFIG.signals.yellow+CONFIG.signals.allRed)}))};
+  }
+  const cloneState = state => ({intersections:state.intersections.map(s=>({...s}))});
+
+  class TrafficSignal {
+    static planColor(plan,time,axis) {
+      let t=modulo(time+plan.offset,plan.cycleLength);
+      if(t<plan.greenEW) return axis==='EW'?'GREEN':'RED';
+      t-=plan.greenEW;
+      if(t<CONFIG.signals.yellow) return axis==='EW'?'YELLOW':'RED';
+      t-=CONFIG.signals.yellow+CONFIG.signals.allRed;
+      if(t<0) return 'RED';
+      if(t<plan.greenNS) return axis==='NS'?'GREEN':'RED';
+      t-=plan.greenNS;
+      if(t<CONFIG.signals.yellow) return axis==='NS'?'YELLOW':'RED';
+      return 'RED';
+    }
+    static validate(plan) {
+      return Number.isFinite(plan.offset) && plan.greenEW>=CONFIG.signals.minGreen && plan.greenNS>=CONFIG.signals.minGreen
+        && plan.greenEW<=CONFIG.signals.maxGreen && plan.greenNS<=CONFIG.signals.maxGreen
+        && Math.abs(plan.cycleLength-plan.greenEW-plan.greenNS-2*(CONFIG.signals.yellow+CONFIG.signals.allRed))<1e-8;
+    }
+  }
+
+  class TrafficGenerator {
+    constructor() {
+      // Cada entrada tem fluxo e PRNG próprios: bloqueios numa rota não consomem
+      // aleatoriedade das demais. Snapshots compartilham as mesmas chegadas futuras.
+      this.streams=CONFIG.traffic.arrivalRates.map((rate,i)=>{
+        const rng=new PRNG((CONFIG.seed+Math.imul(i+1,0x9E3779B9))>>>0);
+        return {rate,rng,next:rng.next()/rate,pending:[],arrived:0};
+      });
+    }
+    advance(time) {
+      for(const stream of this.streams) while(stream.next<=time) {
+        stream.pending.push({targetSpeed:CONFIG.traffic.freeSpeed*(0.88+0.24*stream.rng.next()),tone:stream.rng.next(),arrivalTime:stream.next});
+        stream.arrived++;
+        stream.next+=(0.72+0.56*stream.rng.next())/stream.rate;
+      }
+    }
+    clone() {
+      const copy=Object.create(TrafficGenerator.prototype);
+      copy.streams=this.streams.map(s=>({...s,rng:s.rng.clone(),pending:s.pending.map(p=>({...p}))}));
+      return copy;
+    }
+  }
+
+  class EnergyModel {
+    static evaluate(meanDelay,queueCount,stoppedCount,activeCount) {
+      // D: fração de um referencial explícito de atraso de 20 s simulados, saturada em 1.
+      // Q e S: frações observadas de veículos em fila e parados, respectivamente.
+      // A normalização limita o custo, sem impor um piso alto nem fabricar dados.
+      const D=clamp(meanDelay/CONFIG.objective.delayReference,0,1);
+      const Q=activeCount?queueCount/activeCount:0,S=activeCount?stoppedCount/activeCount:0;
+      const w=CONFIG.objective;
+      return {D,Q,S,energy:w.delayWeight*D+w.queueWeight*Q+w.stopWeight*S};
+    }
+  }
+
+  class TrafficSimulation {
+    constructor(network=new RoadNetwork()) {
+      this.network=network;this.state=initialState();this.time=0;this.vehicles=[];
+      this.steps=0;this.validationEnabled=true;
+      this.generator=new TrafficGenerator();this.nextVehicleId=1;this.exited=0;
+      this.totalStops=0;this.completedDelay=0;this.completedTrips=0;
+      this.clearances=this.state.intersections.map(()=>({until:-1,yellowUntil:-1,axis:null}));
+      this.occupancy=this.state.intersections.map(()=>({EW:0,NS:0}));
+      this.lanes=network.routes.map(()=>[]);
+      this.metrics={energy:0,meanDelay:0,queueCount:0,stoppedCount:0,meanSpeed:0,activeCount:0,D:0,Q:0,S:0,meanQueueLength:0,queueByIntersection:[0,0,0,0],stopEvents:0};
+      this.refreshOccupancy();
+    }
+    clone() {
+      const copy=Object.create(TrafficSimulation.prototype);
+      copy.network=this.network;copy.state=cloneState(this.state);copy.time=this.time;
+      copy.steps=this.steps;copy.validationEnabled=false;
+      copy.vehicles=this.vehicles.map(v=>({...v}));copy.generator=this.generator.clone();
+      for(const key of ['nextVehicleId','exited','totalStops','completedDelay','completedTrips'])copy[key]=this[key];
+      copy.clearances=this.clearances.map(c=>({...c}));copy.occupancy=this.occupancy.map(o=>({...o}));
+      copy.lanes=this.network.routes.map(()=>[]);
+      copy.metrics={...this.metrics,queueByIntersection:[...this.metrics.queueByIntersection]};
+      return copy;
+    }
+    refreshOccupancy() {
+      for(const o of this.occupancy){o.EW=0;o.NS=0;}
+      for(const v of this.vehicles){
+        const r=this.network.routes[v.route];
+        for(const crossing of r.intersections)if(v.s>crossing.s-CONFIG.traffic.junctionRadius+1e-6 && v.s<crossing.s+CONFIG.traffic.junctionRadius+CONFIG.traffic.vehicleLength/2)
+          this.occupancy[crossing.index][r.axis]++;
+      }
+    }
+    signalColor(index,axis) {
+      const c=this.clearances[index];
+      if(this.time<c.until) return this.time<c.yellowUntil && axis===c.axis?'YELLOW':'RED';
+      const opposite=axis==='EW'?'NS':'EW';
+      const raw=TrafficSignal.planColor(this.state.intersections[index],this.time,axis);
+      // A fase prevista só abre depois de o último veículo comprometido sair.
+      // Isso também cobre veículos lentos que atravessam durante o amarelo.
+      if(this.occupancy[index][opposite]>0 && raw!=='RED')return 'RED';
+      return raw;
+    }
+    applyState(state) {
+      if(state.intersections.some(p=>!TrafficSignal.validate(p))) throw new Error('Plano semafórico inválido');
+      state.intersections.forEach((p,i)=>{
+        const before=this.state.intersections[i];
+        if(p.greenEW!==before.greenEW||p.greenNS!==before.greenNS||p.offset!==before.offset){
+          const oldEW=this.signalColor(i,'EW'),oldNS=this.signalColor(i,'NS');
+          const axis=oldEW==='GREEN'||oldEW==='YELLOW'?'EW':oldNS==='GREEN'||oldNS==='YELLOW'?'NS':null;
+          this.clearances[i]={axis,yellowUntil:this.time+CONFIG.signals.yellow,until:this.time+CONFIG.signals.yellow+CONFIG.signals.allRed};
+        }
+      });
+      this.state=cloneState(state);
+    }
+    warmup(seconds=CONFIG.traffic.warmupTime) {
+      const steps=Math.round(seconds/(CONFIG.physicsDt*CONFIG.timeScale));
+      for(let i=0;i<steps;i++)this.step(CONFIG.physicsDt*CONFIG.timeScale);
+      const errors=this.validate();if(errors.length)throw new Error(errors.join("; "));
+      return this;
+    }
+    step(dt) {
+      if(!(dt>0&&dt<=0.1))throw new Error('Passo físico fora do intervalo estável');
+      const cfg=CONFIG.traffic;
+      this.time+=dt;this.generator.advance(this.time);
+      for(const lane of this.lanes)lane.length=0;
+      for(const v of this.vehicles)this.lanes[v.route].push(v);
+      for(let routeId=0;routeId<this.lanes.length;routeId++){
+        const lane=this.lanes[routeId];lane.sort((a,b)=>b.s-a.s);
+        const stream=this.generator.streams[routeId];
+        const tail=lane[lane.length-1];
+        if(stream.pending.length && (!tail||tail.s>=cfg.vehicleLength+cfg.safeGap+1) && this.vehicles.length<cfg.maxVehicles){
+          const spec=stream.pending.shift();
+          const v={id:this.nextVehicleId++,route:routeId,lane:routeId,s:0,prevS:0,v:cfg.freeSpeed*0.5,targetSpeed:spec.targetSpeed,a:0,
+            delay:0,age:0,inQueue:false,wasMoving:true,stopCount:0,tone:spec.tone,distanceToLeader:Infinity,distanceToSignal:Infinity,queueIntersection:-1};
+          this.vehicles.push(v);lane.push(v);
+        }
+      }
+      this.refreshOccupancy();
+      for(let routeId=0;routeId<this.lanes.length;routeId++){
+        const route=this.network.routes[routeId],lane=this.lanes[routeId];
+        let leader=null;
+        for(const v of lane){
+          v.prevS=v.s;const oldSpeed=v.v;
+          let hardLimit=Infinity,allowedSpeed=v.targetSpeed;
+          v.distanceToLeader=leader?leader.s-v.s-cfg.vehicleLength:Infinity;
+          if(leader){
+            const gap=Math.max(0,v.distanceToLeader-cfg.safeGap);
+            hardLimit=leader.s-cfg.vehicleLength-cfg.safeGap;
+            // Distance d'arrêt relative + temps de réaction réduit. Une projection
+            // géométrique finale garantit l'espacement même à basse vitesse.
+            allowedSpeed=Math.min(allowedSpeed,Math.sqrt(Math.max(0,leader.v*leader.v+2*cfg.braking*gap)),gap/0.65+leader.v);
+          }
+          v.distanceToSignal=Infinity;v.queueIntersection=-1;
+          for(const crossing of route.intersections){
+            const stopLine=crossing.s-cfg.junctionRadius;
+            if(v.s<=stopLine+1e-8){
+              v.distanceToSignal=stopLine-v.s;v.queueIntersection=crossing.index;
+              const color=this.signalColor(crossing.index,route.axis);
+              const blockedExit=leader && leader.s>stopLine && leader.s<crossing.s+cfg.junctionRadius+cfg.vehicleLength+cfg.safeGap && leader.v<cfg.queueSpeed;
+              if(color!=='GREEN'||blockedExit){
+                hardLimit=Math.min(hardLimit,stopLine);
+                allowedSpeed=Math.min(allowedSpeed,Math.sqrt(2*cfg.braking*Math.max(0,stopLine-v.s)));
+              }
+              break;
+            }
+          }
+          const acceleration=clamp((allowedSpeed-v.v)*3,-cfg.braking,cfg.acceleration);
+          let speed=clamp(v.v+acceleration*dt,0,v.targetSpeed);
+          let next=v.s+(v.v+speed)*0.5*dt;
+          if(next>hardLimit){next=Math.max(v.s,hardLimit);speed=Math.min(speed,Math.max(0,(next-v.s)/dt));}
+          v.s=next;v.v=speed;v.a=(speed-oldSpeed)/dt;v.age+=dt;
+          // Atraso acumulado: integral da perda relativa de velocidade, em
+          // segundos simulados, coerente para os veículos e snapshots.
+          v.delay+=Math.max(0,1-speed/v.targetSpeed)*dt;
+          v.inQueue=speed<cfg.queueSpeed && (v.distanceToSignal<cfg.queueRadius || (leader&&leader.inQueue&&v.distanceToLeader<cfg.safeGap+20));
+          if(v.inQueue&&leader&&leader.inQueue&&v.distanceToSignal>=cfg.queueRadius)v.queueIntersection=leader.queueIntersection;
+          if(v.wasMoving&&speed<=cfg.stoppedSpeed){v.stopCount++;this.totalStops++;v.wasMoving=false;}
+          else if(speed>cfg.queueSpeed)v.wasMoving=true;
+          leader=v;
+        }
+      }
+      // Saída efetiva do domínio: o próximo veículo entra somente pela borda.
+      for(let i=this.vehicles.length-1;i>=0;i--)if(this.vehicles[i].s>this.network.routes[this.vehicles[i].route].length){
+        this.completedDelay+=this.vehicles[i].delay;this.completedTrips++;this.exited++;
+        this.vehicles.splice(i,1);
+      }
+      this.refreshOccupancy();this.collectMetrics();this.steps++;
+      if(this.validationEnabled&&this.steps%120===0){const errors=this.validate();if(errors.length)throw new Error(errors.join("; "));}
+    }
+    collectMetrics() {
+      let delay=0,speed=0,queueCount=0,stoppedCount=0;
+      const queueByIntersection=[0,0,0,0];
+      for(const v of this.vehicles){delay+=v.delay;speed+=v.v;
+        if(v.inQueue){queueCount++;if(v.queueIntersection>=0)queueByIntersection[v.queueIntersection]++;}
+        if(v.v<CONFIG.traffic.stoppedSpeed)stoppedCount++;
+      }
+      const activeCount=this.vehicles.length,meanDelay=activeCount?delay/activeCount:0;
+      this.metrics={...EnergyModel.evaluate(meanDelay,queueCount,stoppedCount,activeCount),
+        meanDelay,queueCount,stoppedCount,activeCount,meanSpeed:activeCount?speed/activeCount:0,
+        meanQueueLength:queueCount/16,queueByIntersection,stopEvents:this.totalStops,
+        pendingArrivals:this.generator.streams.reduce((sum,s)=>sum+s.pending.length,0)};
+    }
+    validate() {
+      const errors=this.network.validate();
+      if(this.state.intersections.some(p=>!TrafficSignal.validate(p)))errors.push('Sinais inválidos');
+      for(let i=0;i<4;i++){
+        if(this.signalColor(i,'NS')==='GREEN'&&this.signalColor(i,'EW')==='GREEN')errors.push('Verdes conflitantes em I'+(i+1));
+        if(this.occupancy[i].EW>0&&this.occupancy[i].NS>0)errors.push('Travessias conflitantes em I'+(i+1));
+      }
+      const lanes=this.network.routes.map(()=>[]);
+      for(const v of this.vehicles){
+        if(!Number.isFinite(v.s+v.v+v.delay+v.a)||v.v<0||v.s<0||v.s>this.network.routes[v.route].length)errors.push('Veículo inválido '+v.id);
+        lanes[v.route].push(v);
+      }
+      for(const lane of lanes){lane.sort((a,b)=>a.s-b.s);for(let i=1;i<lane.length;i++)if(lane[i].s-lane[i-1].s<CONFIG.traffic.vehicleLength+CONFIG.traffic.safeGap-1e-6)errors.push('Espaçamento inválido');}
+      if(!Number.isFinite(this.metrics.energy)||this.metrics.energy<0||this.metrics.energy>1||this.metrics.queueCount<0)errors.push('Métricas inválidas');
+      const w=CONFIG.objective;
+      if(Math.abs(w.delayWeight+w.queueWeight+w.stopWeight-1)>1e-10)errors.push('Pesos inválidos');
+      return errors;
+    }
+  }
+
+  class AnnealingController {
+    constructor(simulation) {
+      this.simulation=simulation;this.rng=new PRNG(CONFIG.seed^0xA341316C);
+      this.temperature=CONFIG.optimization.initialTemperature;
+      this.attemptedMoves=0;this.acceptedMoves=0;this.history=[];this.currentProposal=null;this.job=null;
+      this.nextProposal=0;this.phase='INITIAL_STATE';
+    }
+    get acceptanceRatio(){return this.attemptedMoves?this.acceptedMoves/this.attemptedMoves:0;}
+    createProposal(sceneTime) {
+      const cfg=CONFIG.optimization;
+      const state=cloneState(this.simulation.state),index=Math.floor(this.rng.next()*4),p=state.intersections[index];
+      const parameter=this.rng.next()<0.7?'offset':'greenEW';
+      const before=p[parameter],limit=parameter==='offset'?cfg.maxOffsetChange:cfg.maxGreenChange;
+      const requested=(this.rng.next()*2-1)*limit;
+      let delta=requested;
+      if(parameter==='offset')p.offset=modulo(before+delta,p.cycleLength);
+      else{
+        // Redistribuição dos verdes com ciclo constante mantém a viabilidade.
+        const totalGreen=p.greenEW+p.greenNS;
+        const lower=Math.max(CONFIG.signals.minGreen,totalGreen-CONFIG.signals.maxGreen);
+        const upper=Math.min(CONFIG.signals.maxGreen,totalGreen-CONFIG.signals.minGreen);
+        let proposed=p.greenEW+delta;
+        // Reflexão nos limites conserva uma proposta simétrica, necessária
+        // ao critério de Metropolis sem razão de Hastings adicional.
+        while(proposed<lower||proposed>upper){
+          if(proposed<lower)proposed=2*lower-proposed;
+          if(proposed>upper)proposed=2*upper-proposed;
+        }
+        delta=proposed-p.greenEW;p.greenEW=proposed;p.greenNS=totalGreen-proposed;
+      }
+      const proposal={index:this.nextProposal+1,intersection:index,intersectionId:'I'+(index+1),parameter,
+        before,after:p[parameter],deltaParameter:delta,sceneTime,temperature:this.temperature,status:'EVALUATING',accepted:null,
+        currentEnergy:null,candidateEnergy:null,deltaEnergy:null,probability:null,u:null,window:cfg.evaluationWindow};
+      const baseline=this.simulation.clone(),candidate=this.simulation.clone();
+      candidate.applyState(state);
+      this.job={baseline,candidate,state,proposal,steps:0,totalSteps:Math.round(cfg.evaluationWindow/cfg.evaluationDt),baselineSum:0,candidateSum:0};
+      this.currentProposal=proposal;this.nextProposal++;
+    }
+    update(sceneTime) {
+      const cfg=CONFIG.optimization;
+      this.temperature=cfg.initialTemperature+(cfg.finalTemperatureScene-cfg.initialTemperature)*clamp(sceneTime/CONFIG.duration,0,1);
+      this.phase=sceneTime<6?'INITIAL_STATE':'HIGH_T_EXPLORATION';
+      if(!this.job && this.nextProposal<cfg.proposalTimes.length && sceneTime+1e-8>=cfg.proposalTimes[this.nextProposal])this.createProposal(sceneTime);
+      if(!this.job)return;
+      const job=this.job;
+      // Mesmo snapshot, chegadas, passo e horizonte nas duas alternativas.
+      // O trabalho em lotes preserva a fluidez. O passo de avaliação é maior
+      // que o passo da cena, porém idêntico entre as duas alternativas.
+      for(let i=0;i<cfg.evaluationStepsPerTick&&job.steps<job.totalSteps;i++){
+        job.baseline.step(cfg.evaluationDt);job.candidate.step(cfg.evaluationDt);
+        job.baselineSum+=job.baseline.metrics.energy;job.candidateSum+=job.candidate.metrics.energy;job.steps++;
+      }
+      job.proposal.progress=job.steps/job.totalSteps;
+      if(job.steps<job.totalSteps)return;
+      const p=job.proposal;
+      p.currentEnergy=job.baselineSum/job.totalSteps;p.candidateEnergy=job.candidateSum/job.totalSteps;
+      p.deltaEnergy=p.candidateEnergy-p.currentEnergy;
+      p.probability=p.deltaEnergy<=0?1:Math.exp(-p.deltaEnergy/p.temperature);
+      p.u=this.rng.next();p.accepted=p.u<p.probability;
+      p.status=p.accepted?'ACCEPTED':'REJECTED';p.decidedAt=sceneTime;
+      this.attemptedMoves++;
+      if(p.accepted){this.acceptedMoves++;this.simulation.applyState(job.state);}
+      this.history.push(p);this.job=null;
+    }
+    validate() {
+      const errors=[];
+      if(!(this.temperature>0))errors.push('Temperatura inválida');
+      for(const p of this.history){
+        const prob=p.deltaEnergy<=0?1:Math.exp(-p.deltaEnergy/p.temperature);
+        if(!(p.probability>=0&&p.probability<=1)||Math.abs(prob-p.probability)>1e-12||p.accepted!==(p.u<p.probability))errors.push('Decisão Metropolis inválida');
+      }
+      return errors;
+    }
+  }
+  return {RANDOM_SEED,CONFIG,PRNG,RoadNetwork,TrafficSignal,TrafficGenerator,EnergyModel,TrafficSimulation,AnnealingController,initialState,cloneState,clamp};
+})();
+if(typeof globalThis!=='undefined')globalThis.UrbanCore=UrbanCore;
+
+</script>
+<script>
+"use strict";
+(() => {
+  const { CONFIG, RoadNetwork, TrafficSimulation, AnnealingController } = window.UrbanCore;
+  const RECORDING_MODE = true;
+  const DEBUG_MODE = false;
+  const C = { bg:'#0f111a', asphalt:'#222633', border:'#353b4c', muted:'#778198', cyan:'#8be9fd', purple:'#bd93f9', green:'#50fa7b', orange:'#ffb86c', red:'#ff6868' };
+  const $ = id => document.getElementById(id);
+  const clamp = (x,a,b) => Math.max(a,Math.min(b,x));
+  const fmt = (x,n=3) => Number.isFinite(x) ? x.toFixed(n) : '—';
+  const signed = (x,n=3) => (x>=0?'+':'−')+fmt(Math.abs(x),n);
+  const stage = $('stage');
+
+  class Renderer {
+    constructor(network) {
+      this.network=network;
+      this.canvas=$('network');
+      this.ctx=this.canvas.getContext('2d',{alpha:false});
+      this.base=document.createElement('canvas');
+      this.grid=false; this.debug=DEBUG_MODE;
+      this.resize();
+    }
+    resize() {
+      this.scale=Math.min(innerWidth/1920,innerHeight/1080);
+      stage.style.transform=`scale(${this.scale})`;
+      stage.style.left=`${(innerWidth-1920*this.scale)/2}px`;
+      stage.style.top=`${(innerHeight-1080*this.scale)/2}px`;
+      this.ratio=this.scale*(devicePixelRatio||1);
+      this.canvas.width=Math.round(1920*this.ratio);
+      this.canvas.height=Math.round(1080*this.ratio);
+      this.base.width=this.canvas.width; this.base.height=this.canvas.height;
+      this.buildMap();
+    }
+    path(ctx,points) {
+      ctx.beginPath();
+      points.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));
+    }
+    text(ctx,text,x,y,color=C.muted,size=12,align='left') {
+      ctx.fillStyle=color; ctx.font=`${size}px Consolas, monospace`; ctx.textAlign=align; ctx.fillText(text,x,y); ctx.textAlign='left';
+    }
+    buildMap() {
+      const ctx=this.base.getContext('2d');
+      ctx.setTransform(this.ratio,0,0,this.ratio,0,0);
+      ctx.fillStyle=C.bg;ctx.fillRect(0,0,1920,1080);
+      // Quadras abstratas: nenhum contorno geográfico ou dado municipal.
+      const blocks=[[[475,215],[620,211],[626,364],[478,374]],[[648,212],[864,210],[848,363],[655,372]],[[1032,217],[1190,232],[1207,344],[1020,343]],[[1097,503],[1240,511],[1248,630],[1100,650]],[[556,493],[691,486],[700,673],[555,681]],[[726,485],[855,480],[894,688],[729,677]],[[199,540],[357,524],[385,704],[216,745]],[[565,802],[717,815],[720,910],[570,908]],[[766,814],[897,833],[923,920],[771,917]]];
+      for(const p of blocks){this.path(ctx,p.map(([x,y])=>({x,y})));ctx.closePath();ctx.fillStyle='#141824';ctx.fill();ctx.strokeStyle='#202535';ctx.lineWidth=1;ctx.stroke();}
+      // Subdivisões discretas dão escala às quadras esquemáticas.
+      ctx.strokeStyle='#1e2431';ctx.lineWidth=1;
+      for(const [x,y,w,h] of [[495,240,99,104],[677,239,62,96],[759,233,71,98],[1052,242,111,71],[228,563,97,116],[1120,535,91,73],[593,824,91,66],[788,834,90,59]]) {
+        ctx.strokeRect(x,y,w,h);ctx.beginPath();ctx.moveTo(x+w/2,y);ctx.lineTo(x+w/2,y+h);ctx.stroke();
+      }
+      this.text(ctx,'CORREDOR A · REFERÊNCIA T-7',604,388,'#737e93',12);
+      this.text(ctx,'CORREDOR B · REFERÊNCIA T-63',626,805,'#737e93',12);
+      this.text(ctx,'EIXO NORTE–SUL',1030,270,'#525e73',11);
+      const corridors=this.network.corridors;
+      // Três passadas: bordas, asfalto e marcações; sem texturas externas.
+      ctx.lineJoin='round';ctx.lineCap='round';
+      for(const road of corridors){this.path(ctx,road.points);ctx.lineWidth=road.width+4;ctx.strokeStyle=C.border;ctx.stroke();}
+      for(const road of corridors){this.path(ctx,road.points);ctx.lineWidth=road.width;ctx.strokeStyle=C.asphalt;ctx.stroke();}
+      for(const road of corridors){this.path(ctx,road.points);ctx.lineWidth=1;ctx.strokeStyle='#7c7e794c';ctx.setLineDash([8,11]);ctx.stroke();ctx.setLineDash([]);}
+      // Remove as linhas centrais dentro dos cruzamentos.
+      for(const n of this.network.intersections){ctx.fillStyle=C.asphalt;ctx.beginPath();ctx.arc(n.x,n.y,23,0,Math.PI*2);ctx.fill();}
+      for(const route of this.network.routes){
+        for(const entry of route.intersections){
+          const p=this.network.pose(route.id,entry.s-CONFIG.traffic.junctionRadius+CONFIG.traffic.vehicleLength/2);
+          ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.angle);ctx.strokeStyle='#a6b1bd80';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(0,-5.7);ctx.lineTo(0,5.7);ctx.stroke();ctx.restore();
+        }
+        for(let s=95;s<route.length-50;s+=220){
+          if(route.intersections.some(e=>Math.abs(e.s-s)<70))continue;
+          const p=this.network.pose(route.id,s);ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.angle);ctx.strokeStyle='#66748a60';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(-5,-3);ctx.lineTo(0,0);ctx.lineTo(-5,3);ctx.stroke();ctx.restore();
+        }
+      }
+      for(const [i,n] of this.network.intersections.entries()){
+        this.text(ctx,`I${i+1}`,n.x+35,n.y-35,'#9ba7bd',13);
+      }
+      for(const road of corridors){
+        for(const i of [0,road.points.length-1]){
+          const p=road.points[i];ctx.strokeStyle='#677388';ctx.lineWidth=1;ctx.beginPath();ctx.arc(p.x,p.y,4,0,Math.PI*2);ctx.stroke();
+        }
+      }
+    }
+    render(sim,optimizer,t,alpha) {
+      const ctx=this.ctx;
+      ctx.setTransform(1,0,0,1,0,0);ctx.drawImage(this.base,0,0);
+      ctx.setTransform(this.ratio,0,0,this.ratio,0,0);
+      if(this.grid){ctx.strokeStyle='#53688125';ctx.lineWidth=.6;for(let x=75;x<1360;x+=40){ctx.beginPath();ctx.moveTo(x,190);ctx.lineTo(x,938);ctx.stroke();}for(let y=190;y<940;y+=40){ctx.beginPath();ctx.moveTo(75,y);ctx.lineTo(1360,y);ctx.stroke();}}
+      // Carga local medida: um halo sutil acompanha somente veículos em fila.
+      for(const v of sim.vehicles){
+        if(!v.inQueue)continue;
+        const p=this.network.pose(v.route,v.s);ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.angle);ctx.strokeStyle='#ff686826';ctx.lineWidth=12;ctx.beginPath();ctx.moveTo(-7,0);ctx.lineTo(7,0);ctx.stroke();ctx.restore();
+      }
+      for(const v of sim.vehicles){
+        const s=(v.prevS??v.s)+(v.s-(v.prevS??v.s))*alpha;
+        const p=this.network.pose(v.route,s);ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.angle);
+        const palette=['#d0d7df','#b4bfce','#dde0e1','#b0bdc9','#8bd3df','#c0a9df'];
+        ctx.fillStyle=palette[v.id%palette.length];ctx.beginPath();ctx.roundRect(-5,-2.5,10,5,1.3);ctx.fill();
+        ctx.fillStyle='#313b4b';ctx.fillRect(.9,-1.8,1.8,3.6);
+        if(v.inQueue){ctx.fillStyle=C.red;ctx.fillRect(-5.4,-2.5,1.5,1.5);ctx.fillRect(-5.4,1,1.5,1.5);}
+        if(this.debug){ctx.strokeStyle=C.cyan;ctx.lineWidth=.6;ctx.strokeRect(-5.5,-3,11,6);this.text(ctx,`${v.id}:${v.v.toFixed(1)}`,0,-8,C.cyan,8);}
+        ctx.restore();
+      }
+      for(const route of this.network.routes){for(const e of route.intersections){
+        const p=this.network.pose(route.id,e.s-CONFIG.traffic.junctionRadius+CONFIG.traffic.vehicleLength/2);
+        const color=sim.signalColor(e.index,route.axis);
+        const ink=color==='GREEN'?C.green:color==='YELLOW'?C.orange:C.red;
+        ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.angle);ctx.fillStyle='#0e131e';ctx.beginPath();ctx.arc(0,10,5,0,Math.PI*2);ctx.fill();ctx.fillStyle=ink;ctx.beginPath();ctx.arc(0,10,2.7,0,Math.PI*2);ctx.fill();ctx.restore();
+        if(this.debug){ctx.strokeStyle='#8be9fd66';ctx.lineWidth=.6;ctx.beginPath();ctx.arc(p.x,p.y,5,0,Math.PI*2);ctx.stroke();}
+      }}
+      const proposal=optimizer.currentProposal;
+      let focus=-1;
+      if(t>=3&&t<6){
+        let max=0;const counts=Array(this.network.intersections.length).fill(0);
+        for(const v of sim.vehicles)if(v.inQueue){const route=this.network.routes[v.route];const next=route.intersections.find(e=>e.s>v.s);if(next)counts[next.index]++;}
+        counts.forEach((n,i)=>{if(n>max){max=n;focus=i;}});
+      }else if(t>=6&&proposal)focus=proposal.intersection;
+      if(focus>=0){
+        const n=this.network.intersections[focus];
+        const a=.45+.1*Math.sin(t*2);
+        ctx.strokeStyle=t<6?`rgba(255,184,108,${a})`:`rgba(189,147,249,${a})`;
+        ctx.lineWidth=1;ctx.setLineDash([4,6]);ctx.beginPath();ctx.arc(n.x,n.y,49,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);
+        ctx.strokeStyle='#69738960';ctx.beginPath();ctx.moveTo(n.x+(n.x>730?-43:43),n.y+(n.y>600?-25:25));ctx.lineTo(720,n.y>600?692:511);ctx.stroke();
+      }
+      if(this.debug){for(const road of this.network.corridors){for(let i=1;i<road.points.length;i++){const a=road.points[i-1],b=road.points[i];this.text(ctx,`${road.id}:${i}`, (a.x+b.x)/2,(a.y+b.y)/2-24,C.cyan,11);}}}
+      if(t<.7){ctx.fillStyle=`rgba(15,17,26,${.30*(1-t/.7)})`;ctx.fillRect(50,185,1320,760);}
+    }
+  }
+
+  class HUD {
+    constructor(){this.history=[];this.smoothed=null;this.lastProposal=-1;this.lastSample=-1;this.chart=$('energyGraph').getContext('2d');}
+    update(app,dt){
+      const {sim,optimizer,t}=app;const m=sim.metrics;
+      if(!this.smoothed)this.smoothed={energy:m.energy,meanDelay:m.meanDelay};
+      const a=1-Math.exp(-dt/.35);
+      for(const key of ['energy','meanDelay'])this.smoothed[key]+=a*(m[key]-this.smoothed[key]);
+      $('temperatureValue').textContent=fmt(optimizer.temperature);
+      $('temperatureBar').style.width=`${optimizer.temperature*100}%`;
+      $('energyValue').textContent=fmt(this.smoothed.energy);
+      $('energyBadge').textContent=this.smoothed.energy>=.5?'ALTA':this.smoothed.energy>=.3?'MODERADA':'BAIXA';
+      const attempted=optimizer.attemptedMoves,accepted=optimizer.acceptedMoves;
+      $('acceptanceValue').innerHTML=attempted?`${fmt(100*accepted/attempted,0)}<small> %</small>`:'—';
+      $('acceptanceCount').textContent=`${accepted} / ${attempted} propostas`;
+      $('acceptanceBadge').textContent=attempted?(accepted/attempted>=.65?'ALTA':'MEDIDA'):'SEM AMOSTRA';
+      $('delayValue').textContent=fmt(this.smoothed.meanDelay,1);
+      $('queueValue').textContent=m.queueCount;
+      $('vehicleValue').textContent=sim.vehicles.length;
+      $('sceneTime').textContent=fmt(t,1).padStart(4,'0');
+      $('durationLabel').textContent=`${fmt(CONFIG.duration,1)} s`;
+      $('timeScaleLabel').textContent=`TRÁFEGO ×${CONFIG.timeScale}`;
+      $('timelineProgress').style.width=`${100*t/CONFIG.duration}%`;
+      $('playStatus').textContent=app.finished?'CENA CONCLUÍDA':app.running?'EM EXECUÇÃO':'PAUSADO';
+      $('liveLabel').textContent=app.finished?'FIM DA CENA':app.running?'AO VIVO':'PAUSADO';
+      $('playButton').setAttribute('aria-label',app.finished?'Reproduzir novamente':app.running?'Pausar':'Reproduzir');
+      $('playButton').querySelector('span').textContent=app.finished?'Reproduzir':app.running?'Pausar':'Reproduzir';
+      if(t-this.lastSample>=.1){this.history.push({t,e:m.energy});this.lastSample=t;this.drawChart();}
+      this.proposal(optimizer);
+      this.timeline(app);
+      if(app.renderer.debug){$('debugPanel').textContent=`MODELO SINTÉTICO · SEED ${CONFIG.seed}\nTempo do tráfego: ${fmt(sim.time,2)} s\nPasso fixo: ${fmt(CONFIG.physicsDt,4)} s\nVelocidade média: ${fmt(m.meanSpeed,2)} u/s\nE instantânea: ${fmt(m.energy,5)}\nFilas: ${m.queueCount} · ativos: ${sim.vehicles.length}\nPlanos x = (g_NS, g_EW, offset)\n${sim.state.intersections.map((s,i)=>`I${i+1}  ${fmt(s.greenNS,1)} / ${fmt(s.greenEW,1)} / ${fmt(s.offset,1)}`).join('\n')}`;}
+    }
+    drawChart(){
+      const ctx=this.chart,w=412,h=112;ctx.clearRect(0,0,w,h);
+      ctx.strokeStyle='#31384a';ctx.lineWidth=1;ctx.setLineDash([3,6]);ctx.beginPath();ctx.moveTo(0,h*.4);ctx.lineTo(w,h*.4);ctx.stroke();ctx.setLineDash([]);
+      if(this.history.length<2)return;
+      ctx.beginPath();for(let i=0;i<this.history.length;i++){const p=this.history[i],x=p.t/CONFIG.duration*w,y=h-8-p.e*(h-16);if(i)ctx.lineTo(x,y);else ctx.moveTo(x,y);}ctx.strokeStyle=C.orange;ctx.lineWidth=2;ctx.stroke();
+      const last=this.history[this.history.length-1];ctx.fillStyle=C.orange;ctx.beginPath();ctx.arc(last.t/CONFIG.duration*w,h-8-last.e*(h-16),3,0,Math.PI*2);ctx.fill();
+    }
+    proposal(o){
+      const p=o.currentProposal;const key=p?`${p.index}:${p.status}`:'';
+      if(!p||this.lastProposal===key)return;
+      this.lastProposal=key;
+      $('proposalEmpty').hidden=true;$('proposalData').hidden=false;
+      $('proposalNumber').textContent=`PROPOSTA ${String(p.index).padStart(2,'0')}`;
+      $('proposalIntersection').textContent=`INTERSEÇÃO I${p.intersection+1}`;
+      const label=p.parameter==='offset'?'OFFSET':'VERDE L–O';
+      $('proposalChange').innerHTML=`${label} <span>${fmt(p.before,1)} →</span> ${fmt(p.after,1)} s`;
+      $('currentEnergy').textContent=fmt(p.currentEnergy);
+      $('candidateEnergy').textContent=fmt(p.candidateEnergy);
+      $('deltaEnergy').textContent=Number.isFinite(p.deltaEnergy)?signed(p.deltaEnergy):'—';
+      $('deltaEnergy').style.color=p.deltaEnergy>0?C.orange:C.green;
+      $('decisionT').textContent=fmt(p.temperature);
+      $('probability').textContent=fmt(p.probability);
+      $('randomU').textContent=fmt(p.u);
+      const pending=p.status==='EVALUATING';
+      $('decision').className=pending?'':p.accepted?'accepted':'rejected';
+      $('decisionText').textContent=pending?'AVALIANDO…':p.accepted?'✓ ACEITA':'× REJEITADA';
+      $('decisionExplanation').textContent=pending?`janela ${p.window} s simulados`:p.accepted?(p.deltaEnergy>0?'custo maior · exploração':'custo menor ou igual'):'sorteio ≥ probabilidade';
+      $('moveLog').replaceChildren();
+      for(const item of o.history.slice(-6)){const span=document.createElement('span');span.className=`move mono${item.accepted?'':' rejected'}`;span.textContent=`${item.accepted?'✓':'×'} I${item.intersection+1}`;span.title=`${item.parameter}, ΔE ${signed(item.deltaEnergy,5)}, ${item.accepted?'aceita':'rejeitada'}`;$('moveLog').append(span);}
+    }
+    timeline(app){
+      const {t,optimizer,sim}=app;
+      const set=(phase,title,detail)=>{$('phaseIndex').textContent=phase;$('narrativeTitle').innerHTML=title;$('narrativeDetail').innerHTML=detail;};
+      const p=optimizer.currentProposal;
+      $('focusNote').classList.toggle('visible',t>=3);
+      if(t<2.5){set('01 / OBSERVAÇÃO','Um estado<br>longe do ótimo.','Sinais fora de fase.<br>O atraso se acumula.');}
+      else if(t<6){set('02 / DESSINCRONIZAÇÃO','O fluxo avança.<br>E para de novo.','Verdes desencontrados<br>produzem ondas de parada.');$('focusKind').textContent='FILA EM FORMAÇÃO';$('focusTitle').textContent=`${sim.metrics.queueCount} veículos em fila`;$('focusDetail').textContent='A espera emerge do fluxo e dos sinais.';}
+      else if(t<13.5){set('03 / EXPLORAÇÃO A ALTA T','Alterar. Avaliar.<br>Aceitar ou rejeitar.','Pequenos ajustes semafóricos<br>exploram outras configurações.');if(p){$('focusKind').textContent=`PROPOSTA · I${p.intersection+1}`;$('focusTitle').textContent=`${p.parameter==='offset'?'Offset':'Verde L–O'} ${signed(p.deltaParameter,1)} s`;$('focusDetail').textContent=p.status==='EVALUATING'?'Avaliando as duas configurações com as mesmas chegadas.':p.accepted&&p.deltaEnergy>0?'Mesmo com custo maior, a alteração foi aceita.':p.accepted?'Configuração aceita. A exploração continua.':'Configuração rejeitada. O estado anterior permanece.';}else{$('focusKind').textContent='AVALIAÇÃO PAREADA';$('focusTitle').textContent='O mesmo tráfego.';$('focusDetail').textContent='Duas configurações, condições iniciais idênticas.';}}
+      else{set('04 / PRÓXIMA CENA','Como o<br>algoritmo decide?','Simulação 03<br>Metrópolis em tempo real.');$('focusKind').textContent='ALTA T → EXPLORAÇÃO';$('focusTitle').textContent=p?`ΔE = ${signed(p.deltaEnergy)}`:'O custo permanece alto.';$('focusDetail').textContent=p?`T = ${fmt(p.temperature)} · P = ${fmt(p.probability)}`:'A rede ainda está longe do ótimo.';}
+    }
+  }
+
+  class Application {
+    constructor(){this.network=new RoadNetwork();this.renderer=new Renderer(this.network);this.last=0;this.accumulator=0;this.bindControls();this.restart();requestAnimationFrame(now=>this.frame(now));}
+    restart(){
+      this.sim=new TrafficSimulation(this.network);this.sim.warmup();this.optimizer=new AnnealingController(this.sim);
+      const errors=[...this.sim.validate(),...this.optimizer.validate()];
+      if(errors.length)throw new Error(errors.join('; '));
+      this.initialState=JSON.parse(JSON.stringify(this.sim.state));this.samples=[{sceneTime:0,simulationTime:this.sim.time,...this.sim.metrics}];this.hud=new HUD();$('proposalEmpty').hidden=false;$('proposalData').hidden=true;$('proposalNumber').textContent='EXPLORAÇÃO SEMAFÓRICA';$('proposalIntersection').textContent='x → x′';$('moveLog').replaceChildren();this.t=0;this.ticks=0;this.accumulator=0;this.last=performance.now();this.finished=false;this.running=true;this.lastHud=-1;this.hud.update(this,0);this.renderer.render(this.sim,this.optimizer,0,1);
+    }
+    toggle(){if(this.finished){this.restart();return;}this.running=!this.running;this.last=performance.now();this.hud.update(this,0);}
+    frame(now){
+      const elapsed=Math.min((now-this.last)/1000,.25);this.last=now;
+      // O tempo científico avança somente por passos fixos. O desenho interpola
+      // posições consecutivas; a pausa não consome sorteios nem tempo simulado.
+      if(this.running&&!this.finished){
+        this.accumulator+=elapsed*CONFIG.timeScale;
+        const dt=CONFIG.physicsDt;
+        while(this.accumulator>=dt&&!this.finished){
+          this.sim.step(dt);this.ticks++;this.t=Math.min(CONFIG.duration,this.ticks*dt/CONFIG.timeScale);
+          this.optimizer.update(this.t);this.accumulator-=dt;
+          if(this.ticks%Math.round(CONFIG.timeScale/dt)===0)this.samples.push({sceneTime:this.t,simulationTime:this.sim.time,...this.sim.metrics});
+          if(this.renderer.debug&&this.ticks%120===0){const errors=[...this.sim.validate(),...this.optimizer.validate()];if(errors.length)throw new Error(errors.join('; '));}
+          if(this.t>=CONFIG.duration){this.finished=true;this.running=false;this.accumulator=0;}
+        }
+      }
+      if(now-this.lastHud>=80){this.hud.update(this,this.running?Math.max(0,now-this.lastHud)/1000:0);this.lastHud=now;}
+      this.renderer.render(this.sim,this.optimizer,this.t,this.running?this.accumulator/CONFIG.physicsDt:1);
+      if(RECORDING_MODE&&now-this.lastPointer>1800)stage.classList.add('cursor-idle');
+      requestAnimationFrame(n=>this.frame(n));
+    }
+    bindControls(){
+      stage.classList.toggle('capture',RECORDING_MODE);this.lastPointer=performance.now();
+      $('exportButton').addEventListener('click',()=>{const report={schemaVersion:1,model:'Modelo urbano reduzido, sintético, não georreferenciado',config:CONFIG,network:{intersections:this.network.intersections,corridors:this.network.corridors},initialState:this.initialState,currentState:this.sim.state,sceneTime:this.t,metrics:this.sim.metrics,samples:this.samples,optimizer:{temperature:this.optimizer.temperature,attempted:this.optimizer.attemptedMoves,accepted:this.optimizer.acceptedMoves,decisions:this.optimizer.history}};const blob=new Blob([JSON.stringify(report,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='simulation-02.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
+      $('playButton').addEventListener('click',()=>this.toggle());
+      $('restartButton').addEventListener('click',()=>this.restart());
+      const hud=()=>{stage.classList.toggle('hide-hud');$('hudButton').setAttribute('aria-pressed',!stage.classList.contains('hide-hud'));};
+      const grid=()=>{this.renderer.grid=!this.renderer.grid;$('gridButton').setAttribute('aria-pressed',this.renderer.grid);};
+      const debug=()=>{this.renderer.debug=!this.renderer.debug;$('debugButton').setAttribute('aria-pressed',this.renderer.debug);$('debugPanel').style.display=this.renderer.debug?'block':'none';};
+      $('hudButton').addEventListener('click',hud);$('gridButton').addEventListener('click',grid);$('debugButton').addEventListener('click',debug);
+      addEventListener('keydown',event=>{if(event.repeat||event.ctrlKey||event.metaKey||event.altKey)return;const key=event.key.toLowerCase();if(event.code==='Space'){event.preventDefault();this.toggle();}else if(key==='r')this.restart();else if(key==='h')hud();else if(key==='g')grid();else if(key==='d')debug();});
+      addEventListener('resize',()=>this.renderer.resize());
+      addEventListener('pointermove',()=>{this.lastPointer=performance.now();stage.classList.remove('cursor-idle');});
+      // Uma janela oculta pausa a cena, evitando saltos ao retornar.
+      document.addEventListener('visibilitychange',()=>{if(document.hidden&&this.running){this.running=false;this.hud.update(this,0);}this.last=performance.now();});
+    }
+  }
+  try { window.urbanScene=new Application(); }
+  catch(error){$('error').style.display='block';$('error').textContent=`Não foi possível iniciar o modelo: ${error.message}`;console.error(error);}
+})();
+
+</script>
+
+<!-- Implementation Notes
+1. Rede: 4 cruzamentos e 12 segmentos bidirecionais, rotas fixas sem conversões.
+2. Estado x: verdes L–O/N–S e offsets; ciclos válidos com amarelo e vermelho de segurança.
+3. Veículos: aceleração limitada, frenagem e espaçamento garantido por restrição geométrica.
+4. Entradas sintéticas independentes; filas iniciais produzidas por 120 s de aquecimento real.
+5. Atraso: integral de max(0,1-v/v_livre) dt, média sobre veículos ativos.
+6. Filas: baixa velocidade e proximidade de sinal ou veículo enfileirado à frente.
+7. E = 0.55 min(D/20s,1) + 0.30 Q/N + 0.15 S/N; adimensional. Alta no HUD: E ≥ 0.5.
+8. T computacional permanece entre 0.95 e 0.88; não representa temperatura física da cidade.
+9. Propostas simétricas de offset ou redistribuição de verde; demais controles constantes.
+10. Avaliação em clones por 64 s, chegadas comuns e passo de 1/15 s em ambas as alternativas.
+11. Metrópolis: P = min(1,exp(-ΔE/T)); u uniforme determinístico; k_B = 1.
+12. Aceitação = decisões aceitas/tentadas; nenhuma porcentagem é forçada.
+13. Seed 20260911; cena de 15 s, passo físico de 1/120 s, tráfego acelerado 4 vezes.
+14. Limites: rede não georreferenciada, sem calibração; objetivo baseado nos veículos ativos.
+15. Controles: Espaço pausa, R reinicia, H painel, G malha, D inspeção; JSON exporta a execução.
+-->
+</body>
+</html>
