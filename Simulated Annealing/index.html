@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Simulação 05 — Antes × Depois. Comparação reproduzível do modelo urbano das Simulações 02 e 04. Canvas 2D, offline.">
+<title>SIMULAÇÃO 05 — ANTES × DEPOIS</title>
+<style>
+:root{color-scheme:dark;--bg:#0f111a;--panel:#151823;--secondary:#191c2a;--text:#f8f8f2;--muted:#8b93a7;--cyan:#8be9fd;--purple:#bd93f9;--green:#50fa7b;--orange:#ffb86c;--red:#ff5555;--line:#2a303f;--mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;font-family:Inter,system-ui,"Segoe UI",Arial,sans-serif}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#090b11;color:var(--text)}
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:center;overflow:hidden;background:var(--bg)}
+.recording{user-select:none;-webkit-user-select:none}.recording #stage{cursor:none}.recording button{cursor:pointer}
+header{position:absolute;left:48px;right:48px;top:38px}.eyebrow,.mono,.label,.badge,button,footer{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.eyebrow{display:flex;align-items:center;gap:14px;color:var(--muted);font-size:12px;letter-spacing:.13em}.eyebrow::before{content:"";width:26px;height:1px;background:var(--cyan)}
+h1{font-size:47px;letter-spacing:-.035em;font-weight:500;margin:17px 0 9px}h1 span{color:var(--muted);font-weight:300;margin:0 7px}.subtitle{font:14px var(--mono);color:#b0b9cb;margin:0}
+.identity{position:absolute;right:0;top:0;text-align:right}.badge{display:inline-flex;align-items:center;gap:10px;border:1px solid #354151;border-radius:3px;padding:10px 14px;font-size:11px;letter-spacing:.08em;color:#c5d3df}.badge::before{content:"";width:5px;height:5px;background:var(--cyan);border-radius:50%}.identity p{font:11px var(--mono);letter-spacing:.06em;color:var(--muted);margin:15px 0}
+.invariants{position:absolute;right:0;top:101px;display:flex;gap:24px;font:11px var(--mono);color:#b8c7d6}.invariants span::before{content:"=";color:var(--cyan);margin-right:9px}
+#provenance{position:absolute;top:167px;left:48px;right:48px;display:flex;justify-content:space-between;border-top:1px solid var(--line);padding-top:10px;font:10px var(--mono);letter-spacing:.04em;color:var(--muted)}
+#divider{position:absolute;left:960px;top:221px;height:534px;width:1px;background:linear-gradient(transparent,#303746 20%,#303746 80%,transparent);opacity:0}
+.panel{position:absolute;top:204px;width:896px;height:576px;overflow:hidden;border:1px solid #303847;border-radius:5px;background:radial-gradient(ellipse at 50% 43%,#171d2a,#121620 80%);opacity:0;will-change:opacity,transform}.panel::before{content:"";position:absolute;left:25px;top:0;width:48px;height:2px;background:var(--accent)}
+#before{left:48px;--accent:var(--orange)}#after{left:976px;--accent:var(--cyan)}.panel-head{position:absolute;top:20px;left:26px;right:26px;display:flex;align-items:center;justify-content:space-between}.panel h2{font-size:31px;font-weight:500;letter-spacing:-.035em;margin:0 0 5px}.panel h2 span{font:11px var(--mono);color:var(--muted);vertical-align:middle;letter-spacing:0;margin-right:14px}.subhead{font:10px var(--mono);color:var(--muted);letter-spacing:.11em}.state-badge{font:10px var(--mono);color:var(--accent);border:1px solid #35404c;border-radius:2px;padding:9px 12px;letter-spacing:.05em}
+.map{position:absolute;left:0;top:81px;width:896px;height:356px}.microstate{position:absolute;left:26px;right:26px;top:441px;display:flex;justify-content:space-between;align-items:center;font:10px var(--mono);color:var(--muted)}.microstate output{color:#c6b3e1;font-size:12px}
+.metrics{position:absolute;top:477px;left:26px;right:26px;display:grid;grid-template-columns:1.27fr 1fr 1.16fr 1fr .87fr;gap:16px;padding-top:17px;border-top:1px solid var(--line)}.label{font-size:9px;letter-spacing:.04em;color:#aeb9cd;white-space:nowrap}.metrics output{display:block;font:29px/1.2 var(--mono);margin-top:7px;letter-spacing:-.05em}.metrics .primary output{color:var(--accent);font-size:37px;margin-top:1px}.metric-unit{font:8px var(--mono);color:var(--muted);margin-top:4px}.metric-mark{position:absolute;top:-1px;width:105px;height:1px;background:var(--accent);opacity:.65}
+#legend{position:absolute;left:48px;right:48px;top:795px;display:flex;justify-content:space-between;align-items:center;font:10px var(--mono);color:var(--muted);opacity:0}.legend-items{display:flex;align-items:center;gap:17px}.swatch{display:inline-block;width:23px;height:3px;margin-right:7px;vertical-align:middle}.legend-note{color:#b8c3d3}
+#result{position:absolute;left:48px;right:48px;top:832px;height:110px;display:grid;grid-template-columns:1.08fr 1.04fr 1.04fr .89fr 1fr;gap:30px;padding:18px 24px;background:linear-gradient(100deg,#181e2a,#151823 60%);border:1px solid #35414e;border-radius:4px;opacity:0}
+.result-title{font:10px/1.65 var(--mono);letter-spacing:.07em;color:#bcc8d8}.result-title strong{font-weight:400;color:var(--cyan)}.delta{font:11px var(--mono);color:var(--muted);margin-top:12px}.result-metric{position:relative;border-left:1px solid #303847;padding-left:24px}.result-metric::before{content:"";position:absolute;top:-19px;left:24px;right:8px;height:2px;background:var(--cyan);opacity:0;transition:opacity .3s}.result-metric.active::before{opacity:1}.result-metric output{display:block;font:37px/1.1 var(--mono);letter-spacing:-.05em;margin-top:7px}.result-metric small{font:9px var(--mono);color:var(--muted);display:block;margin-top:5px}.result-metric.energy output{color:var(--green)}.result-metric.delay output{color:var(--cyan)}.result-metric.iteration output{font-size:29px;letter-spacing:0;margin-top:10px}.result-metric .label{font-size:10px}
+#narrative{position:absolute;left:48px;right:48px;top:960px;height:49px;opacity:0}.statement{font:19px/1.4 var(--mono);color:#c2ccdb;letter-spacing:-.025em}.statement strong{color:var(--cyan);font-weight:400}.substatement{font:11px var(--mono);color:var(--muted);margin-top:7px}.formula{position:absolute;right:0;top:0;text-align:right;font:11px/1.9 var(--mono);color:var(--muted)}#closing{position:absolute;top:-3px;left:0;bottom:-2px;width:1210px;background:var(--bg);opacity:0}.closing-title{font:17px var(--mono);color:var(--cyan);margin:0 0 9px}.closing-sub{font:13px var(--mono);letter-spacing:.05em;color:#c2ccdb}
+#time-track{position:absolute;left:48px;right:48px;top:1024px;height:2px;background:#242a38}#progress{height:100%;background:#a9cbd6;transform:scaleX(0);transform-origin:left}.time-tick{position:absolute;top:-2px;width:1px;height:6px;background:#445067}
+footer{position:absolute;left:48px;right:48px;bottom:14px;height:30px;display:flex;justify-content:space-between;align-items:center;font-size:9px;color:var(--muted)}#controls{display:flex;gap:8px;align-items:center}button{height:29px;padding:0 11px;border:1px solid #344052;background:#181e2a;color:#c3d4e0;border-radius:3px;font-size:9px;letter-spacing:.05em}button:hover{border-color:var(--cyan);color:var(--cyan)}button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}#play{border-color:#47606f}.key-help{margin-left:6px}#controls.hidden{visibility:hidden}#clock{min-width:139px;text-align:right;color:#a7b7ca}
+#intro{position:absolute;left:48px;right:48px;top:295px;height:320px;pointer-events:none;text-align:center;background:var(--bg)}.intro-index{font:12px var(--mono);letter-spacing:.2em;color:var(--purple);margin-top:35px}.intro-title{font-size:88px;font-weight:300;letter-spacing:-.055em;margin:25px 0}.intro-title span{color:#657086;font-weight:200;margin:0 15px}.intro-sub{font:14px var(--mono);color:var(--muted);letter-spacing:.13em}.intro-rule{width:80px;height:1px;background:var(--cyan);margin:35px auto}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}#error{position:absolute;inset:0;z-index:20;background:var(--bg);color:var(--orange);padding:140px;font:24px/1.7 var(--mono)}#error[hidden]{display:none}
+</style>
+</head>
+<body>
+<main id="stage" aria-label="Simulação 05 — Antes e depois do Simulated Annealing">
+ <header>
+  <div class="eyebrow">SEMANA DA FÍSICA / UFG <span>·</span> COMPUTATIONAL PHYSICS <span>·</span> SIMULAÇÃO 05</div>
+  <h1>ANTES <span>×</span> DEPOIS</h1>
+  <p class="subtitle">Simulated Annealing // Urban Optimization</p>
+  <div class="identity"><span class="badge">ANIMAÇÃO COMPUTACIONAL</span><p>05 / RESULTADO DO EXPERIMENTO</p></div>
+  <div class="invariants"><span>MESMA REDE</span><span>MESMA DEMANDA</span><span>OUTRA CONFIGURAÇÃO</span></div>
+ </header>
+ <div id="provenance"><span>SIM. 02 / INITIAL STATE → SIM. 04 / BEST STATE FOUND</span><span id="topology"></span></div>
+ <div id="divider" aria-hidden="true"></div>
+ <section id="before" class="panel" aria-label="Antes: configuração inicial" aria-hidden="true">
+  <div class="panel-head"><div><h2><span>01 /</span>ANTES</h2><div class="subhead">INITIAL CONFIGURATION</div></div><span class="state-badge">HIGHER COST STATE</span></div>
+  <canvas id="map-before" class="map" role="img" aria-label="Estado inicial da rede. Vias com cores calculadas a partir do atraso; arcos representam as frações de verde.">Rede urbana conceitual inicial.</canvas>
+  <div class="microstate"><span>INITIAL MICROSTATE <output id="vector-before"></output></span><span id="temperature-before"></span></div>
+  <div class="metrics">
+   <div class="primary"><i class="metric-mark"></i><div class="label">INITIAL ENERGY E₀</div><output id="energy-before"></output><div class="metric-unit">Σⱼ wⱼ dⱼ / d_ref</div></div>
+   <div><div class="label">MEAN DELAY</div><output id="mean-before"></output><div class="metric-unit">D / d_ref</div></div>
+   <div><div class="label">CRITICAL SEGMENTS</div><output id="critical-before"></output><div class="metric-unit">dⱼ ≥ 0.28</div></div>
+   <div><div class="label">MAX DELAY</div><output id="max-before"></output><div class="metric-unit">max(dⱼ) / d_ref</div></div>
+   <div><div class="label">QUEUE INDEX</div><output id="queue-before"></output><div class="metric-unit">Q ∈ [0, 1)</div></div>
+  </div>
+ </section>
+ <section id="after" class="panel" aria-label="Depois: melhor estado encontrado" aria-hidden="true">
+  <div class="panel-head"><div><h2><span>02 /</span>DEPOIS</h2><div class="subhead">BEST CONFIGURATION FOUND</div></div><span class="state-badge">LOWER-COST STATE</span></div>
+  <canvas id="map-after" class="map" role="img" aria-label="Melhor estado encontrado na Simulação 04. Mesmas vias, demanda, quantidade de partículas e escala de cores.">Melhor estado encontrado.</canvas>
+  <div class="microstate"><span>BEST MICROSTATE <output id="vector-after"></output></span><span id="temperature-after"></span></div>
+  <div class="metrics">
+   <div class="primary"><i class="metric-mark"></i><div class="label">BEST ENERGY E_best</div><output id="energy-after"></output><div class="metric-unit">minₜ E(xₜ) observado</div></div>
+   <div><div class="label">MEAN DELAY</div><output id="mean-after"></output><div class="metric-unit">D / d_ref</div></div>
+   <div><div class="label">CRITICAL SEGMENTS</div><output id="critical-after"></output><div class="metric-unit">dⱼ ≥ 0.28</div></div>
+   <div><div class="label">MAX DELAY</div><output id="max-after"></output><div class="metric-unit">max(dⱼ) / d_ref</div></div>
+   <div><div class="label">QUEUE INDEX</div><output id="queue-after"></output><div class="metric-unit">Q ∈ [0, 1)</div></div>
+  </div>
+ </section>
+ <div id="legend"><div class="legend-items"><span>ATRASO dⱼ / ESCALA ÚNICA</span><span><i class="swatch" style="background:linear-gradient(90deg,#8be9fd,#50fa7b)"></i>BAIXO ≤ 0.09</span><span><i class="swatch" style="background:#ffb86c"></i>MODERADO 0.13</span><span><i class="swatch" style="background:#ff5555"></i>ALTO ≥ 0.28</span></div><span class="legend-note" id="flow-note"></span></div>
+ <section id="result" aria-label="Resultado calculado do Simulated Annealing" aria-hidden="true">
+  <div><div class="result-title">SIMULATED ANNEALING<br><strong>RESULT / REDUÇÃO NO MODELO</strong></div><div class="delta" id="total-change"></div></div>
+  <div class="result-metric energy" id="result-energy"><div class="label">ENERGY REDUCTION</div><output id="energy-reduction"></output><small>REDUÇÃO DO CUSTO GLOBAL</small></div>
+  <div class="result-metric delay" id="result-delay"><div class="label">MEAN DELAY REDUCTION</div><output id="delay-reduction"></output><small>REDUÇÃO DO ATRASO MÉDIO</small></div>
+  <div class="result-metric" id="result-critical"><div class="label">CRITICAL SEGMENTS</div><output id="critical-change"></output><small id="residual"></small></div>
+  <div class="result-metric iteration"><div class="label">BEST STATE FOUND AT</div><output id="best-iteration"></output><small id="run-detail"></small></div>
+ </section>
+ <div id="narrative">
+  <div class="statement"><strong>MENOR ATRASO GLOBAL</strong> → MENOS TEMPO PERDIDO NO MODELO</div>
+  <div class="substatement" id="local-tradeoff"></div>
+  <div class="formula">E_best = minₜ E(xₜ) &nbsp; · &nbsp; d_ref = 0.25<br>Reduction = (E₀ − E_best) / E₀ × 100%</div>
+  <div id="closing"><div class="closing-title">CONFIGURAÇÃO DE MENOR CUSTO ENCONTRADA</div><div class="closing-sub">MESMA REDE. &nbsp; MESMA DEMANDA. &nbsp; OUTRA CONFIGURAÇÃO.</div></div>
+ </div>
+ <div id="time-track" aria-hidden="true"><div id="progress"></div><i class="time-tick" style="left:8.333%"></i><i class="time-tick" style="left:20.833%"></i><i class="time-tick" style="left:33.333%"></i><i class="time-tick" style="left:66.667%"></i><i class="time-tick" style="left:87.5%"></i></div>
+ <footer><span>MODELO CONCEITUAL — NÃO SÃO DADOS REAIS DE TRÁFEGO</span><div id="controls"><button id="play" type="button" aria-label="Play / Pause" aria-pressed="false">▶ PLAY</button><button id="restart" type="button" aria-label="Restart">↺ RESTART</button><span class="key-help">SPACE play/pause &nbsp; R restart &nbsp; H ocultar</span></div><span id="seed-label"></span><span id="clock">READY · 00.00 / 12 s</span></footer>
+ <div id="intro" aria-hidden="true"><div class="intro-index">05 / SÍNTESE DO EXPERIMENTO</div><div class="intro-title">ANTES <span>×</span> DEPOIS</div><div class="intro-sub">UMA REDE. DOIS MICROESTADOS.</div><div class="intro-rule"></div></div>
+ <p class="sr-only" id="accessible-summary" aria-live="polite"></p>
+ <div id="error" role="alert" hidden></div>
+</main>
+<noscript>Ative JavaScript para executar a simulação offline.</noscript>
+<script id="model">
+const Simulation05 = (() => {
+ 'use strict';
+ const AUTO_PLAY = false;
+ const RECORDING_MODE = true;
+ const RANDOM_SEED = 20260913;
+ const CONFIG = Object.freeze({width:1920,height:1080,duration:12,
+  annealingDuration:16,simulationRate:120,proposalRate:120,proposalAmplitude:.15,
+  minSignal:.20,maxSignal:.80,temperatureInitial:.096,temperatureFinal:.00001,
+  coolingPower:2,delayReference:.25,criticalDelay:.28,minimumImprovement:.10,
+  cycle:4.8,hudRate:20,seeds:Object.freeze([RANDOM_SEED,20260917,20261003,31415926])});
+ const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+ const mix=(a,b,t)=>a+(b-a)*t;
+ const smooth=(a,b,x)=>{const u=clamp((x-a)/(b-a),0,1);return u*u*(3-2*u);};
+ const assert=(ok,message)=>{if(!ok)throw new Error(message);};
+ const deepFreeze=o=>{Object.values(o).forEach(v=>{if(v&&typeof v==='object')deepFreeze(v);});return Object.freeze(o);};
+ // Exact data from Simulation2_UrbanLattice and Simulation4_Convergence.
+ // No files are loaded at runtime. These coordinates and inputs are synthetic.
+ const NETWORK_CONFIG=deepFreeze({version:1,geometrySeed:20260912,
+  nodes:[[110,104],[366,72],[664,116],[977,94],[146,260],[426,245],[720,277],[1040,231],
+   [88,434],[337,409],[652,443],[993,411],[194,596],[448,574],[770,614],[1064,564]],
+  // a, b, axis (0=main green, 1=complement), fixed demand q, base capacity c, corridor
+  edges:[[0,1,0,.49,.91,1],[1,2,0,.51,.92,1],[2,3,0,.48,.90,1],
+   [4,5,0,.57,.96,1],[5,6,0,.58,.94,1],[6,7,0,.54,.95,1],
+   [8,9,0,.53,.93,1],[9,10,0,.55,.94,1],[10,11,0,.52,.94,1],
+   [12,13,0,.47,.93,0],[13,14,0,.48,.95,0],[14,15,0,.46,.92,0],
+   [0,4,1,.38,.78,0],[4,8,1,.40,.78,0],[8,12,1,.25,.83,0],
+   [1,5,1,.42,.79,0],[5,9,1,.41,.79,0],[9,13,1,.39,.80,0],
+   [2,6,1,.41,.77,0],[6,10,1,.42,.80,0],[10,14,1,.39,.80,0],
+   [3,7,1,.26,.83,0],[7,11,1,.40,.80,0],[11,15,1,.24,.82,0],
+   [1,4,1,.38,.82,0],[10,15,0,.40,.89,0]],
+  offsets:[.07,.64,.26,.82,.41,.92,.16,.56,.77,.31,.95,.11,.52,.03,.69,.38],
+  initialState:[.39,.51,.34,.48,.42,.30,.43,.36,.35,.49,.38,.46,.47,.33,.50,.41]});
+ const INITIAL_STATE=NETWORK_CONFIG.initialState;
+ class PRNG {
+  constructor(seed){this.state=seed>>>0;}
+  next(){let t=this.state=(this.state+0x6D2B79F5)>>>0;t=Math.imul(t^(t>>>15),t|1);
+   t^=t+Math.imul(t^(t>>>7),t|61);return ((t^(t>>>14))>>>0)/4294967296;}
+ }
+ class UrbanNetwork {
+  constructor(){this.nodes=NETWORK_CONFIG.nodes.map(([x,y],id)=>({x,y,id,offset:NETWORK_CONFIG.offsets[id]}));
+   this.edges=NETWORK_CONFIG.edges.map(([a,b,axis,q,c,main],id)=>({a,b,axis,q,c,main,id}));
+   this.demand=this.edges.reduce((sum,e)=>sum+e.q,0);deepFreeze(this);}
+ }
+ class TrafficModel {
+  static evaluate(network,state,out){let sum=0,weighted=0;
+   for(let j=0;j<network.edges.length;j++){
+    const e=network.edges[j],ga=e.axis===0?state[e.a]:1-state[e.a],gb=e.axis===0?state[e.b]:1-state[e.b];
+    const capacity=e.c*(.16+.84*Math.sqrt(ga*gb)),rho=e.q/capacity;
+    const z=10*(rho-1),overload=(Math.max(z,0)+Math.log1p(Math.exp(-Math.abs(z))))/10;
+    const delay=.10*rho*rho+.80*overload+3.2*overload*overload;
+    assert(capacity>0&&Number.isFinite(delay)&&delay>=0,'Atraso ou capacidade inválida');
+    out.delays[j]=delay;out.capacities[j]=capacity;out.rhos[j]=rho;sum+=delay;weighted+=e.q*delay;
+   }
+   out.meanDelay=sum/network.edges.length;out.weightedDelay=weighted/network.demand;return out;
+  }
+ }
+ class EnergyModel {
+  static buffer(network){const n=network.edges.length;return {delays:new Float64Array(n),capacities:new Float64Array(n),
+   rhos:new Float64Array(n),energy:0,meanDelay:0,weightedDelay:0};}
+  static evaluate(network,state,out=EnergyModel.buffer(network)){
+   assert(state.length===network.nodes.length,'Dimensão de x inválida');
+   for(const s of state)assert(Number.isFinite(s)&&s>=CONFIG.minSignal&&s<=CONFIG.maxSignal,'Fração de verde fora dos limites');
+   TrafficModel.evaluate(network,state,out);
+   // Exactly the scene 02/04 objective, with fixed weights w_j=q_j/sum(q).
+   out.energy=out.weightedDelay/CONFIG.delayReference;
+   assert(Number.isFinite(out.energy)&&out.energy>=0,'Energia inválida');return out;
+  }
+ }
+ class AnnealingEngine {
+  constructor(network,seed){this.network=network;this.seed=seed;this.rng=new PRNG(seed);
+   this.state=new Float64Array(INITIAL_STATE);this.candidateState=this.state.slice();
+   this.result=EnergyModel.evaluate(network,this.state);this.candidateResult=EnergyModel.buffer(network);
+   this.bestEnergy=this.result.energy;this.bestState=this.state.slice();this.bestIteration=0;
+   this.bestTemperature=CONFIG.temperatureInitial;this.iteration=0;this.events=[];
+   this.beta=Math.log(CONFIG.temperatureInitial/CONFIG.temperatureFinal);}
+  temperatureAt(t){return CONFIG.temperatureInitial*Math.exp(-this.beta*Math.pow(clamp(t/CONFIG.annealingDuration,0,1),CONFIG.coolingPower));}
+  propose(time){const T=this.temperatureAt(time),i=Math.floor(this.rng.next()*this.state.length),before=this.result.energy;
+   this.candidateState.set(this.state);
+   let v=this.state[i]+(2*this.rng.next()-1)*CONFIG.proposalAmplitude;
+   // Same reflected proposal and RNG draw order as scene 04, including downhill moves.
+   while(v<CONFIG.minSignal||v>CONFIG.maxSignal){if(v<CONFIG.minSignal)v=2*CONFIG.minSignal-v;if(v>CONFIG.maxSignal)v=2*CONFIG.maxSignal-v;}
+   this.candidateState[i]=v;EnergyModel.evaluate(this.network,this.candidateState,this.candidateResult);
+   const delta=this.candidateResult.energy-before,p=delta<=0?1:Math.exp(-delta/T),u=this.rng.next(),accepted=delta<=0||u<p;
+   this.iteration++;
+   if(accepted){const oldState=this.state,oldResult=this.result;this.state=this.candidateState;this.result=this.candidateResult;
+    this.candidateState=oldState;this.candidateResult=oldResult;
+    if(this.result.energy<this.bestEnergy){this.bestEnergy=this.result.energy;this.bestState=this.state.slice();
+     this.bestIteration=this.iteration;this.bestTemperature=T;}}
+   this.events.push({iteration:this.iteration,time,T,i,v,before,delta,p,u,accepted,after:this.result.energy,best:this.bestEnergy});
+  }
+  run(){const ticks=Math.round(CONFIG.annealingDuration*CONFIG.simulationRate);
+   for(let tick=1;tick<=ticks;tick++){const target=Math.floor(tick*CONFIG.proposalRate/CONFIG.simulationRate+1e-10);
+    while(this.iteration<target)this.propose(tick/CONFIG.simulationRate);}return this;}
+ }
+ // Continuous, fixed transfer function copied from Simulation 04.
+ const COLOR_STOPS=deepFreeze([[.04,[139,233,253]],[.09,[80,250,123]],[.13,[255,184,108]],[.28,[255,85,85]]]);
+ function delayColor(d){let k=0;while(k<COLOR_STOPS.length-2&&d>COLOR_STOPS[k+1][0])k++;
+  const a=COLOR_STOPS[k],b=COLOR_STOPS[k+1],u=clamp((d-a[0])/(b[0]-a[0]),0,1);
+  return `rgb(${Math.round(mix(a[1][0],b[1][0],u))},${Math.round(mix(a[1][1],b[1][1],u))},${Math.round(mix(a[1][2],b[1][2],u))})`;}
+ const flowSpeed=d=>.055/(1+6*d); // Same phase speed as scene 04, conceptual units.
+ const queueLoad=d=>d/(d+.16);
+ const particleCount=e=>2*(8+Math.round(18*e.q)); // Depends ONLY on fixed demand, never on state.
+ class Metrics {
+  static calculate(network,state){const r=EnergyModel.evaluate(network,state);
+   const delays=Array.from(r.delays),normalized=delays.map(d=>d/CONFIG.delayReference);
+   // New bounded queue diagnostic; not vehicles or seconds: Q=sum_j w_j*d_j/(d_j+.16).
+   const queue=network.edges.reduce((s,e,j)=>s+e.q/network.demand*queueLoad(delays[j]),0);
+   return deepFreeze({energy:r.energy,meanDelay:r.meanDelay,meanNormalized:r.meanDelay/CONFIG.delayReference,
+    maxDelay:Math.max(...delays),maxNormalized:Math.max(...normalized),queue,
+    critical:normalized.filter(d=>d>=CONFIG.criticalDelay/CONFIG.delayReference).length,
+    moderate:delays.filter(d=>d>=.13&&d<CONFIG.criticalDelay).length,
+    delays,normalized,capacities:Array.from(r.capacities),rhos:Array.from(r.rhos)});
+  }
+ }
+ class ComparisonData {
+  constructor(network){const initialMetrics=Metrics.calculate(network,INITIAL_STATE);this.trials=[];let selected;
+   for(const seed of CONFIG.seeds){const run=new AnnealingEngine(network,seed).run(),bestMetrics=Metrics.calculate(network,run.bestState);
+    const improvement=(initialMetrics.energy-bestMetrics.energy)/initialMetrics.energy;
+    const valid=improvement>CONFIG.minimumImprovement&&bestMetrics.meanDelay<initialMetrics.meanDelay;
+    this.trials.push({seed,improvement,valid});if(valid){selected={run,bestMetrics};break;}}
+   assert(selected,'Nenhuma seed passou na validação; nenhum resultado será fabricado.');
+   const {run,bestMetrics}=selected;this.network=network;this.seed=run.seed;
+   this.initialState=INITIAL_STATE;this.bestState=Array.from(run.bestState);
+   this.initialMetrics=initialMetrics;this.bestMetrics=bestMetrics;
+   this.bestIteration=run.bestIteration;this.bestTemperature=run.bestTemperature;
+   this.iterations=run.iteration;this.lastEnergy=run.result.energy;
+   this.totalChange=bestMetrics.energy-initialMetrics.energy;
+   this.energyReduction=-100*this.totalChange/initialMetrics.energy;
+   this.delayReduction=100*(initialMetrics.meanDelay-bestMetrics.meanDelay)/initialMetrics.meanDelay;
+   this.worse=bestMetrics.delays.filter((d,j)=>d>initialMetrics.delays[j]+1e-12).length;
+   this.improved=bestMetrics.delays.filter((d,j)=>d<initialMetrics.delays[j]-1e-12).length;
+   this.particles=network.edges.reduce((s,e)=>s+particleCount(e),0);this.events=run.events;
+   this.validation=this.validate(run);deepFreeze(this);
+  }
+  validate(run){const n=this.network,a=this.initialMetrics,b=this.bestMetrics;
+   const state=new Float64Array(INITIAL_STATE),candidate=state.slice(),buffer=EnergyModel.buffer(n);
+   let previous=a.energy,best=previous,bestAt=0,decisions=true;let observedBest=Array.from(state);
+   for(const e of run.events){candidate.set(state);candidate[e.i]=e.v;
+    const delta=EnergyModel.evaluate(n,candidate,buffer).energy-previous,p=delta<=0?1:Math.exp(-delta/e.T);
+    const accept=delta<=0||e.u<p;
+    decisions=decisions&&e.delta===delta&&p===e.p&&accept===e.accepted&&e.T===run.temperatureAt(e.time);
+    if(accept)state[e.i]=e.v;
+    previous=EnergyModel.evaluate(n,state,buffer).energy;
+    decisions=decisions&&previous===e.after;
+    if(previous<best){best=previous;bestAt=e.iteration;observedBest=Array.from(state);}
+    decisions=decisions&&best===e.best;
+   }
+   const replay=new AnnealingEngine(n,this.seed).run();
+   const checks={finite:[a,b].every(m=>[m.energy,m.meanDelay,m.maxDelay,m.queue,...m.delays,...m.capacities,...m.rhos].every(Number.isFinite)),
+    improvement:b.energy<a.energy*(1-CONFIG.minimumImprovement),lowerMean:b.meanDelay<a.meanDelay,
+    bestObserved:best===b.energy&&bestAt===this.bestIteration&&observedBest.every((v,i)=>v===this.bestState[i]),
+    bestCopy:run.bestState!==run.state&&run.bestState!==run.candidateState,
+    bestNotWorseThanLast:b.energy<=run.result.energy,metropolisReplay:decisions,
+    reproducible:JSON.stringify(run.events)===JSON.stringify(replay.events),
+    sameNetwork:Object.isFrozen(n)&&n.nodes.every((v,i)=>v.x===NETWORK_CONFIG.nodes[i][0]&&v.y===NETWORK_CONFIG.nodes[i][1]),
+    fixedInputs:n.edges.every((e,i)=>e.q===NETWORK_CONFIG.edges[i][3]&&e.c===NETWORK_CONFIG.edges[i][4]),
+    sharedScale:Object.isFrozen(COLOR_STOPS)&&CONFIG.criticalDelay===.28,
+    sameParticles:n.edges.every(e=>Number.isInteger(particleCount(e))&&particleCount(e)>0)};
+   assert(Object.values(checks).every(Boolean),'Validação numérica falhou: '+JSON.stringify(checks));
+   return {status:'PASS',checks};
+  }
+ }
+ return {AUTO_PLAY,RECORDING_MODE,RANDOM_SEED,CONFIG,NETWORK_CONFIG,INITIAL_STATE,PRNG,UrbanNetwork,
+  TrafficModel,EnergyModel,AnnealingEngine,Metrics,ComparisonData,COLOR_STOPS,delayColor,flowSpeed,queueLoad,particleCount,clamp,mix,smooth};
+})();
+</script>
+<script>
+(() => {
+ 'use strict';
+ const {AUTO_PLAY,RECORDING_MODE,CONFIG,PRNG,UrbanNetwork,ComparisonData,delayColor,flowSpeed,queueLoad,particleCount,clamp,mix,smooth}=Simulation05;
+ const $=id=>document.getElementById(id),TAU=Math.PI*2,MONO='Consolas,"Liberation Mono",monospace';
+ const C={bg:'#0f111a',panel:'#151823',muted:'#8b93a7',text:'#f8f8f2',cyan:'#8be9fd',purple:'#bd93f9',green:'#50fa7b',orange:'#ffb86c',red:'#ff5555'};
+ const number=(v,d=3)=>v.toFixed(d);
+ const integer=v=>String(v).replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+ function line(c,x1,y1,x2,y2,color,width=1){c.beginPath();c.moveTo(x1,y1);c.lineTo(x2,y2);c.strokeStyle=color;c.lineWidth=width;c.stroke();}
+ function circle(c,x,y,r,color){c.beginPath();c.arc(x,y,r,0,TAU);c.fillStyle=color;c.fill();}
+ function text(c,value,x,y,size=10,color=C.muted,align='left'){c.font=`${size}px ${MONO}`;c.fillStyle=color;c.textAlign=align;c.fillText(value,x,y);}
+ function fitCanvas(canvas,w,h){const rect=canvas.getBoundingClientRect(),dpr=window.devicePixelRatio||1;
+  canvas.width=Math.max(1,Math.round(rect.width*dpr));canvas.height=Math.max(1,Math.round(rect.height*dpr));
+  const c=canvas.getContext('2d');if(!c)throw new Error('Canvas 2D indisponível');
+  c.setTransform(canvas.width/w,0,0,canvas.height/h,0,0);return c;}
+ class Renderer {
+  constructor(data){this.data=data;this.canvases=[$('map-before'),$('map-after')];
+   // Same affine map on both sides; preserves the scene 04 schematic aspect ratio.
+   this.nodes=data.network.nodes.map(n=>({...n,x:76+(n.x-88)*.75,y:25+(n.y-72)*.75*.77}));
+   const rng=new PRNG(data.seed^0x59D3);
+   this.edges=data.network.edges.map(e=>{const a=this.nodes[e.a],b=this.nodes[e.b],dx=b.x-a.x,dy=b.y-a.y,L=Math.hypot(dx,dy);
+    return {...e,aNode:a,bNode:b,dx,dy,nx:-dy/L,ny:dx/L,count:particleCount(e)/2,phase:rng.next()};});
+   this.views=[data.initialMetrics,data.bestMetrics].map((m,index)=>({metrics:m,state:index?data.bestState:data.initialState,
+    colors:m.delays.map(delayColor),loads:m.delays.map(queueLoad),speeds:m.delays.map(flowSpeed),
+    worst:m.delays.map((d,j)=>j).sort((a,b)=>m.delays[b]-m.delays[a]).slice(0,2)}));
+   this.background=document.createElement('canvas');this.layers=[document.createElement('canvas'),document.createElement('canvas')];this.resize();
+  }
+  cache(canvas){canvas.width=this.canvases[0].width;canvas.height=this.canvases[0].height;
+   const c=canvas.getContext('2d');c.setTransform(canvas.width/896,0,0,canvas.height/356,0,0);return c;}
+  resize(){this.contexts=this.canvases.map(c=>fitCanvas(c,896,356));const c=this.cache(this.background);
+   c.fillStyle='#334051';c.globalAlpha=.30;for(let x=28;x<875;x+=26)for(let y=12;y<350;y+=26)c.fillRect(x,y,1,1);c.globalAlpha=1;
+   const blocks=[[0,1,5,4],[1,2,6,5],[2,3,7,6],[4,5,9,8],[5,6,10,9],[6,7,11,10],[8,9,13,12],[9,10,14,13],[10,11,15,14]];
+   blocks.forEach((ids,i)=>{const points=ids.map(id=>this.nodes[id]),cx=points.reduce((s,n)=>s+n.x,0)/4,cy=points.reduce((s,n)=>s+n.y,0)/4;
+    c.beginPath();points.forEach((n,k)=>{const x=mix(cx,n.x,.73),y=mix(cy,n.y,.66);if(k)c.lineTo(x,y);else c.moveTo(x,y);});
+    c.closePath();c.fillStyle=i%3?'#171c28':'#19202b';c.fill();c.strokeStyle='#27313e';c.lineWidth=.8;c.stroke();text(c,`B${String(i+1).padStart(2,'0')}`,cx,cy+3,9,'#414d61','center');});
+   c.lineCap='round';for(const e of this.edges){line(c,e.aNode.x,e.aNode.y,e.bNode.x,e.bNode.y,'#2b3340',e.main?22:17);line(c,e.aNode.x,e.aNode.y,e.bNode.x,e.bNode.y,'#10151f',e.main?19:14);}
+   for(let side=0;side<2;side++){const layer=this.cache(this.layers[side]),v=this.views[side];layer.drawImage(this.background,0,0,896,356);layer.lineCap='round';
+    for(let j=0;j<this.edges.length;j++){const e=this.edges[j];layer.globalAlpha=.80;line(layer,e.aNode.x,e.aNode.y,e.bNode.x,e.bNode.y,v.colors[j],e.main?4:2.8);}layer.globalAlpha=1;
+   }
+  }
+  render(time){for(let side=0;side<2;side++){if(time<(side?2.5:1))continue;
+   const c=this.contexts[side],v=this.views[side];c.clearRect(0,0,896,356);c.drawImage(this.layers[side],0,0,896,356);c.lineCap='round';
+   for(let j=0;j<this.edges.length;j++){const e=this.edges[j],load=v.loads[j],travel=e.phase+time*v.speeds[j],power=1+3.2*load;
+    // Fixed count on every edge and side. Delay changes packing and speed, never demand.
+    // Analytic illustrative flow (no routing/vehicle conservation law is claimed).
+    c.beginPath();for(let lane=0;lane<2;lane++)for(let k=0;k<e.count;k++){
+     const u=(k/e.count+travel+lane*.19)%1,packed=.065+.87*(1-Math.pow(1-u,power)),f=lane?1-packed:packed;
+     const offset=(lane?1:-1)*(e.main?6:4.7),x=e.aNode.x+e.dx*f+e.nx*offset,y=e.aNode.y+e.dy*f+e.ny*offset;
+     c.moveTo(x+1.55,y);c.arc(x,y,1.55,0,TAU);
+    }c.fillStyle=v.colors[j];c.globalAlpha=.65;c.fill();c.globalAlpha=1;
+   }
+   for(let i=0;i<this.nodes.length;i++){const n=this.nodes[i],s=v.state[i];
+    // Freeze only the secondary signal phase during final hold; particles stay alive.
+    const green=(Math.min(time,10.5)/CONFIG.cycle+n.offset)%1<s;
+    circle(c,n.x,n.y,12.5,'#10151f');c.beginPath();c.arc(n.x,n.y,10.5,0,TAU);c.strokeStyle='#354054';c.lineWidth=1.7;c.stroke();
+    c.beginPath();c.arc(n.x,n.y,10.5,-Math.PI/2,TAU*s-Math.PI/2);c.strokeStyle=C.purple;c.lineWidth=2;c.stroke();
+    line(c,n.x-4.5,n.y,n.x+4.5,n.y,green?C.cyan:'#414c5d',2);line(c,n.x,n.y-4.5,n.x,n.y+4.5,green?'#414c5d':C.cyan,2);
+    text(c,String(i+1).padStart(2,'0'),n.x-17,n.y-15,9,'#a0adc1');
+   }
+   // Real worst segments remain annotated, even when below the critical threshold.
+   for(const j of v.worst){const e=this.edges[j],x=(e.aNode.x+e.bNode.x)/2,y=(e.aNode.y+e.bNode.y)/2-19;
+    c.fillStyle=C.panel;c.fillRect(x-46,y-11,92,19);text(c,`e${String(j+1).padStart(2,'0')} d=${number(v.metrics.delays[j])}`,x,y+2,9,v.colors[j],'center');}
+   text(c,'sᵢ / ARCO = FRAÇÃO DE VERDE',26,352,9,'#8b93a7');
+   text(c,side?`${this.data.worse} TRECHOS COM ATRASO MAIOR · CUSTO GLOBAL MENOR`:'CONFIGURAÇÃO SEMAFÓRICA INICIAL / SIMULAÇÃO 02',870,352,9,side?'#c5b395':'#8b93a7','right');
+  }}
+ }
+ class HUD {
+  constructor(data){this.cache=new Map();this.phase=-1;this.set('topology',`${data.network.nodes.length} NÓS / ${data.network.edges.length} SEGMENTOS · Σq = ${number(data.network.demand,2)} FIXA`);
+   [['before',data.initialMetrics,data.initialState],['after',data.bestMetrics,data.bestState]].forEach(([side,m,state])=>{
+    for(const [id,value] of Object.entries({energy:m.energy,mean:m.meanNormalized,max:m.maxNormalized,queue:m.queue}))this.set(`${id}-${side}`,number(value));
+    this.set(`critical-${side}`,String(m.critical).padStart(2,'0'));
+    this.set(`vector-${side}`,`${side==='before'?'x₀':'x*'} = [${state.slice(0,4).map(s=>number(s,2)).join(', ')}, …]`);
+   });
+   this.set('temperature-before',`T₀ = ${number(CONFIG.temperatureInitial)} / SIM. 04`);
+   this.set('temperature-after',`T_best = ${data.bestTemperature.toExponential(3)}`);
+   this.set('flow-note',`${data.particles} PARTÍCULAS POR PAINEL · FLUXO ILUSTRATIVO`);
+   this.set('energy-reduction',`${number(data.energyReduction,1)} %`);this.set('delay-reduction',`${number(data.delayReduction,1)} %`);
+   this.set('total-change',`E_best − E₀ = ${number(data.totalChange,4)}`);
+   this.set('critical-change',`${data.initialMetrics.critical} → ${data.bestMetrics.critical}`);
+   this.set('residual',`${data.bestMetrics.moderate} TRECHOS AINDA MODERADOS`);
+   this.set('best-iteration',`# ${integer(data.bestIteration)}`);this.set('run-detail',`ITERATION / ${integer(data.iterations)} PROPOSTAS`);
+   this.set('seed-label',`SEED ${data.seed} · DETERMINISTIC`);
+   this.set('local-tradeoff',`${data.improved} trechos melhoraram; ${data.worse} pioraram. Menor E observado nesta execução; sem garantia de ótimo global.`);
+   this.set('accessible-summary',`Modelo conceitual, sem dados reais. Energia inicial ${number(data.initialMetrics.energy,6)}, melhor ${number(data.bestMetrics.energy,6)}. Redução ${number(data.energyReduction,2)}%. Mesmo número de nós, vias, partículas e mesma demanda. ${data.worse} atrasos locais aumentaram. Melhor estado encontrado na iteração ${data.bestIteration}, sem garantia de ótimo global.`);
+  }
+  set(id,value){if(this.cache.get(id)!==value){$(id).textContent=value;this.cache.set(id,value);}}
+  update(time,running){this.set('clock',`${time>=CONFIG.duration?'HOLD':running?'RUN':time?'PAUSE':'READY'} · ${number(time,2).padStart(5,'0')} / 12 s`);
+   const phase=time<4?-1:time<6?0:time<8?1:time<10.5?2:3;
+   if(phase!==this.phase){this.phase=phase;['energy','delay','critical'].forEach((id,i)=>$('result-'+id).classList.toggle('active',phase===i||(phase===3&&i<2)));}
+  }
+ }
+ class Timeline {
+  constructor(){this.before=$('before');this.after=$('after');this.result=$('result');this.lastTime=-1;}
+  update(t){if(t===this.lastTime)return;this.lastTime=t;
+   const a=smooth(1,2.35,t),b=smooth(2.5,3.85,t),r=smooth(3.8,4.35,t);
+   this.before.style.opacity=a;this.after.style.opacity=b;
+   this.before.style.transform=`translateY(${(1-a)*9}px)`;this.after.style.transform=`translateY(${(1-b)*9}px)`;
+   this.before.setAttribute('aria-hidden',String(a===0));this.after.setAttribute('aria-hidden',String(b===0));
+   $('divider').style.opacity=b;$('legend').style.opacity=a;
+   this.result.style.opacity=r;this.result.setAttribute('aria-hidden',String(r===0));
+   $('narrative').style.opacity=smooth(4,4.5,t);$('closing').style.opacity=smooth(10.5,11,t);
+   $('intro').style.opacity=1-smooth(.65,1.1,t);$('intro').style.visibility=t>=1.1?'hidden':'visible';
+   $('progress').style.transform=`scaleX(${t/CONFIG.duration})`;
+  }
+ }
+ class Controls {
+  constructor(loop){this.loop=loop;this.hidden=false;$('play').addEventListener('click',()=>this.toggle());$('restart').addEventListener('click',()=>loop.restart());
+   document.addEventListener('keydown',e=>{if(e.repeat||e.ctrlKey||e.metaKey||e.altKey||/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)||e.target.isContentEditable)return;
+    if(e.code==='Space'){e.preventDefault();this.toggle();}else if(e.code==='KeyR'){e.preventDefault();loop.restart();}
+    else if(e.code==='KeyH'){e.preventDefault();this.hidden=!this.hidden;
+     if(this.hidden&&$('controls').contains(document.activeElement))document.activeElement.blur();$('controls').classList.toggle('hidden',this.hidden);}
+   });
+  }
+  toggle(){if(this.loop.time>=CONFIG.duration)this.loop.restart();this.loop.running=!this.loop.running;this.loop.last=performance.now();this.sync();this.loop.draw(true);}
+  sync(){$('play').textContent=this.loop.running?'Ⅱ PAUSE':'▶ PLAY';$('play').setAttribute('aria-pressed',String(this.loop.running));}
+ }
+ class MainLoop {
+  constructor(){this.data=new ComparisonData(new UrbanNetwork());this.time=0;this.running=AUTO_PLAY;this.last=performance.now();
+   this.lastDpr=window.devicePixelRatio;this.lastHud=-1;this.performance={frames:0,totalWorkMs:0,maxWorkMs:0,totalInterval:0};
+   this.renderer=new Renderer(this.data);this.hud=new HUD(this.data);this.timeline=new Timeline();this.controls=new Controls(this);
+   this.controls.sync();this.draw(true);this.log();
+   window.addEventListener('resize',()=>this.resize());document.addEventListener('visibilitychange',()=>{if(document.hidden){this.running=false;this.controls.sync();this.draw(true);}this.last=performance.now();});
+   this.frame=this.frame.bind(this);requestAnimationFrame(this.frame);
+  }
+  resize(){fitStage();this.renderer.resize();this.draw(true);}
+  restart(){this.time=0;this.running=false;this.last=performance.now();this.lastHud=-1;
+   this.performance={frames:0,totalWorkMs:0,maxWorkMs:0,totalInterval:0};this.controls.sync();this.draw(true);}
+  draw(force=false){this.timeline.update(this.time);this.renderer.render(this.time);
+   const tick=Math.floor(this.time*CONFIG.hudRate);if(force||tick!==this.lastHud){this.hud.update(this.time,this.running);this.lastHud=tick;}}
+  frame(now){const elapsed=clamp((now-this.last)/1000,0,.25);this.last=now;
+   try{if(window.devicePixelRatio!==this.lastDpr){this.lastDpr=window.devicePixelRatio;this.resize();}
+    if(this.running){const start=performance.now();this.time=Math.min(CONFIG.duration,this.time+elapsed);
+     if(this.time>=CONFIG.duration){this.running=false;this.controls.sync();}
+     this.draw(!this.running);const work=performance.now()-start,p=this.performance;p.frames++;p.totalWorkMs+=work;p.maxWorkMs=Math.max(p.maxWorkMs,work);p.totalInterval+=elapsed;
+     if(!this.running)console.info('Simulation 05 — completed',JSON.stringify({frames:p.frames,observedFps:p.frames/p.totalInterval,averageWorkMs:p.totalWorkMs/p.frames,maxWorkMs:p.maxWorkMs}));
+    }
+   }catch(error){this.running=false;this.controls.sync();showError(error);}
+   requestAnimationFrame(this.frame);
+  }
+  log(){const d=this.data;console.info(`============================================\nSIMULATION 05 — BEFORE × AFTER\n============================================\nSeed: ${d.seed}\nInitial Energy: ${d.initialMetrics.energy}\nBest Energy: ${d.bestMetrics.energy}\nEnergy Reduction: ${d.energyReduction} %\nInitial Mean Delay: ${d.initialMetrics.meanDelay}\nBest Mean Delay: ${d.bestMetrics.meanDelay}\nInitial Critical Segments: ${d.initialMetrics.critical}\nBest Critical Segments: ${d.bestMetrics.critical}\nBest Iteration: ${d.bestIteration}\nValidation: ${d.validation.status}`);
+   console.info('Simulation 05 — audit',JSON.stringify({checks:d.validation.checks,trials:d.trials,lastEnergy:d.lastEnergy,bestTemperature:d.bestTemperature,localDelaysIncreased:d.worse,moderateRemaining:d.bestMetrics.moderate,particlesPerPanel:d.particles}));}
+ }
+ function fitStage(){$('stage').style.transform=`translate(-50%,-50%) scale(${Math.min(innerWidth/CONFIG.width,innerHeight/CONFIG.height)})`;}
+ function showError(error){$('error').hidden=false;$('error').textContent=`Não foi possível validar a comparação. ${error.message}`;console.error(error);}
+ try{document.body.classList.toggle('recording',RECORDING_MODE);fitStage();const app=new MainLoop();
+  // Read-only diagnostics return copies; no interface can edit the scientific states.
+  Object.defineProperty(window,'ComparisonExperiment',{value:Object.freeze({
+   snapshot:()=>({time:app.time,running:app.running,seed:app.data.seed,initialState:[...app.data.initialState],bestState:[...app.data.bestState],
+    initialMetrics:JSON.parse(JSON.stringify(app.data.initialMetrics)),bestMetrics:JSON.parse(JSON.stringify(app.data.bestMetrics)),
+    energyReduction:app.data.energyReduction,delayReduction:app.data.delayReduction,bestIteration:app.data.bestIteration,
+    lastEnergy:app.data.lastEnergy,particlesPerPanel:app.data.particles,validation:JSON.parse(JSON.stringify(app.data.validation)),performance:{...app.performance}}),
+   history:()=>app.data.events.map(e=>({...e}))
+  })});
+ }catch(error){showError(error);}
+})();
+</script>
+</body>
+</html>
