@@ -14,7 +14,7 @@ header{position:absolute;left:48px;right:48px;top:39px}.eyebrow,.label,.mono,.ba
 .eyebrow{font-size:12px;letter-spacing:.14em;color:var(--muted);display:flex;align-items:center;gap:14px}.eyebrow::before{content:"";width:26px;height:1px;background:var(--cyan)}
 h1{font-size:43px;font-weight:500;letter-spacing:-.035em;margin:20px 0 12px}h1 span{font-weight:300;color:var(--muted)}.subtitle{font:15px var(--mono);color:#b0b9cb;margin:0}.origin{font:12px var(--mono);color:var(--muted);margin-top:13px}
 .identity{position:absolute;right:0;top:0;text-align:right}.badge{display:inline-flex;align-items:center;gap:10px;border:1px solid #354151;padding:10px 14px;border-radius:3px;color:#c5d3df;font-size:11px;letter-spacing:.09em}.badge::before{content:"";width:5px;height:5px;background:var(--cyan);border-radius:50%}.identity p{font:11px var(--mono);color:var(--muted);margin-top:16px;letter-spacing:.07em}
-#comparison{position:absolute;right:48px;top:144px;width:748px;display:grid;grid-template-columns:1fr 1fr 1.05fr 1fr 1fr;gap:17px;opacity:0;pointer-events:none;padding-top:13px;border-top:1px solid var(--line)}#comparison .label{font-size:9px;letter-spacing:.04em}#comparison output{display:block;font:24px var(--mono);margin-top:7px}#comparison::after{content:"E E ATRASOS NORMALIZADOS · d_ref = 0.25";position:absolute;right:0;bottom:-16px;font:8px var(--mono);color:var(--muted)}.green{color:var(--green)}.cyan{color:var(--cyan)}.orange{color:var(--orange)}
+#comparison{position:absolute;right:48px;top:132px;width:1050px;display:grid;grid-template-columns:1fr 1.15fr 1.15fr 1fr 1fr 1fr;gap:17px;opacity:0;pointer-events:none;padding-top:13px;border-top:1px solid var(--line)}#comparison .label{font-size:10px;letter-spacing:.04em}#comparison output{display:block;font:24px var(--mono);margin-top:7px}#comparison-note{position:absolute;right:0;bottom:-16px;font:9px var(--mono);color:var(--muted)}#comparison .best-result output{font-size:30px}#comparison .best-result{border-bottom:2px solid var(--green)}.green{color:var(--green)}.cyan{color:var(--cyan)}.orange{color:var(--orange)}
 #network-panel{position:absolute;left:48px;top:224px;width:1264px;height:664px;border:1px solid #303847;border-radius:5px;background:radial-gradient(ellipse at 50% 45%,#171d2a,#121620 78%);overflow:hidden}
 .panel-head{position:absolute;left:26px;right:26px;top:23px;display:flex;justify-content:space-between;font:11px var(--mono);letter-spacing:.08em;color:#aeb9cc}.panel-head span:last-child{color:var(--muted)}#network{position:absolute;left:0;top:52px;width:1264px;height:570px}
 .map-foot{position:absolute;left:26px;right:26px;bottom:19px;display:flex;justify-content:space-between;align-items:center;font:10px var(--mono);color:var(--muted);letter-spacing:.025em}.legend{display:flex;gap:17px;align-items:center}.swatch{display:inline-block;width:17px;height:3px;vertical-align:middle;margin-right:6px}
@@ -26,7 +26,7 @@ h1{font-size:43px;font-weight:500;letter-spacing:-.035em;margin:20px 0 12px}h1 s
 #counts{position:absolute;top:359px;left:0;right:0;display:flex;justify-content:space-between;font:10px var(--mono);color:var(--muted)}#counts b{font-size:12px;color:var(--text);font-weight:400}
 .graph{position:absolute;left:0;right:0}.graph-title{display:flex;justify-content:space-between;font:10px var(--mono);letter-spacing:.04em;color:var(--muted)}#energy-chart-panel{top:398px}#temperature-chart-panel{top:527px}.graph canvas{display:block;width:512px;margin-top:9px;background:#10131d;border-radius:2px}#energy-chart{height:88px}#temperature-chart{height:56px}.chart-foot{display:flex;justify-content:space-between;margin-top:5px;font:9px var(--mono);color:#738198}
 #phase{position:absolute;top:637px;left:0;right:0;border-left:2px solid var(--orange);padding-left:12px;color:var(--orange);font:11px var(--mono);letter-spacing:.04em}#phase-name{display:inline-block}#phase-index{color:var(--muted);margin-right:12px}
-#timeline{position:absolute;left:48px;right:48px;top:913px}.time-track{position:relative;height:3px;background:#292f3d}.time-progress{position:absolute;inset:0;background:#b9cbd6;transform:scaleX(0);transform-origin:left}.ticks{display:grid;grid-template-columns:3fr 6.5fr 4fr 2.5fr;margin-top:13px;font:10px var(--mono);color:#78849a;letter-spacing:.06em}.ticks span.active{color:#dae5ec}.ticks b{font-weight:400;opacity:.6;margin-right:8px}.clock{position:absolute;right:0;top:-28px;font:13px var(--mono);color:#bcc7d6}
+#timeline{position:absolute;left:48px;right:48px;top:913px}.time-track{position:relative;height:3px;background:#292f3d}.time-progress{position:absolute;inset:0;background:#b9cbd6;transform:scaleX(0);transform-origin:left}.ticks{display:grid;grid-template-columns:3fr 6.5fr 4fr 2.5fr 4fr;margin-top:13px;font:10px var(--mono);color:#78849a;letter-spacing:.06em}.ticks span.active{color:#dae5ec}.ticks b{font-weight:400;opacity:.6;margin-right:8px}.clock{position:absolute;right:0;top:-28px;font:13px var(--mono);color:#bcc7d6}
 #narrative{position:absolute;left:48px;right:48px;top:969px;height:44px;display:flex;justify-content:space-between;align-items:center}.concept{font-size:18px;line-height:1.65;color:#bec9d9}.concept .arrow{color:#626e85;margin:0 13px}.formula{text-align:right;font:12px/1.8 var(--mono);color:var(--muted)}#closing{position:absolute;inset:-4px auto -4px 0;min-width:1080px;background:var(--bg);opacity:0;pointer-events:none;font:13px/1.9 var(--mono);color:#bec9d9}#closing strong{font-weight:500;font-size:17px;color:var(--cyan)}
 footer{position:absolute;left:48px;right:48px;bottom:18px;padding-top:13px;border-top:1px solid #242a38;display:flex;justify-content:space-between;align-items:center;font-size:9px;letter-spacing:.025em;color:var(--muted)}#controls{display:flex;gap:8px;align-items:center}button{height:29px;padding:0 11px;border:1px solid #344052;background:#181e2a;color:#c3d4e0;border-radius:3px;font-size:9px;letter-spacing:.05em;cursor:pointer}button:hover{border-color:var(--cyan);color:var(--cyan)}button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}#play{border-color:#47606f}.key-help{margin-left:8px}#controls.hidden{visibility:hidden}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}#error{position:absolute;inset:0;z-index:20;background:var(--bg);color:var(--orange);padding:140px;font:24px/1.7 var(--mono)}#error[hidden]{display:none}
@@ -39,34 +39,36 @@ footer{position:absolute;left:48px;right:48px;bottom:18px;padding-top:13px;borde
   <h1>COOLING <span>AND</span> CONVERGENCE</h1>
   <p class="subtitle">Simulated Annealing // Conceptual Urban Model</p>
   <p class="origin">Rede esquemática inspirada em Goiânia / Continuidade da Simulação 02</p>
-  <div class="identity"><span class="badge">ANIMAÇÃO COMPUTACIONAL</span><p>04 / 04 &nbsp; RESFRIAMENTO E CONVERGÊNCIA</p></div>
+  <div class="identity"><span class="badge">ANIMAÇÃO COMPUTACIONAL</span><p>04 / 05 &nbsp; RESFRIAMENTO E CONVERGÊNCIA</p></div>
  </header>
- <section id="comparison" aria-label="Comparação calculada da configuração inicial com a atual" aria-hidden="true">
+ <section id="comparison" aria-label="Resultados do run completo: energia inicial, corrente final e melhor encontrada" aria-hidden="true">
   <div><div class="label">INITIAL ENERGY</div><output id="initial-energy">—</output></div>
-  <div><div class="label" id="final-energy-label">CURRENT ENERGY</div><output id="final-energy" class="cyan">—</output></div>
-  <div><div class="label">REDUCTION</div><output id="reduction" class="green">—</output></div>
+  <div><div class="label">FINAL CURRENT ENERGY</div><output id="final-energy" class="cyan">—</output></div>
+  <div class="best-result"><div class="label">BEST ENERGY FOUND</div><output id="result-best-energy" class="green">—</output></div>
+  <div><div class="label">BEST COST REDUCTION</div><output id="reduction" class="green">—</output></div>
   <div><div class="label">INITIAL MEAN DELAY</div><output id="initial-delay">—</output></div>
-  <div><div class="label" id="final-delay-label">CURRENT MEAN DELAY</div><output id="final-delay" class="cyan">—</output></div>
+  <div><div class="label">BEST MEAN DELAY</div><output id="best-delay" class="green">—</output></div>
+  <span id="comparison-note"></span>
  </section>
  <section id="network-panel" aria-label="Modelo urbano conceitual de 16 interseções e 26 segmentos">
-  <div class="panel-head"><span>MICROSTATE FIELD / CONFIGURAÇÃO SEMAFÓRICA</span><span id="topology"></span></div>
+  <div class="panel-head"><span id="map-state">CURRENT STATE x_n / CONFIGURAÇÃO SEMAFÓRICA</span><span id="topology"></span></div>
   <canvas id="network" role="img" aria-label="Rede conceitual: cores e partículas representam os atrasos calculados de cada via.">Rede urbana esquemática.</canvas>
   <div class="map-foot"><div class="legend"><span>ATRASO dⱼ</span><span><i class="swatch" style="background:linear-gradient(90deg,var(--cyan),var(--green))"></i>BAIXO</span><span><i class="swatch" style="background:var(--orange)"></i>MODERADO</span><span><i class="swatch" style="background:var(--red)"></i>ALTO ≥ 0.28</span></div><span>FLUXO ILUSTRATIVO · SEM ESCALA GEOGRÁFICA</span></div>
  </section>
  <aside id="hud" aria-label="Métricas da mesma cadeia de Monte Carlo">
   <div class="hud-head"><span>COOLING AND CONVERGENCE</span><span id="run-status">● READY</span></div>
-  <section id="temperature-metric"><div class="label">TEMPERATURE T</div><div class="reading"><output class="value" id="temperature">—</output><span id="temperature-ratio">T / T₀ = 1.000</span></div><div class="track"><div class="fill" id="temperature-bar"></div></div><div class="note">TEMPERATURA COMPUTACIONAL · MESMA T DO METRÓPOLIS</div></section>
-  <section id="energy-metrics"><div><div class="label">OBJECTIVE ENERGY E</div><div class="reading"><output class="value" id="energy">—</output></div><div class="note">E = Σⱼ wⱼ dⱼ / d_ref</div></div><div class="best"><div class="label">BEST ENERGY FOUND</div><div class="reading"><output class="value" id="best-energy">—</output></div><div class="note">min E(xτ), τ ≤ t</div></div></section>
-  <section id="secondary"><div><div class="label">MEAN DELAY / d_ref</div><div class="reading"><output class="value" id="mean-delay">—</output></div></div><div><div class="label">ACCEPTANCE RATE</div><div class="reading"><span><output class="value cyan" id="acceptance">—</output><span class="suffix"> %</span></span><span class="unit" id="window-label"></span></div></div></section>
+  <section id="temperature-metric"><div class="label">TEMPERATURE T</div><div class="reading"><output class="value" id="temperature">—</output><span id="temperature-ratio">T / T₀ = 1.000</span></div><div class="track"><div class="fill" id="temperature-bar"></div></div><div class="note" id="schedule-note"></div></section>
+  <section id="energy-metrics"><div><div class="label">CURRENT ENERGY E(x_n)</div><div class="reading"><output class="value" id="energy">—</output></div><div class="note">E = Σⱼ wⱼ dⱼ / d_ref</div></div><div class="best"><div class="label">BEST ENERGY FOUND</div><div class="reading"><output class="value" id="best-energy">—</output></div><div class="note">E_best(n) = min E(xτ), τ ≤ n</div></div></section>
+  <section id="secondary"><div><div class="label" id="mean-delay-label">CURRENT MEAN DELAY / d_ref</div><div class="reading"><output class="value" id="mean-delay">—</output></div></div><div><div class="label">ACCEPTANCE RATE</div><div class="reading"><span><output class="value cyan" id="acceptance">—</output><span class="suffix"> %</span></span><span class="unit" id="window-label"></span></div></div></section>
   <div id="counts"><span>ITERATION <b id="iteration">000000</b></span><span>ΔE &gt; 0 ACCEPTED <b id="uphill">0</b></span><span>p↑ <b id="uphill-rate">—</b></span></div>
-  <section class="graph" id="energy-chart-panel"><div class="graph-title"><span>ENERGY E(t) <span class="cyan">— CURRENT</span></span><span class="green">┄ BEST</span></div><canvas id="energy-chart" role="img" aria-label="Histórico real da energia atual em cyan e do menor valor observado em verde."></canvas><div class="chart-foot"><span id="energy-range"></span><span>E ATUAL PODE SUBIR</span><span class="duration-label"></span></div></section>
-  <section class="graph" id="temperature-chart-panel"><div class="graph-title"><span>TEMPERATURE T(t)</span><span class="orange">T₀ exp[−β(t/D)²]</span></div><canvas id="temperature-chart" role="img" aria-label="Temperatura computacional real, em escala linear, com valor final positivo."></canvas><div class="chart-foot"><span>ESCALA LINEAR</span><span id="temperature-floor"></span></div></section>
+  <section class="graph" id="energy-chart-panel"><div class="graph-title"><span>ENERGY E(t) <span class="cyan">— CURRENT</span></span><span class="green">┄ BEST · RUNNING MINIMUM</span></div><canvas id="energy-chart" role="img" aria-label="Histórico real da energia atual em cyan e do menor valor observado em verde."></canvas><div class="chart-foot"><span id="energy-range"></span><span>E ATUAL PODE SUBIR</span><span class="duration-label"></span></div></section>
+  <section class="graph" id="temperature-chart-panel"><div class="graph-title"><span>TEMPERATURE T_n</span><span class="orange">T_n = T₀ αⁿ</span></div><canvas id="temperature-chart" role="img" aria-label="Temperatura computacional real, em escala linear, com valor final positivo."></canvas><div class="chart-foot"><span>ESCALA LINEAR</span><span id="temperature-floor"></span></div></section>
   <div id="phase"><span id="phase-index">PHASE 01</span><span id="phase-name">HIGH-T EXPLORATION</span></div>
  </aside>
- <section id="timeline" aria-label="Sequência temporal"><div class="clock"><span id="time">00.00</span> / <span id="duration"></span> s</div><div class="time-track"><div class="time-progress" id="progress"></div></div><div class="ticks"><span><b id="tick-0"></b>HIGH-T EXPLORATION</span><span><b id="tick-1"></b>COOLING</span><span><b id="tick-2"></b>CONVERGENCE</span><span><b id="tick-3"></b>LOW-T STATE</span></div></section>
- <div id="narrative"><div class="concept" id="concept"></div><div class="formula">P_acc = min[1, exp(−ΔE/T)] &nbsp; · &nbsp; k_B = 1<br><span id="microstate"></span></div><div id="closing">RESFRIAMENTO → MENOS FLUTUAÇÕES DESFAVORÁVEIS<br><strong>MENOR ATRASO GLOBAL → CONFIGURAÇÃO DE MENOR CUSTO ENCONTRADA</strong></div></div>
+ <section id="timeline" aria-label="Sequência temporal"><div class="clock"><span id="time">00.00</span> / <span id="duration"></span> s</div><div class="time-track"><div class="time-progress" id="progress"></div></div><div class="ticks"><span><b id="tick-0"></b>HIGH-T EXPLORATION</span><span><b id="tick-1"></b>COOLING</span><span><b id="tick-2"></b>LOW-T STABILIZATION</span><span><b id="tick-3"></b>LOW-T STATE</span><span><b id="tick-4"></b>BEST FOUND → SIM. 05</span></div></section>
+ <div id="narrative"><div class="concept" id="concept"></div><div class="formula">P_acc = min[1, exp(−ΔE/T)] &nbsp; · &nbsp; k_B = 1<br><span id="microstate"></span></div><div id="closing">MENOR CUSTO AGREGADO DO MODELO<br><strong>BEST CONFIGURATION FOUND ↓ SIMULATION 05 ↓ BEFORE × AFTER</strong></div></div>
  <footer><span>MODELO URBANO CONCEITUAL — NÃO SÃO DADOS REAIS DE TRÁFEGO</span><div id="controls"><button id="play" type="button" aria-label="Play / Pause" aria-pressed="false">▶ PLAY</button><button id="restart" type="button" aria-label="Restart">↺ RESTART</button><span class="key-help">SPACE play/pause &nbsp; R restart &nbsp; H ocultar</span></div><span id="seed-label"></span></footer>
- <p class="sr-only">NORMALIZED CONCEPTUAL TRAFFIC MODEL. Demandas e capacidades sintéticas. A temperatura é computacional e a energia é uma função objetivo. Convergência operacional não garante o ótimo global. Os atrasos normalizados não representam segundos nem previsões de tráfego.</p>
+ <p class="sr-only">NORMALIZED CONCEPTUAL TRAFFIC MODEL. Demandas e capacidades sintéticas. A temperatura é computacional e a energia é uma função objetivo. Estabilização operacional observada em um run finito. O fechamento exibe o melhor estado encontrado; o último estado da cadeia é registrado separadamente. Os atrasos normalizados não representam segundos nem previsões de tráfego.</p>
  <div id="error" role="alert" hidden></div>
 </main>
 <noscript>Ative JavaScript para executar esta simulação offline.</noscript>
@@ -78,7 +80,7 @@ const Simulation04 = (() => {
  const RANDOM_SEED = 20260913;
  const CONFIG = Object.freeze({width:1920,height:1080,duration:16,simulationRate:120,
   proposalRate:120,proposalAmplitude:.15,minSignal:.20,maxSignal:.80,
-  temperatureInitial:.096,temperatureFinal:.00001,coolingPower:2,
+  temperatureInitial:.096,temperatureFinal:.00001,closingDuration:4,
   delayReference:.25,acceptanceWindow:96,hudRate:15,cycle:4.8,
   seeds:Object.freeze([RANDOM_SEED,20260917,20261003,31415926])});
  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -138,16 +140,39 @@ const Simulation04 = (() => {
    assert(Number.isFinite(out.energy)&&out.energy>=0,'Energia não finita');return out;
   }
  }
- class CoolingSchedule {
-  constructor(){assert(CONFIG.temperatureInitial>CONFIG.temperatureFinal&&CONFIG.temperatureFinal>0,'Exige T₀ > T_f > 0');
-   this.beta=Math.log(CONFIG.temperatureInitial/CONFIG.temperatureFinal);}
-  at(t){return CONFIG.temperatureInitial*Math.exp(-this.beta*Math.pow(clamp(t/CONFIG.duration,0,1),CONFIG.coolingPower));}
+ const INITIAL_STATE=NETWORK_CONFIG.initialState;
+ const copyResult=r=>({delays:r.delays.slice(),capacities:r.capacities.slice(),rhos:r.rhos.slice(),energy:r.energy,meanDelay:r.meanDelay,weightedDelay:r.weightedDelay});
+ class GeometricCoolingSchedule {
+  constructor(T0,Tf,nSteps){
+   assert(Number.isFinite(T0)&&Number.isFinite(Tf)&&T0>Tf&&Tf>0,'Exige T₀ > T_f > 0');
+   assert(Number.isSafeInteger(nSteps)&&nSteps>=2,'Exige N inteiro e N ≥ 2');
+   this.T0=T0;this.Tf=Tf;this.N=nSteps;this.alpha=Math.pow(Tf/T0,1/(nSteps-1));
+   assert(Number.isFinite(this.alpha)&&this.alpha>0&&this.alpha<1,'Exige 0 < alpha < 1');
+   this.validation=this.validate();Object.freeze(this);
+  }
+  atStep(n){assert(Number.isSafeInteger(n)&&n>=0&&n<this.N,'Índice de proposta fora de [0,N−1]');
+   // Endpoints are pinned only to remove floating-point accumulation error.
+   if(n===0)return this.T0;if(n===this.N-1)return this.Tf;
+   return this.T0*Math.pow(this.alpha,n);
+  }
+  validate(){const close=(a,b)=>Math.abs(a-b)<=1e-12*Math.max(Math.abs(a),Math.abs(b),Number.MIN_VALUE);
+   let finite=true,positive=true,monotonic=true,formula=true,previous=Infinity;
+   for(let n=0;n<this.N;n++){const T=this.atStep(n);finite=finite&&Number.isFinite(T);positive=positive&&T>0;
+    monotonic=monotonic&&T<=previous;formula=formula&&close(T,this.T0*Math.pow(this.alpha,n));previous=T;}
+   const checks={initial:this.atStep(0)===this.T0,final:this.atStep(this.N-1)===this.Tf,
+    derivedAlpha:this.alpha===Math.pow(this.Tf/this.T0,1/(this.N-1)),finite,positive,monotonic,formula};
+   assert(Object.values(checks).every(Boolean),'Falha na validação do schedule geométrico');
+   return Object.freeze({status:'PASS',T0:this.T0,Tf:this.Tf,N:this.N,alpha:this.alpha,
+    first:this.atStep(0),last:this.atStep(this.N-1),checks:Object.freeze(checks)});
+  }
  }
  class HistoryBuffer {
-  constructor(capacity){this.length=0;for(const k of ['t','T','e','best','mean'])this[k]=new Float64Array(capacity);}
+  constructor(capacity){this.length=0;for(const k of ['t','T','e','best','mean','iteration','acceptance','uphill','uphillRate'])this[k]=new Float64Array(capacity);}
   push(engine){const i=this.length++;assert(i<this.t.length,'Histórico sem espaço');
    this.t[i]=engine.time;this.T[i]=engine.temperature;this.e[i]=engine.result.energy;
-   this.best[i]=engine.bestEnergy;this.mean[i]=engine.result.meanDelay;}
+   this.best[i]=engine.bestEnergy;this.mean[i]=engine.result.meanDelay;this.iteration[i]=engine.metrics.attempted;
+   this.acceptance[i]=engine.metrics.acceptance??NaN;this.uphill[i]=engine.metrics.uphillAccepted;
+   this.uphillRate[i]=engine.metrics.uphillAcceptance??NaN;}
  }
  class Metrics {
   constructor(){this.attempted=0;this.accepted=0;this.uphillAccepted=0;this.uphillProposed=0;this.count=0;this.cursor=0;
@@ -161,22 +186,26 @@ const Simulation04 = (() => {
   get uphillAcceptance(){return this.windowUphill?this.windowUphillAccepted/this.windowUphill:null;}
  }
  class AnnealingEngine {
-  constructor(network,seed){this.network=network;this.seed=seed;this.rng=new PRNG(seed);this.schedule=new CoolingSchedule();
-   this.ticks=0;this.totalTicks=Math.round(CONFIG.duration*CONFIG.simulationRate);
-   assert(CONFIG.duration>0&&this.totalTicks>0&&CONFIG.proposalRate>0,'Duração ou taxa inválida');
-   this.temperature=this.schedule.at(0);this.state=new Float64Array(NETWORK_CONFIG.initialState);this.candidateState=new Float64Array(this.state.length);
+  constructor(network,seed){this.network=network;this.seed=seed;this.rng=new PRNG(seed);
+   this.ticks=0;this.totalTicks=Math.round(CONFIG.duration*CONFIG.simulationRate);this.totalSteps=Math.round(CONFIG.duration*CONFIG.proposalRate);
+   assert(CONFIG.duration>0&&CONFIG.simulationRate>0&&CONFIG.proposalRate>0&&this.totalTicks>=1,'Duração ou taxa inválida');
+   assert(Math.abs(this.totalTicks-CONFIG.duration*CONFIG.simulationRate)<1e-9&&Math.abs(this.totalSteps-CONFIG.duration*CONFIG.proposalRate)<1e-9,'Duração deve conter números inteiros de ticks e propostas');
+   this.schedule=new GeometricCoolingSchedule(CONFIG.temperatureInitial,CONFIG.temperatureFinal,this.totalSteps);
+   this.temperature=this.schedule.atStep(0);this.state=new Float64Array(INITIAL_STATE);this.candidateState=new Float64Array(this.state.length);
    this.result=EnergyModel.evaluate(network,this.state);this.candidateResult=EnergyModel.buffer(network);
    this.initialEnergy=this.result.energy;this.initialMeanDelay=this.result.meanDelay;this.bestEnergy=this.result.energy;this.bestState=this.state.slice();
+   this.bestResult=copyResult(this.result);this.bestIteration=0;this.bestTime=0;
    this.metrics=new Metrics();this.events=[];this.flashes=new Float64Array(this.state.length).fill(-10);
-   this.history=new HistoryBuffer(this.totalTicks+Math.ceil(CONFIG.duration*CONFIG.proposalRate)+2);this.history.push(this);}
+   this.history=new HistoryBuffer(this.totalSteps+1);this.history.push(this);}
   get time(){return this.ticks/CONFIG.simulationRate;}
   get finished(){return this.ticks>=this.totalTicks;}
-  step(){if(this.finished)return;this.ticks++;this.temperature=this.schedule.at(this.time);
-   // Integer target separates Monte Carlo rate from rendering and avoids accumulated rounding drift.
-   const target=Math.floor(this.ticks*CONFIG.proposalRate/CONFIG.simulationRate+1e-10),before=this.metrics.attempted;
+  step(){if(this.finished)return;this.ticks++;
+   // Fixed scientific ticks schedule proposals; only the proposal index controls T.
+   const target=Math.min(this.totalSteps,Math.floor(this.ticks*CONFIG.proposalRate/CONFIG.simulationRate+1e-10));
    while(this.metrics.attempted<target){this.propose();this.history.push(this);}
-   if(before===this.metrics.attempted)this.history.push(this);}
-  propose(){const i=Math.floor(this.rng.next()*this.state.length),oldValue=this.state[i],before=this.result.energy;
+   if(this.finished)assert(this.metrics.attempted===this.totalSteps,'Última proposta não executada');}
+  propose(){const n=this.metrics.attempted;this.temperature=this.schedule.atStep(n);
+   const i=Math.floor(this.rng.next()*this.state.length),oldValue=this.state[i],before=this.result.energy;
    this.candidateState.set(this.state);
    // Symmetric uniform proposal, reflected at the bounds; no clipping or artificial boundary mass.
    let v=oldValue+(2*this.rng.next()-1)*CONFIG.proposalAmplitude;
@@ -187,71 +216,106 @@ const Simulation04 = (() => {
    assert(this.temperature>0&&Number.isFinite(probability)&&probability>=0&&probability<=1,'Probabilidade inválida');
    if(accepted){const oldState=this.state,oldResult=this.result;this.state=this.candidateState;this.result=this.candidateResult;
     this.candidateState=oldState;this.candidateResult=oldResult;this.flashes[i]=this.time;
-    if(this.result.energy<this.bestEnergy){this.bestEnergy=this.result.energy;this.bestState.set(this.state);}}
+    if(this.result.energy<this.bestEnergy){this.bestEnergy=this.result.energy;this.bestState.set(this.state);
+     this.bestResult=copyResult(this.result);this.bestIteration=n+1;this.bestTime=this.time;}}
    this.metrics.record(accepted,delta>0);
-   this.events.push({t:this.time,T:this.temperature,i,oldValue,proposedValue:v,before,delta,probability,u,accepted,after:this.result.energy});}
+   this.events.push({iteration:n+1,n,t:this.time,T:this.temperature,i,oldValue,proposedValue:v,before,delta,probability,u,accepted,after:this.result.energy});}
   run(){while(!this.finished)this.step();return this;}
  }
  function validateTrajectory(engine){
-  const events=engine.events,h=engine.history,initial=engine.initialEnergy,final=engine.result.energy;
+  const events=engine.events,h=engine.history,initial=engine.initialEnergy,final=engine.result.energy,tol=1e-12;
   const early=events.filter(e=>e.t<=CONFIG.duration*3/16),late=events.filter(e=>e.t>CONFIG.duration*13.5/16);
   const middle=events.filter(e=>e.t>=CONFIG.duration*5/16&&e.t<CONFIG.duration*9.5/16);
-  const mean=a=>a.reduce((s,e)=>s+e.after,0)/a.length;
-  const deviation=a=>{const m=mean(a);return Math.sqrt(a.reduce((s,e)=>s+(e.after-m)**2,0)/a.length);};
+  const mean=a=>a.reduce((sum,e)=>sum+e.after,0)/a.length;
+  const deviation=a=>{const m=mean(a);return Math.sqrt(a.reduce((sum,e)=>sum+(e.after-m)**2,0)/a.length);};
   const rate=a=>a.filter(e=>e.accepted).length/a.length;
   const uphillRate=a=>a.filter(e=>e.delta>0&&e.accepted).length/Math.max(1,a.filter(e=>e.delta>0).length);
-  const replay=new Float64Array(NETWORK_CONFIG.initialState),candidate=replay.slice(),result=EnergyModel.buffer(engine.network);
-  let decisions=true,rejections=true,consistency=true,previous=initial,best=initial;
-  for(const e of events){candidate.set(replay);candidate[e.i]=e.proposedValue;
+  const replay=new Float64Array(INITIAL_STATE),candidate=replay.slice(),result=EnergyModel.buffer(engine.network),rng=new PRNG(engine.seed);
+  const recordedBest=replay.slice();let bestIteration=0,bestTime=0;
+  let decisions=true,rejections=true,consistency=true,proposals=true,previous=initial,best=initial;
+  for(let n=0;n<events.length;n++){const e=events[n],i=Math.floor(rng.next()*replay.length);
+   let v=replay[i]+(2*rng.next()-1)*CONFIG.proposalAmplitude;
+   while(v<CONFIG.minSignal||v>CONFIG.maxSignal){if(v<CONFIG.minSignal)v=2*CONFIG.minSignal-v;if(v>CONFIG.maxSignal)v=2*CONFIG.maxSignal-v;}
+   const u=rng.next();proposals=proposals&&i===e.i&&v===e.proposedValue&&u===e.u;
+   candidate.set(replay);candidate[e.i]=e.proposedValue;
    const expected=EnergyModel.evaluate(engine.network,candidate,result).energy,delta=expected-previous;
    const p=delta<=0?1:Math.exp(-delta/e.T),accepted=delta<=0||e.u<p;
-   decisions=decisions&&accepted===e.accepted&&Math.abs(delta-e.delta)<1e-12&&p===e.probability&&e.T===engine.schedule.at(e.t);
+   decisions=decisions&&accepted===e.accepted&&Math.abs(delta-e.delta)<tol&&p===e.probability&&e.T===engine.schedule.atStep(n)&&e.n===n&&e.iteration===n+1;
    consistency=consistency&&e.oldValue===replay[e.i]&&e.before===previous;
    if(e.accepted)replay[e.i]=e.proposedValue;else rejections=rejections&&e.after===previous;
    const actual=EnergyModel.evaluate(engine.network,replay,result).energy;
-   consistency=consistency&&actual===e.after;previous=actual;best=Math.min(best,actual);
+   consistency=consistency&&actual===e.after;previous=actual;
+   if(actual<best){best=actual;recordedBest.set(replay);bestIteration=e.iteration;bestTime=e.t;}
   }
-  let finite=true,cooling=true,bestMonotone=true,maxEnergy=0,historyBest=initial;
-  for(let i=0;i<h.length;i++){finite=finite&&Number.isFinite(h.e[i]+h.T[i]+h.mean[i])&&h.T[i]>0;
+  let finite=true,cooling=true,bestMonotone=true,historyConsistent=h.length===events.length+1,maxEnergy=0,historyBest=initial;
+  for(let i=0;i<h.length;i++){finite=finite&&Number.isFinite(h.e[i]+h.T[i]+h.mean[i]+h.best[i])&&h.T[i]>0;
    historyBest=Math.min(historyBest,h.e[i]);bestMonotone=bestMonotone&&h.best[i]===historyBest;
-   if(i&&h.t[i]>h.t[i-1])cooling=cooling&&h.T[i]<h.T[i-1];maxEnergy=Math.max(maxEnergy,h.e[i]);}
+   if(i){cooling=cooling&&h.T[i]<=h.T[i-1];const e=events[i-1];
+    historyConsistent=historyConsistent&&!!e&&h.iteration[i]===i&&h.t[i]===e.t&&h.T[i]===e.T&&h.e[i]===e.after;}
+   maxEnergy=Math.max(maxEnergy,h.e[i]);}
+  const bestReplay=EnergyModel.evaluate(engine.network,engine.bestState);
+  const resultSame=['energy','meanDelay','weightedDelay'].every(k=>bestReplay[k]===engine.bestResult[k])&&
+   ['delays','capacities','rhos'].every(k=>bestReplay[k].every((v,i)=>v===engine.bestResult[k][i]));
   const firstNear=events.find(e=>e.after<final*1.10);
-  const checks={lowerFinal:final<initial,bestSignificantlyLower:engine.bestEnergy<initial*.75,
+  const checks={schedule:engine.schedule.validate().status==='PASS',complete:engine.finished&&events.length===engine.totalSteps,
+   firstTemperature:events[0]?.T===CONFIG.temperatureInitial,lastTemperature:events.at(-1)?.T===CONFIG.temperatureFinal,
+   lowerFinal:final<initial,bestSignificantlyLower:engine.bestEnergy<initial*.75,
    earlyUphill:early.filter(e=>e.accepted&&e.delta>0).length>=10,
    acceptanceFalls:rate(early)>rate(late)+.30,uphillAcceptanceFalls:uphillRate(early)>uphillRate(late)+.30,
    currentEnergyRises:events.filter(e=>e.after>e.before).length>=10,
    temperatureDecreases:cooling,lowerMeanDelay:engine.result.meanDelay<engine.initialMeanDelay,
+   bestMeanDelayImproves:engine.bestResult.meanDelay<engine.initialMeanDelay,
    finite,bestMonotone:bestMonotone&&best===engine.bestEnergy,metropolisCorrect:decisions,rejectionsUnchanged:rejections,
-   modelConsistent:consistency&&replay.every((v,i)=>v===engine.state[i]),
-   gradual:firstNear!==undefined&&firstNear.t>CONFIG.duration*.25&&mean(early)>final*1.35&&mean(middle)>final*1.08,
+   modelConsistent:consistency&&replay.every((v,i)=>v===engine.state[i]),reflectedProposalReplay:proposals,historyConsistent,
+   bestEnergyReplay:Math.abs(bestReplay.energy-engine.bestEnergy)<=tol&&resultSame,
+   bestBelowVisited:engine.bestEnergy<=initial+tol&&events.every(e=>engine.bestEnergy<=e.after+tol),
+   bestBelowFinal:engine.bestEnergy<=final+tol,
+   bestVisited:bestIteration===engine.bestIteration&&bestTime===engine.bestTime&&recordedBest.every((v,i)=>v===engine.bestState[i]),
    smallerLateFluctuations:deviation(late)<deviation(early)*.15};
-  return {seed:engine.seed,checks,valid:Object.values(checks).every(Boolean),initialEnergy:initial,finalEnergy:final,
-   bestEnergy:engine.bestEnergy,reduction:100*(initial-final)/initial,initialMeanDelay:engine.initialMeanDelay,
-   finalMeanDelay:engine.result.meanDelay,earlyAcceptance:rate(early),lateAcceptance:rate(late),
-   finalWindowAcceptance:engine.metrics.acceptance,earlyUphillAcceptance:uphillRate(early),lateUphillAcceptance:uphillRate(late),
+  // The previous quadratic cooling demanded delayed visual progress. Keep its
+  // pacing test as a disclosed diagnostic; geometric cooling has different timing.
+  // Seed eligibility uses the physical/trajectory requirements of Block 4.
+  const diagnostics={legacyPacingPassed:firstNear!==undefined&&firstNear.t>CONFIG.duration*.25&&mean(early)>final*1.35&&mean(middle)>final*1.08,
+   firstNearFinalTime:firstNear?.t??null,earlyMean:mean(early),middleMean:mean(middle)};
+  return {seed:engine.seed,checks,diagnostics,valid:Object.values(checks).every(Boolean),cooling:engine.schedule.validation,
+   initialEnergy:initial,finalEnergy:final,bestEnergy:engine.bestEnergy,bestIteration:engine.bestIteration,bestTime:engine.bestTime,
+   reductionBest:100*(initial-engine.bestEnergy)/initial,reductionFinal:100*(initial-final)/initial,
+   initialMeanDelay:engine.initialMeanDelay,finalMeanDelay:engine.result.meanDelay,bestMeanDelay:engine.bestResult.meanDelay,
+   earlyAcceptance:rate(early),lateAcceptance:rate(late),finalWindowAcceptance:engine.metrics.acceptance,
+   earlyUphillAcceptance:uphillRate(early),lateUphillAcceptance:uphillRate(late),
    earlyFluctuation:deviation(early),lateFluctuation:deviation(late),uphillAccepted:engine.metrics.uphillAccepted,
-   iterations:engine.metrics.attempted,maxEnergy,firstNearFinalTime:firstNear?.t??null};
+   iterations:engine.metrics.attempted,maxEnergy};
  }
+ function sameRun(a,b){return JSON.stringify(a.events)===JSON.stringify(b.events)&&a.bestEnergy===b.bestEnergy&&
+  a.bestIteration===b.bestIteration&&a.bestTime===b.bestTime&&a.state.every((v,i)=>v===b.state[i])&&a.bestState.every((v,i)=>v===b.bestState[i]);}
  function validateAndSelect(network){const trials=[];
-  for(const seed of CONFIG.seeds){const trial=new AnnealingEngine(network,seed).run(),report=validateTrajectory(trial);trials.push({seed,checks:report.checks});
-   if(!report.valid)continue;
-   // Verify the complete trajectory, including uniforms and decisions, with a fresh PRNG.
-   const replay=new AnnealingEngine(network,seed).run();let same=replay.events.length===trial.events.length;
-   for(let i=0;same&&i<trial.events.length;i++){const a=trial.events[i],b=replay.events[i];
-    same=a.u===b.u&&a.i===b.i&&a.proposedValue===b.proposedValue&&a.accepted===b.accepted&&a.after===b.after;}
+  for(const seed of CONFIG.seeds){const trial=new AnnealingEngine(network,seed).run(),report=validateTrajectory(trial);
+   trials.push({seed,checks:report.checks,diagnostics:report.diagnostics});if(!report.valid)continue;
+   const replay=new AnnealingEngine(network,seed).run(),same=sameRun(trial,replay);
    report.checks.reproducible=same;report.valid=report.valid&&same;
-   if(same)return {seed,report,trials};
+   if(same)return {seed,report,trials,run:trial};
   }
-  throw new Error('Nenhuma seed passou na validação. Revise os parâmetros; a trajetória não será fabricada.');
+  throw new Error('Nenhuma seed passou na validação. A trajetória não será fabricada. '+JSON.stringify(trials));
  }
- return {AUTO_PLAY,RECORDING_MODE,RANDOM_SEED,CONFIG,NETWORK_CONFIG,PRNG,UrbanNetwork,TrafficModel,EnergyModel,
-  CoolingSchedule,HistoryBuffer,Metrics,AnnealingEngine,validateTrajectory,validateAndSelect,clamp,mix,smooth};
+ function continuitySnapshot(selection){const e=selection.run,r=e.schedule;
+  const serialResult=x=>({energy:x.energy,meanDelay:x.meanDelay,weightedDelay:x.weightedDelay,delays:Array.from(x.delays),capacities:Array.from(x.capacities),rhos:Array.from(x.rhos)});
+  return {modelVersion:NETWORK_CONFIG.version,seed:selection.seed,NETWORK_CONFIG:JSON.parse(JSON.stringify(NETWORK_CONFIG)),INITIAL_STATE:Array.from(INITIAL_STATE),
+   proposalRate:CONFIG.proposalRate,proposalAmplitude:CONFIG.proposalAmplitude,delayReference:CONFIG.delayReference,minSignal:CONFIG.minSignal,maxSignal:CONFIG.maxSignal,
+   T0:r.T0,Tf:r.Tf,N:r.N,alpha:r.alpha,coolingSchedule:'geometric',temperatureIndex:'n = 0..N-1; iteration = n+1',
+   scientificDuration:CONFIG.duration,closingDuration:CONFIG.closingDuration,initialEnergy:e.initialEnergy,
+   bestState:Array.from(e.bestState),bestEnergy:e.bestEnergy,bestResult:serialResult(e.bestResult),bestIteration:e.bestIteration,bestTime:e.bestTime,
+   finalState:Array.from(e.state),finalEnergy:e.result.energy,finalResult:serialResult(e.result),
+   validation:JSON.parse(JSON.stringify(selection.report)),selectionTrials:JSON.parse(JSON.stringify(selection.trials)),
+   source:'Validated complete run; playback does not change this continuity contract'};
+ }
+ return {AUTO_PLAY,RECORDING_MODE,RANDOM_SEED,CONFIG,NETWORK_CONFIG,INITIAL_STATE,PRNG,UrbanNetwork,TrafficModel,EnergyModel,
+  GeometricCoolingSchedule,HistoryBuffer,Metrics,AnnealingEngine,validateTrajectory,validateAndSelect,sameRun,continuitySnapshot,clamp,mix,smooth};
 })();
 </script>
-<script>
+<script id="presentation">
 (() => {
  'use strict';
- const {AUTO_PLAY,RECORDING_MODE,CONFIG,NETWORK_CONFIG,PRNG,UrbanNetwork,AnnealingEngine,validateAndSelect,clamp,mix,smooth}=Simulation04;
+ const {AUTO_PLAY,RECORDING_MODE,CONFIG,NETWORK_CONFIG,PRNG,UrbanNetwork,AnnealingEngine,validateAndSelect,sameRun,continuitySnapshot,clamp,mix,smooth}=Simulation04;
  const $=id=>document.getElementById(id),TAU=Math.PI*2,MONO='Consolas,"Liberation Mono",monospace';
  const C={bg:'#0f111a',panel:'#151823',text:'#f8f8f2',muted:'#8b93a7',cyan:'#8be9fd',purple:'#bd93f9',green:'#50fa7b',orange:'#ffb86c',red:'#ff5555'};
  function fitCanvas(canvas,w,h){const rect=canvas.getBoundingClientRect(),dpr=window.devicePixelRatio||1;
@@ -272,11 +336,11 @@ const Simulation04 = (() => {
  // Numerical steps and particle motion remain at 120 Hz; Canvas renders with rAF.
  class DisplayState {
   constructor(network){this.state=new Float64Array(network.nodes.length);this.delays=new Float64Array(network.edges.length);
-   this.flashes=new Float64Array(network.nodes.length);}
-  capture(e){this.time=e.time;this.tick=e.ticks;this.temperature=e.temperature;this.energy=e.result.energy;
+   this.flashes=new Float64Array(network.nodes.length);this.showBest=false;}
+  capture(e,showBest=false){this.showBest=showBest;this.bestIteration=e.bestIteration;this.bestTime=e.bestTime;this.displayMeanDelay=showBest?e.bestResult.meanDelay:e.result.meanDelay;this.time=e.time;this.tick=e.ticks;this.temperature=e.temperature;this.energy=e.result.energy;
    this.meanDelay=e.result.meanDelay;this.best=e.bestEnergy;this.iteration=e.metrics.attempted;this.acceptance=e.metrics.acceptance;
    this.uphill=e.metrics.uphillAccepted;this.uphillRate=e.metrics.uphillAcceptance;this.window=e.metrics.count;this.finished=e.finished;
-   this.historyLength=e.history.length;this.state.set(e.state);this.delays.set(e.result.delays);this.flashes.set(e.flashes);}
+   this.historyLength=e.history.length;this.state.set(showBest?e.bestState:e.state);this.delays.set(showBest?e.bestResult.delays:e.result.delays);if(showBest)this.flashes.fill(-10);else this.flashes.set(e.flashes);}
  }
  class Renderer {
   constructor(network){this.canvas=$('network');this.background=document.createElement('canvas');
@@ -327,87 +391,111 @@ const Simulation04 = (() => {
    for(let k=1;k<8;k++)line(c,k*w/8,0,k*w/8,h,'#1f2633',.6);}
   draw(p,h){const w=512,ex=t=>3+t/CONFIG.duration*(w-7),ey=e=>83-e/this.maxEnergy*76,c=this.energy;
    this.grid(c,w,88);c.setLineDash([3,5]);c.beginPath();
-   for(let i=0;i<p.historyLength;i++){const x=ex(h.t[i]),y=ey(h.best[i]);if(i)c.lineTo(x,y);else c.moveTo(x,y);}c.strokeStyle=C.green;c.lineWidth=1.15;c.stroke();c.setLineDash([]);
+   for(let i=0;i<p.historyLength;i++){const x=ex(h.t[i]),y=ey(h.best[i]);if(i){c.lineTo(x,ey(h.best[i-1]));c.lineTo(x,y);}else c.moveTo(x,y);}c.strokeStyle=C.green;c.lineWidth=1.15;c.stroke();c.setLineDash([]);
    // Exact sample-and-hold Monte Carlo history: no moving average, splines or invented points.
    c.beginPath();for(let i=0;i<p.historyLength;i++){const x=ex(h.t[i]),y=ey(h.e[i]);if(i){c.lineTo(x,ey(h.e[i-1]));c.lineTo(x,y);}else c.moveTo(x,y);}
    c.strokeStyle=C.cyan;c.lineWidth=1.65;c.lineJoin='round';c.stroke();circle(c,ex(p.time),ey(p.energy),2.6,C.cyan);
    const t=this.temperature,ty=v=>51-v/CONFIG.temperatureInitial*45;this.grid(t,w,56);
    const gradient=t.createLinearGradient(0,0,w,0);gradient.addColorStop(0,C.orange);gradient.addColorStop(1,C.purple);
-   t.beginPath();for(let i=0;i<p.historyLength;i++){const x=ex(h.t[i]),y=ty(h.T[i]);if(i)t.lineTo(x,y);else t.moveTo(x,y);}t.strokeStyle=gradient;t.lineWidth=1.9;t.stroke();circle(t,ex(p.time),ty(p.temperature),2.5,C.purple);}
+   t.beginPath();for(let i=0;i<p.historyLength;i++){const x=ex(h.t[i]),y=ty(h.T[i]);if(i){t.lineTo(x,ty(h.T[i-1]));t.lineTo(x,y);}else t.moveTo(x,y);}t.strokeStyle=gradient;t.lineWidth=1.9;t.stroke();circle(t,ex(p.time),ty(p.temperature),2.5,C.purple);}
  }
  class Timeline {
-  constructor(){this.phase=-1;this.labels=['HIGH-T EXPLORATION','COOLING','CONVERGENCE','LOW-T STABLE STATE'];
+  constructor(){this.phase=-1;this.labels=['HIGH-T EXPLORATION','COOLING','LOW-T STABILIZATION','LOW-T STABLE STATE','BEST STATE FOUND'];
    this.ticks=Array.from(document.querySelectorAll('.ticks span'));
-   const limits=[0,3,9.5,13.5,16].map(t=>t/16*CONFIG.duration);
-   for(let i=0;i<4;i++)$('tick-'+i).textContent=`${limits[i].toFixed(1)}—${limits[i+1].toFixed(1)}`;}
-  update(p){const t=p.time/CONFIG.duration*16,phase=t<3?0:t<9.5?1:t<13.5?2:3;
+   const limits=[0,3/16*CONFIG.duration,9.5/16*CONFIG.duration,13.5/16*CONFIG.duration,CONFIG.duration,CONFIG.duration+CONFIG.closingDuration];
+   for(let i=0;i<5;i++)$('tick-'+i).textContent=`${limits[i].toFixed(1)}—${limits[i+1].toFixed(1)}`;}
+  update(p,presentationTime){const t=p.time/CONFIG.duration*16,phase=p.finished?4:t<3?0:t<9.5?1:t<13.5?2:3;
    if(phase!==this.phase){this.phase=phase;$('phase-name').textContent=this.labels[phase];$('phase-index').textContent=`PHASE 0${phase+1}`;
-    const color=phase<2?C.orange:phase===2?C.purple:C.cyan;$('phase').style.color=color;$('phase').style.borderColor=color;
+    const color=phase<2?C.orange:phase===2?C.purple:phase===4?C.green:C.cyan;$('phase').style.color=color;$('phase').style.borderColor=color;
     this.ticks.forEach((el,i)=>el.classList.toggle('active',i===phase));
     const phrases=['<span class="orange">T alta</span><span class="arrow">→</span>E pode subir<span class="arrow">→</span>exploração intensa',
      '<span class="orange">T ↓</span><span class="arrow">→</span>pioras menos prováveis<span class="arrow">→</span>E oscila e tende a cair',
-     '<span class="cyan">T baixa</span><span class="arrow">→</span>flutuações menores<span class="arrow">→</span>menor atraso global',
-     '<span class="cyan">LOWER-ENERGY CONFIGURATION</span>'];$('concept').innerHTML=phrases[phase];}
-   const start=phase===0?0:phase===1?3:phase===2?9.5:13.5;
-   $('phase-name').style.opacity=.45+.55*smooth(start,start+.35,t);
-   $('comparison').style.opacity=smooth(13.5,14.2,t);$('comparison').setAttribute('aria-hidden',String(t<13.5));
-   $('closing').style.opacity=smooth(14.5,15.0,t);$('progress').style.transform=`scaleX(${p.time/CONFIG.duration})`;}
+     '<span class="cyan">T baixa</span><span class="arrow">→</span>flutuações menores<span class="arrow">→</span>menor custo agregado do modelo',
+     '<span class="cyan">LOW-T STABILIZATION · FINITE RUN</span>',
+     '<span class="green">BEST STATE FOUND IN THIS RUN</span>'];$('concept').innerHTML=phrases[phase];}
+   const hold=Math.max(0,presentationTime-CONFIG.duration),start=[0,3,9.5,13.5,16][phase];
+   $('phase-name').style.opacity=phase===4?1:.45+.55*smooth(start,start+.35,t);
+   $('comparison').style.opacity=p.finished?smooth(0,.35,hold):0;$('comparison').setAttribute('aria-hidden',String(!p.finished));
+   $('closing').style.opacity=p.finished?smooth(.35,.85,hold):0;$('closing').setAttribute('aria-hidden',String(!p.finished));
+   $('progress').style.transform=`scaleX(${presentationTime/(CONFIG.duration+CONFIG.closingDuration)})`;}
  }
  class HUD {
-  constructor(selection,charts){this.charts=charts;this.timeline=new Timeline();this.cache=new Map();
-   this.set('seed-label',`SEED ${selection.seed} / ${CONFIG.duration} s`);this.set('topology','16 NODES / 26 LINKS');
-   this.set('duration',CONFIG.duration.toFixed(2));this.set('energy-range',`0—${charts.maxEnergy.toFixed(1)}`);
+  constructor(selection,charts){this.charts=charts;this.timeline=new Timeline();this.cache=new Map();const r=selection.report;
+   this.set('seed-label',`SEED ${selection.seed} / VALIDATION PASS`);this.set('topology','16 NODES / 26 LINKS');
+   this.set('duration',(CONFIG.duration+CONFIG.closingDuration).toFixed(2));this.set('energy-range',`0—${charts.maxEnergy.toFixed(1)}`);
    this.set('temperature-floor',`T_f = ${CONFIG.temperatureFinal.toFixed(5)} > 0`);
-   this.set('initial-energy',selection.report.initialEnergy.toFixed(3));this.set('initial-delay',(selection.report.initialMeanDelay/CONFIG.delayReference).toFixed(3));
+   this.set('schedule-note',`α = (T_f/T₀)^(1/(N−1)) · N = ${r.cooling.N} PROPOSTAS`);
+   this.set('initial-energy',r.initialEnergy.toFixed(6));this.set('initial-delay',(r.initialMeanDelay/CONFIG.delayReference).toFixed(4));
+   this.set('final-energy',r.finalEnergy.toFixed(6));this.set('result-best-energy',r.bestEnergy.toFixed(6));
+   this.set('best-delay',(r.bestMeanDelay/CONFIG.delayReference).toFixed(4));this.set('reduction',`${r.reductionBest.toFixed(2)} %`);
+   this.set('comparison-note',`BEST FOUND AT ITERATION ${r.bestIteration} · t* = ${r.bestTime.toFixed(3)} s · ATRASOS / d_ref = 0.25`);
    document.querySelectorAll('.duration-label').forEach(el=>el.textContent=`0—${CONFIG.duration} s`);}
   set(id,value){if(this.cache.get(id)===value)return;this.cache.set(id,value);$(id).textContent=value;}
-  update(p,history,initial){this.set('temperature',p.temperature.toFixed(5));this.set('temperature-ratio',`T / T₀ = ${(p.temperature/CONFIG.temperatureInitial).toFixed(5)}`);
+  updatePlayback(p,presentationTime){this.set('time',presentationTime.toFixed(2).padStart(5,'0'));this.timeline.update(p,presentationTime);}
+  update(p,history,presentationTime){this.set('temperature',p.temperature.toFixed(5));this.set('temperature-ratio',`T / T₀ = ${(p.temperature/CONFIG.temperatureInitial).toFixed(5)}`);
    const cold=1-p.temperature/CONFIG.temperatureInitial;
    $('temperature').style.color=`rgb(${Math.round(mix(255,189,cold))},${Math.round(mix(184,147,cold))},${Math.round(mix(108,249,cold))})`;
    $('temperature-bar').style.transform=`scaleX(${p.temperature/CONFIG.temperatureInitial})`;
-   this.set('energy',p.energy.toFixed(3));this.set('best-energy',p.best.toFixed(3));this.set('mean-delay',(p.meanDelay/CONFIG.delayReference).toFixed(3));
+   this.set('energy',p.energy.toFixed(4));this.set('best-energy',p.best.toFixed(4));this.set('mean-delay',(p.displayMeanDelay/CONFIG.delayReference).toFixed(4));
+   this.set('mean-delay-label',p.showBest?'BEST MEAN DELAY / d_ref':'CURRENT MEAN DELAY / d_ref');
+   this.set('map-state',p.showBest?`BEST STATE FOUND IN THIS RUN / ITERATION ${p.bestIteration}`:'CURRENT STATE x_n / CONFIGURAÇÃO SEMAFÓRICA');
+   $('network').setAttribute('aria-label',p.showBest?'Melhor configuração encontrada no run; atrasos calculados a partir de bestResult.':'Configuração corrente da cadeia; atrasos calculados do estado corrente.');$('network').dataset.state=p.showBest?'best':'current';
    this.set('acceptance',p.acceptance===null?'—':(100*p.acceptance).toFixed(1));this.set('window-label',`n = ${p.window}`);
    this.set('iteration',String(p.iteration).padStart(6,'0'));this.set('uphill',String(p.uphill));this.set('uphill-rate',p.uphillRate===null?'—':`${(100*p.uphillRate).toFixed(1)}%`);
-   this.set('time',p.time.toFixed(2).padStart(5,'0'));this.set('microstate',`x = (s₁, …, s₁₆) · sᵢ ∈ [0.20, 0.80]`);
-   this.set('final-energy',p.energy.toFixed(3));this.set('final-delay',(p.meanDelay/CONFIG.delayReference).toFixed(3));this.set('reduction',`${(100*(initial-p.energy)/initial).toFixed(1)} %`);
-   this.set('final-energy-label',p.finished?'FINAL ENERGY':'CURRENT ENERGY');this.set('final-delay-label',p.finished?'FINAL MEAN DELAY':'CURRENT MEAN DELAY');
-   this.timeline.update(p);this.charts.draw(p,history);}
+   this.set('microstate','x = (s₁, …, s₁₆) · sᵢ ∈ [0.20, 0.80]');
+   this.updatePlayback(p,presentationTime);this.charts.draw(p,history);}
  }
  class Controls {
   constructor(loop){this.loop=loop;this.hidden=false;$('play').addEventListener('click',()=>this.toggle());$('restart').addEventListener('click',()=>loop.restart());
    document.addEventListener('keydown',e=>{if(e.repeat||e.ctrlKey||e.metaKey||e.altKey||/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)||e.target.isContentEditable)return;
     if(e.code==='Space'){e.preventDefault();this.toggle();}else if(e.code==='KeyR'){e.preventDefault();loop.restart();}
     else if(e.code==='KeyH'){e.preventDefault();this.hidden=!this.hidden;if(this.hidden&&$('controls').contains(document.activeElement))document.activeElement.blur();$('controls').classList.toggle('hidden',this.hidden);}});}
-  toggle(){if(this.loop.engine.finished)this.loop.restart();this.loop.running=!this.loop.running;this.loop.last=performance.now();this.sync();}
+  toggle(){if(this.loop.finished)this.loop.restart();this.loop.running=!this.loop.running;this.loop.last=performance.now();this.sync();}
   sync(){$('play').textContent=this.loop.running?'Ⅱ PAUSE':'▶ PLAY';$('play').setAttribute('aria-pressed',String(this.loop.running));
-   $('run-status').textContent=this.loop.engine.finished?'● LOW-T':this.loop.running?'● RUNNING':this.loop.engine.ticks?'● PAUSED':'● READY';
+   $('run-status').textContent=this.loop.engine.finished?'● BEST FOUND':this.loop.running?'● RUNNING':this.loop.engine.ticks?'● PAUSED':'● READY';
    $('run-status').style.color=this.loop.engine.finished?C.cyan:this.loop.running?C.orange:C.muted;}
  }
+ function logValidation(selection){const r=selection.report,c=r.cooling;
+  console.info('============================================================\nSIMULATION 04 — GEOMETRIC COOLING VALIDATION\n============================================================');
+  console.info('MODEL',JSON.stringify({nodes:16,links:26,seed:selection.seed}));
+  console.info('COOLING',JSON.stringify(c));
+  console.info('TRAJECTORY',JSON.stringify({initialEnergy:r.initialEnergy,finalCurrentEnergy:r.finalEnergy,bestEnergy:r.bestEnergy,bestIteration:r.bestIteration,
+   uphillAccepted:r.uphillAccepted,acceptanceEarly:r.earlyAcceptance,acceptanceLate:r.lateAcceptance}));
+  console.info('BEST STATE',JSON.stringify({bestBelowFinal:r.checks.bestBelowFinal,bestStateEnergyReplay:r.checks.bestEnergyReplay,runningMinimumMonotonic:r.checks.bestMonotone,bestVisited:r.checks.bestVisited}));
+  console.info('LEGACY PACING DIAGNOSTIC — not a geometric-schedule eligibility criterion',JSON.stringify(r.diagnostics));
+  console.info('VALIDATION STATUS: '+(r.valid?'PASS':'FAIL'),JSON.stringify(r.checks));
+ }
  class MainLoop {
-  constructor(){this.network=new UrbanNetwork();this.selection=validateAndSelect(this.network);
+  constructor(){this.network=new UrbanNetwork();this.selection=validateAndSelect(this.network);logValidation(this.selection);
    this.renderer=new Renderer(this.network);this.charts=new Charts(this.selection.report);this.hud=new HUD(this.selection,this.charts);this.display=new DisplayState(this.network);
    this.running=false;this.accumulator=0;this.last=performance.now();this.lastDpr=window.devicePixelRatio;this.controls=new Controls(this);
    this.performance={frames:0,totalMs:0,maxMs:0,totalFrameInterval:0};this.restart();this.running=AUTO_PLAY;this.controls.sync();
-   console.info('Simulation 04 — numerical validation',JSON.stringify(this.selection.report));
    window.addEventListener('resize',()=>this.resize());document.addEventListener('visibilitychange',()=>{if(document.hidden){this.running=false;this.controls.sync();}this.last=performance.now();});
    requestAnimationFrame(t=>this.frame(t));}
-  resize(){const s=Math.min(innerWidth/CONFIG.width,innerHeight/CONFIG.height);$('stage').style.transform=`translate(-50%,-50%) scale(${s})`;
+  get finished(){return this.engine.finished&&this.holdTicks>=Math.round(CONFIG.closingDuration*CONFIG.simulationRate);}
+  get presentationTime(){return this.engine.time+Math.min(CONFIG.closingDuration,this.holdTicks/CONFIG.simulationRate);}
+  resize(){const scale=Math.min(innerWidth/CONFIG.width,innerHeight/CONFIG.height);$('stage').style.transform=`translate(-50%,-50%) scale(${scale})`;
    this.renderer.resize();this.charts.resize();this.draw(true);}
-  restart(){this.running=false;this.accumulator=0;this.last=performance.now();this.engine=new AnnealingEngine(this.network,this.selection.seed);
+  restart(){this.running=false;this.accumulator=0;this.holdTicks=0;this.last=performance.now();this.engine=new AnnealingEngine(this.network,this.selection.seed);
    this.performance={frames:0,totalMs:0,maxMs:0,totalFrameInterval:0};
    this.display.capture(this.engine);this.renderer.reset(this.selection.seed);this.controls.sync();this.draw(true);}
-  draw(force=false){if(force||this.display.tick!==this.lastHudTick){this.hud.update(this.display,this.engine.history,this.engine.initialEnergy);this.lastHudTick=this.display.tick;}
-   this.renderer.render(this.display,this.engine.time);}
+  draw(force=false){if(force||this.display.tick!==this.lastHudTick){this.hud.update(this.display,this.engine.history,this.presentationTime);this.lastHudTick=this.display.tick;}
+   else this.hud.updatePlayback(this.display,this.presentationTime);
+   this.renderer.render(this.display,this.presentationTime);}
   frame(now){const elapsed=clamp((now-this.last)/1000,0,.25);this.last=now;
    try{if(window.devicePixelRatio!==this.lastDpr){this.lastDpr=window.devicePixelRatio;this.resize();}
     if(this.running){const start=performance.now();this.accumulator+=elapsed;const dt=1/CONFIG.simulationRate;
      const sampleEvery=Math.max(1,Math.round(CONFIG.simulationRate/CONFIG.hudRate));
-     while(this.accumulator+1e-12>=dt){this.engine.step();this.renderer.advance(this.display,dt);this.accumulator=Math.max(0,this.accumulator-dt);
-      if(this.engine.ticks%sampleEvery===0||this.engine.finished)this.display.capture(this.engine);
-      if(this.engine.finished){this.running=false;this.accumulator=0;this.controls.sync();break;}}
+     while(this.accumulator+1e-12>=dt){
+      if(!this.engine.finished){this.engine.step();
+       if(this.engine.ticks%sampleEvery===0||this.engine.finished)this.display.capture(this.engine,this.engine.finished);
+       if(this.engine.finished){if(!sameRun(this.engine,this.selection.run))throw new Error('Playback divergiu da trajetória validada');this.controls.sync();}
+      }else this.holdTicks++;
+      this.renderer.advance(this.display,dt);this.accumulator=Math.max(0,this.accumulator-dt);
+      if(this.finished){this.running=false;this.accumulator=0;this.controls.sync();break;}}
      this.draw();const cost=performance.now()-start;this.performance.frames++;this.performance.totalMs+=cost;
      this.performance.maxMs=Math.max(this.performance.maxMs,cost);this.performance.totalFrameInterval+=elapsed;
-     if(this.engine.finished)console.info('Simulation 04 — completed',JSON.stringify({seed:this.selection.seed,energy:this.engine.result.energy,
+     if(this.finished)console.info('Simulation 04 — completed',JSON.stringify({seed:this.selection.seed,finalCurrentEnergy:this.engine.result.energy,bestEnergy:this.engine.bestEnergy,bestIteration:this.engine.bestIteration,
       acceptance:this.engine.metrics.acceptance,frames:this.performance.frames,averageWorkMs:this.performance.totalMs/this.performance.frames,
       maxWorkMs:this.performance.maxMs,observedFps:this.performance.frames/this.performance.totalFrameInterval}));
     }
@@ -418,12 +506,20 @@ const Simulation04 = (() => {
  try{document.body.classList.toggle('recording',RECORDING_MODE);
   $('stage').style.transform=`translate(-50%,-50%) scale(${Math.min(innerWidth/CONFIG.width,innerHeight/CONFIG.height)})`;
   const app=new MainLoop();
-  // Read-only diagnostics return copies; inspecting them cannot change the chain or its RNG.
-  Object.defineProperty(window,'AnnealingExperiment',{value:Object.freeze({
-   snapshot:()=>({seed:app.selection.seed,time:app.engine.time,temperature:app.engine.temperature,state:Array.from(app.engine.state),
-    energy:app.engine.result.energy,best:app.engine.bestEnergy,meanDelay:app.engine.result.meanDelay,iteration:app.engine.metrics.attempted,
-    acceptance:app.engine.metrics.acceptance,validation:JSON.parse(JSON.stringify(app.selection.report)),performance:{...app.performance}}),
-   history:()=>{const h=app.engine.history;return Array.from({length:h.length},(_,i)=>({t:h.t[i],T:h.T[i],e:h.e[i],best:h.best[i]}));}
+  // The continuity contract always describes the validated COMPLETE run, even
+  // before playback starts. Live values are isolated under the playback key.
+  const contract=continuitySnapshot(app.selection),copy=o=>JSON.parse(JSON.stringify(o));
+  const history=()=>{const h=app.engine.history;return Array.from({length:h.length},(_,i)=>({iteration:h.iteration[i],t:h.t[i],T:h.T[i],E_current:h.e[i],E_best:h.best[i],meanDelay:h.mean[i],
+   acceptance:Number.isNaN(h.acceptance[i])?null:h.acceptance[i],uphillAccepted:h.uphill[i],uphillAcceptance:Number.isNaN(h.uphillRate[i])?null:h.uphillRate[i]}));};
+  const playback=()=>({time:app.engine.time,presentationTime:app.presentationTime,running:app.running,finished:app.finished,temperature:app.engine.temperature,state:Array.from(app.engine.state),
+   energy:app.engine.result.energy,best:app.engine.bestEnergy,meanDelay:app.engine.result.meanDelay,iteration:app.engine.metrics.attempted,acceptance:app.engine.metrics.acceptance,
+   mapState:app.display.showBest?'best':'current',displayedState:Array.from(app.display.state),displayedMeanDelay:app.display.displayMeanDelay,performance:{...app.performance}});
+  Object.defineProperty(window,'Simulation04Experiment',{writable:false,configurable:false,value:Object.freeze({
+   snapshot:()=>({...copy(contract),playback:playback()}),history,events:()=>copy(app.selection.run.events)
+  })});
+  Object.defineProperty(window,'AnnealingExperiment',{writable:false,configurable:false,value:Object.freeze({
+   snapshot:()=>({seed:app.selection.seed,...playback(),validation:copy(app.selection.report)}),
+   history:()=>history().map(p=>({...p,e:p.E_current,best:p.E_best}))
   })});
  }catch(error){showError(error);}
 })();

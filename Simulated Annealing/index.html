@@ -39,9 +39,9 @@ footer{position:absolute;left:48px;right:48px;bottom:14px;height:30px;display:fl
   <h1>ANTES <span>×</span> DEPOIS</h1>
   <p class="subtitle">Simulated Annealing // Urban Optimization</p>
   <div class="identity"><span class="badge">ANIMAÇÃO COMPUTACIONAL</span><p>05 / RESULTADO DO EXPERIMENTO</p></div>
-  <div class="invariants"><span>MESMA REDE</span><span>MESMA DEMANDA</span><span>OUTRA CONFIGURAÇÃO</span></div>
+  <div class="invariants"><span>MESMA REDE</span><span>MESMA DEMANDA</span><span>OUTRA CONFIGURAÇÃO SEMAFÓRICA</span></div>
  </header>
- <div id="provenance"><span>SIM. 02 / INITIAL STATE → SIM. 04 / BEST STATE FOUND</span><span id="topology"></span></div>
+ <div id="provenance"><span id="provenance-label"></span><span id="topology"></span></div>
  <div id="divider" aria-hidden="true"></div>
  <section id="before" class="panel" aria-label="Antes: configuração inicial" aria-hidden="true">
   <div class="panel-head"><div><h2><span>01 /</span>ANTES</h2><div class="subhead">INITIAL CONFIGURATION</div></div><span class="state-badge">HIGHER COST STATE</span></div>
@@ -49,10 +49,10 @@ footer{position:absolute;left:48px;right:48px;bottom:14px;height:30px;display:fl
   <div class="microstate"><span>INITIAL MICROSTATE <output id="vector-before"></output></span><span id="temperature-before"></span></div>
   <div class="metrics">
    <div class="primary"><i class="metric-mark"></i><div class="label">INITIAL ENERGY E₀</div><output id="energy-before"></output><div class="metric-unit">Σⱼ wⱼ dⱼ / d_ref</div></div>
-   <div><div class="label">MEAN DELAY</div><output id="mean-before"></output><div class="metric-unit">D / d_ref</div></div>
-   <div><div class="label">CRITICAL SEGMENTS</div><output id="critical-before"></output><div class="metric-unit">dⱼ ≥ 0.28</div></div>
+   <div><div class="label">MEAN SEGMENT DELAY</div><output id="mean-before"></output><div class="metric-unit">D / d_ref</div></div>
+   <div><div class="label">CRITICAL SEGMENTS</div><output id="critical-before"></output><div class="metric-unit">CONCEPTUAL THRESHOLD dⱼ ≥ 0.28</div></div>
    <div><div class="label">MAX DELAY</div><output id="max-before"></output><div class="metric-unit">max(dⱼ) / d_ref</div></div>
-   <div><div class="label">QUEUE INDEX</div><output id="queue-before"></output><div class="metric-unit">Q ∈ [0, 1)</div></div>
+   <div><div class="label">CONGESTION PROXY</div><output id="proxy-before"></output><div class="metric-unit">derived from segment delay</div></div>
   </div>
  </section>
  <section id="after" class="panel" aria-label="Depois: melhor estado encontrado" aria-hidden="true">
@@ -61,25 +61,25 @@ footer{position:absolute;left:48px;right:48px;bottom:14px;height:30px;display:fl
   <div class="microstate"><span>BEST MICROSTATE <output id="vector-after"></output></span><span id="temperature-after"></span></div>
   <div class="metrics">
    <div class="primary"><i class="metric-mark"></i><div class="label">BEST ENERGY E_best</div><output id="energy-after"></output><div class="metric-unit">minₜ E(xₜ) observado</div></div>
-   <div><div class="label">MEAN DELAY</div><output id="mean-after"></output><div class="metric-unit">D / d_ref</div></div>
-   <div><div class="label">CRITICAL SEGMENTS</div><output id="critical-after"></output><div class="metric-unit">dⱼ ≥ 0.28</div></div>
+   <div><div class="label">MEAN SEGMENT DELAY</div><output id="mean-after"></output><div class="metric-unit">D / d_ref</div></div>
+   <div><div class="label">CRITICAL SEGMENTS</div><output id="critical-after"></output><div class="metric-unit">CONCEPTUAL THRESHOLD dⱼ ≥ 0.28</div></div>
    <div><div class="label">MAX DELAY</div><output id="max-after"></output><div class="metric-unit">max(dⱼ) / d_ref</div></div>
-   <div><div class="label">QUEUE INDEX</div><output id="queue-after"></output><div class="metric-unit">Q ∈ [0, 1)</div></div>
+   <div><div class="label">CONGESTION PROXY</div><output id="proxy-after"></output><div class="metric-unit">derived from segment delay</div></div>
   </div>
  </section>
  <div id="legend"><div class="legend-items"><span>ATRASO dⱼ / ESCALA ÚNICA</span><span><i class="swatch" style="background:linear-gradient(90deg,#8be9fd,#50fa7b)"></i>BAIXO ≤ 0.09</span><span><i class="swatch" style="background:#ffb86c"></i>MODERADO 0.13</span><span><i class="swatch" style="background:#ff5555"></i>ALTO ≥ 0.28</span></div><span class="legend-note" id="flow-note"></span></div>
  <section id="result" aria-label="Resultado calculado do Simulated Annealing" aria-hidden="true">
   <div><div class="result-title">SIMULATED ANNEALING<br><strong>RESULT / REDUÇÃO NO MODELO</strong></div><div class="delta" id="total-change"></div></div>
-  <div class="result-metric energy" id="result-energy"><div class="label">ENERGY REDUCTION</div><output id="energy-reduction"></output><small>REDUÇÃO DO CUSTO GLOBAL</small></div>
-  <div class="result-metric delay" id="result-delay"><div class="label">MEAN DELAY REDUCTION</div><output id="delay-reduction"></output><small>REDUÇÃO DO ATRASO MÉDIO</small></div>
+  <div class="result-metric energy" id="result-energy"><div class="label">ENERGY REDUCTION</div><output id="energy-reduction"></output><small>REDUÇÃO DO CUSTO AGREGADO</small></div>
+  <div class="result-metric delay" id="result-delay"><div class="label">MEAN SEGMENT DELAY REDUCTION</div><output id="delay-reduction"></output><small>REDUÇÃO DO ATRASO MÉDIO</small></div>
   <div class="result-metric" id="result-critical"><div class="label">CRITICAL SEGMENTS</div><output id="critical-change"></output><small id="residual"></small></div>
   <div class="result-metric iteration"><div class="label">BEST STATE FOUND AT</div><output id="best-iteration"></output><small id="run-detail"></small></div>
  </section>
  <div id="narrative">
-  <div class="statement"><strong>MENOR ATRASO GLOBAL</strong> → MENOS TEMPO PERDIDO NO MODELO</div>
+  <div class="statement"><strong>MENOR CUSTO AGREGADO</strong> → MENOR ATRASO MÉDIO NO MODELO</div>
   <div class="substatement" id="local-tradeoff"></div>
   <div class="formula">E_best = minₜ E(xₜ) &nbsp; · &nbsp; d_ref = 0.25<br>Reduction = (E₀ − E_best) / E₀ × 100%</div>
-  <div id="closing"><div class="closing-title">CONFIGURAÇÃO DE MENOR CUSTO ENCONTRADA</div><div class="closing-sub">MESMA REDE. &nbsp; MESMA DEMANDA. &nbsp; OUTRA CONFIGURAÇÃO.</div></div>
+  <div id="closing"><div class="closing-title">BEST STATE VISITED IN THIS RUN</div><div class="closing-sub">MESMA REDE. &nbsp; MESMA DEMANDA. &nbsp; OUTRA CONFIGURAÇÃO.</div></div>
  </div>
  <div id="time-track" aria-hidden="true"><div id="progress"></div><i class="time-tick" style="left:8.333%"></i><i class="time-tick" style="left:20.833%"></i><i class="time-tick" style="left:33.333%"></i><i class="time-tick" style="left:66.667%"></i><i class="time-tick" style="left:87.5%"></i></div>
  <footer><span>MODELO CONCEITUAL — NÃO SÃO DADOS REAIS DE TRÁFEGO</span><div id="controls"><button id="play" type="button" aria-label="Play / Pause" aria-pressed="false">▶ PLAY</button><button id="restart" type="button" aria-label="Restart">↺ RESTART</button><span class="key-help">SPACE play/pause &nbsp; R restart &nbsp; H ocultar</span></div><span id="seed-label"></span><span id="clock">READY · 00.00 / 12 s</span></footer>
@@ -88,28 +88,30 @@ footer{position:absolute;left:48px;right:48px;bottom:14px;height:30px;display:fl
  <div id="error" role="alert" hidden></div>
 </main>
 <noscript>Ative JavaScript para executar a simulação offline.</noscript>
-<script id="model">
-const Simulation05 = (() => {
+<!-- Automatically exported validation witness; AFTER is recalculated, never read from this JSON. -->
+<script id="simulation04-reference" type="application/json">{"modelVersion":1,"seed":20260913,"NETWORK_CONFIG":{"version":1,"geometrySeed":20260912,"nodes":[[110,104],[366,72],[664,116],[977,94],[146,260],[426,245],[720,277],[1040,231],[88,434],[337,409],[652,443],[993,411],[194,596],[448,574],[770,614],[1064,564]],"edges":[[0,1,0,0.49,0.91,1],[1,2,0,0.51,0.92,1],[2,3,0,0.48,0.9,1],[4,5,0,0.57,0.96,1],[5,6,0,0.58,0.94,1],[6,7,0,0.54,0.95,1],[8,9,0,0.53,0.93,1],[9,10,0,0.55,0.94,1],[10,11,0,0.52,0.94,1],[12,13,0,0.47,0.93,0],[13,14,0,0.48,0.95,0],[14,15,0,0.46,0.92,0],[0,4,1,0.38,0.78,0],[4,8,1,0.4,0.78,0],[8,12,1,0.25,0.83,0],[1,5,1,0.42,0.79,0],[5,9,1,0.41,0.79,0],[9,13,1,0.39,0.8,0],[2,6,1,0.41,0.77,0],[6,10,1,0.42,0.8,0],[10,14,1,0.39,0.8,0],[3,7,1,0.26,0.83,0],[7,11,1,0.4,0.8,0],[11,15,1,0.24,0.82,0],[1,4,1,0.38,0.82,0],[10,15,0,0.4,0.89,0]],"offsets":[0.07,0.64,0.26,0.82,0.41,0.92,0.16,0.56,0.77,0.31,0.95,0.11,0.52,0.03,0.69,0.38],"initialState":[0.39,0.51,0.34,0.48,0.42,0.3,0.43,0.36,0.35,0.49,0.38,0.46,0.47,0.33,0.5,0.41]},"INITIAL_STATE":[0.39,0.51,0.34,0.48,0.42,0.3,0.43,0.36,0.35,0.49,0.38,0.46,0.47,0.33,0.5,0.41],"proposalRate":120,"proposalAmplitude":0.15,"delayReference":0.25,"minSignal":0.2,"maxSignal":0.8,"T0":0.096,"Tf":0.00001,"N":1920,"alpha":0.995233118307486,"coolingSchedule":"geometric","scientificDuration":16,"initialEnergy":0.8669683218632138,"bestState":[0.5610181785514579,0.5197648272989321,0.5393270324543118,0.7438630813080815,0.5017434205440805,0.5746743636438626,0.5520059471903367,0.5507745875837282,0.5519893036456774,0.5526249045878653,0.5528894633008168,0.5257061628764493,0.7438343407632788,0.5594819297734648,0.5292797121452167,0.7966896578110751],"bestEnergy":0.4310316856997364,"bestResult":{"energy":0.4310316856997364,"meanDelay":0.10417391443389236,"weightedDelay":0.1077579214249341,"delays":[0.09974613974642213,0.11706646526713288,0.06737893739780665,0.14942809881520097,0.15146139508912485,0.11485644367311604,0.11545307388122478,0.1278969782521462,0.11039140702448018,0.05667856843195442,0.07986835078051059,0.0545559625745106,0.10120715247495123,0.11918897070749285,0.049072243029629814,0.15918322689389564,0.15970479461315557,0.11614555359817313,0.15764352346719973,0.15503449707198397,0.10651121074695274,0.05369229662567712,0.11519578695536169,0.05215482897098396,0.07786531437338867,0.04114055481872427],"capacities":[0.5583742423620482,0.5563632800242602,0.6228443773814673,0.5866143350306724,0.5951233472813053,0.5920091590761517,0.5802622383092999,0.5868570599448435,0.5760942955634386,0.6527568805638209,0.586248720127965,0.6490273497284329,0.4312246353561906,0.43435983134638717,0.36899028190584,0.42631220511912044,0.41586966571390194,0.42632320700401904,0.41703430618136345,0.4287549955658896,0.43628910979619095,0.3692969949888317,0.43818812804260143,0.34509302121610325,0.4681353997101303,0.6385728987208369],"rhos":[0.8775476424685891,0.916667253773041,0.7706579964934309,0.9716775843368988,0.9745878777057005,0.9121480499434949,0.9133801323075096,0.93719584808555,0.9026300104072779,0.7200230499202642,0.8187651137135561,0.7087528748865113,0.8812112501089387,0.9208954676129194,0.677524618558371,0.9851934684409125,0.9858858046214412,0.9147988980959307,0.9831325479052931,0.9795804231870596,0.8939026696820039,0.7040403889770697,0.912849925411743,0.6954646580630439,0.8117309655183014,0.6263967681704996]},"bestIteration":1916,"bestTime":15.966666666666667,"finalState":[0.5610181785514579,0.5197648272989321,0.5393270324543118,0.7438630813080815,0.5017434205440805,0.5746743636438626,0.5520059471903367,0.5507745875837282,0.5519893036456774,0.5526249045878653,0.5528894633008168,0.5257061628764493,0.7438343407632788,0.5594819297734648,0.5292797121452167,0.7966896578110751],"finalEnergy":0.4310316856997364,"sourceFile":"Simulation4_Convergence.html","sourceSha256":"6e2517cab0d13643c12b88684bf524529dc50f88244a2e14f048c98dc3dc967c","algorithmSha256":{"PRNG":"a2fe4e120959fe1366d29b87c8e9041331c43e4bc1339c0bffac27318f46ae4c","TrafficModel":"eeb2dfeb6f2d0a4161d85cbc0ea62ba932bc1de29fd0371d77e7b1a834f25631","EnergyModel":"dc3a637150069a2e7e26829aae2ea7726402425ccaaea6dd5bf00ea3b53b393f","GeometricCoolingSchedule":"7a33cddd0a37a3f7f52c95ef54d4561bc532970f1a3893f3454d6cac7bc8ed10","AnnealingEngine":"32f9562fd0853284685125dd427436c5cd51b65cef473c361e58300b4aa9e992","validateTrajectory":"824d95e193244e8efd92cc8cd64710f538a85f6d389dbb93f335c8ed2952358e","validateAndSelect":"6c68f36c529fc594c5d33a3f80df30feef6b205afc6389224657720795379e58"},"proposalTraceSha256":"45e8025516efdb89a254dabf783d1d933d007f02551d7288ffddc32c71fd05bf","numericProbes":[{"n":0,"T":0.096,"before":0.8669683218632138,"delta":-0.0012068640227922423,"probability":1,"after":0.8657614578404216},{"n":1,"T":0.09554237935751865,"before":0.8657614578404216,"delta":-0.03415817309037572,"probability":1,"after":0.8316032847500459},{"n":7,"T":0.09284210317473875,"before":0.7721884900668647,"delta":0.1576142739645101,"probability":0.18311160445180436,"after":0.7721884900668647},{"n":31,"T":0.08278290069292538,"before":0.7807168214797994,"delta":-0.006885267513070059,"probability":1,"after":0.7738315539667293},{"n":127,"T":0.052326696692508154,"before":0.7170772536177119,"delta":-0.03503043409236706,"probability":1,"after":0.6820468195253448},{"n":255,"T":0.02838574029306506,"before":0.5940923074986757,"delta":0.0929495752588253,"probability":0.037835157700752714,"after":0.5940923074986757},{"n":511,"T":0.008353222248545938,"before":0.4954786965626197,"delta":0.0061452209089664644,"probability":0.47918395961413796,"after":0.5016239174715862},{"n":767,"T":0.0024581469855359007,"before":0.45377783395576216,"delta":-0.0014078799022854138,"probability":1,"after":0.45236995405347674},{"n":1023,"T":0.0007233719423125686,"before":0.44243208392324573,"delta":0.006395250674449626,"probability":0.00014469413113236807,"after":0.44243208392324573},{"n":1279,"T":0.00021287049554157583,"before":0.4333169260618059,"delta":-0.00030395804859600917,"probability":1,"after":0.4330129680132099},{"n":1535,"T":0.00006264252899725542,"before":0.4315449700015569,"delta":0.0078223069019287,"probability":5.871065346115874e-55,"after":0.4315449700015569},{"n":1791,"T":0.000018434149031261927,"before":0.4310918947121551,"delta":0.0009535287961044969,"probability":3.43233219559079e-23,"after":0.4310918947121551},{"n":1919,"T":0.00001,"before":0.4310316856997364,"delta":0.02122925564178718,"probability":0,"after":0.4310316856997364}],"visualScale":[[0.04,[139,233,253]],[0.09,[80,250,123]],[0.13,[255,184,108]],[0.28,[255,85,85]]],"criticalDelay":0.28}</script>
+<script id="scientific-core">
+const Simulation04Core = (() => {
  'use strict';
  const AUTO_PLAY = false;
  const RECORDING_MODE = true;
  const RANDOM_SEED = 20260913;
- const CONFIG = Object.freeze({width:1920,height:1080,duration:12,
-  annealingDuration:16,simulationRate:120,proposalRate:120,proposalAmplitude:.15,
-  minSignal:.20,maxSignal:.80,temperatureInitial:.096,temperatureFinal:.00001,
-  coolingPower:2,delayReference:.25,criticalDelay:.28,minimumImprovement:.10,
-  cycle:4.8,hudRate:20,seeds:Object.freeze([RANDOM_SEED,20260917,20261003,31415926])});
+ const CONFIG = Object.freeze({width:1920,height:1080,duration:16,simulationRate:120,
+  proposalRate:120,proposalAmplitude:.15,minSignal:.20,maxSignal:.80,
+  temperatureInitial:.096,temperatureFinal:.00001,closingDuration:4,
+  delayReference:.25,acceptanceWindow:96,hudRate:15,cycle:4.8,
+  seeds:Object.freeze([RANDOM_SEED,20260917,20261003,31415926])});
  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
  const mix=(a,b,t)=>a+(b-a)*t;
  const smooth=(a,b,x)=>{const u=clamp((x-a)/(b-a),0,1);return u*u*(3-2*u);};
  const assert=(ok,message)=>{if(!ok)throw new Error(message);};
  const deepFreeze=o=>{Object.values(o).forEach(v=>{if(v&&typeof v==='object')deepFreeze(v);});return Object.freeze(o);};
- // Exact data from Simulation2_UrbanLattice and Simulation4_Convergence.
- // No files are loaded at runtime. These coordinates and inputs are synthetic.
+ // Exact geometry, demands, capacities, offsets and initial splits from Simulation 02.
+ // Synthetic coordinates only: no map, georeferencing, external data or assets.
  const NETWORK_CONFIG=deepFreeze({version:1,geometrySeed:20260912,
   nodes:[[110,104],[366,72],[664,116],[977,94],[146,260],[426,245],[720,277],[1040,231],
    [88,434],[337,409],[652,443],[993,411],[194,596],[448,574],[770,614],[1064,564]],
-  // a, b, axis (0=main green, 1=complement), fixed demand q, base capacity c, corridor
+  // a, b, axis (0=main green / 1=complementary green), demand q, base capacity c, corridor
   edges:[[0,1,0,.49,.91,1],[1,2,0,.51,.92,1],[2,3,0,.48,.90,1],
    [4,5,0,.57,.96,1],[5,6,0,.58,.94,1],[6,7,0,.54,.95,1],
    [8,9,0,.53,.93,1],[9,10,0,.55,.94,1],[10,11,0,.52,.94,1],
@@ -121,7 +123,6 @@ const Simulation05 = (() => {
    [1,4,1,.38,.82,0],[10,15,0,.40,.89,0]],
   offsets:[.07,.64,.26,.82,.41,.92,.16,.56,.77,.31,.95,.11,.52,.03,.69,.38],
   initialState:[.39,.51,.34,.48,.42,.30,.43,.36,.35,.49,.38,.46,.47,.33,.50,.41]});
- const INITIAL_STATE=NETWORK_CONFIG.initialState;
  class PRNG {
   constructor(seed){this.state=seed>>>0;}
   next(){let t=this.state=(this.state+0x6D2B79F5)>>>0;t=Math.imul(t^(t>>>15),t|1);
@@ -130,7 +131,7 @@ const Simulation05 = (() => {
  class UrbanNetwork {
   constructor(){this.nodes=NETWORK_CONFIG.nodes.map(([x,y],id)=>({x,y,id,offset:NETWORK_CONFIG.offsets[id]}));
    this.edges=NETWORK_CONFIG.edges.map(([a,b,axis,q,c,main],id)=>({a,b,axis,q,c,main,id}));
-   this.demand=this.edges.reduce((sum,e)=>sum+e.q,0);deepFreeze(this);}
+   this.demand=this.edges.reduce((sum,e)=>sum+e.q,0);}
  }
  class TrafficModel {
   static evaluate(network,state,out){let sum=0,weighted=0;
@@ -146,119 +147,333 @@ const Simulation05 = (() => {
   }
  }
  class EnergyModel {
-  static buffer(network){const n=network.edges.length;return {delays:new Float64Array(n),capacities:new Float64Array(n),
-   rhos:new Float64Array(n),energy:0,meanDelay:0,weightedDelay:0};}
+  static buffer(network){return {delays:new Float64Array(network.edges.length),capacities:new Float64Array(network.edges.length),
+   rhos:new Float64Array(network.edges.length),energy:0,meanDelay:0,weightedDelay:0};}
   static evaluate(network,state,out=EnergyModel.buffer(network)){
    assert(state.length===network.nodes.length,'Dimensão de x inválida');
-   for(const s of state)assert(Number.isFinite(s)&&s>=CONFIG.minSignal&&s<=CONFIG.maxSignal,'Fração de verde fora dos limites');
+   for(const s of state)assert(Number.isFinite(s)&&s>=CONFIG.minSignal&&s<=CONFIG.maxSignal,'sᵢ fora dos limites');
    TrafficModel.evaluate(network,state,out);
-   // Exactly the scene 02/04 objective, with fixed weights w_j=q_j/sum(q).
+   // Same objective as scene 02: w_j=q_j/sum(q), fixed d_ref=.25, no extra penalties.
    out.energy=out.weightedDelay/CONFIG.delayReference;
-   assert(Number.isFinite(out.energy)&&out.energy>=0,'Energia inválida');return out;
+   assert(Number.isFinite(out.energy)&&out.energy>=0,'Energia não finita');return out;
   }
+ }
+ const INITIAL_STATE=NETWORK_CONFIG.initialState;
+ const copyResult=r=>({delays:r.delays.slice(),capacities:r.capacities.slice(),rhos:r.rhos.slice(),energy:r.energy,meanDelay:r.meanDelay,weightedDelay:r.weightedDelay});
+ class GeometricCoolingSchedule {
+  constructor(T0,Tf,nSteps){
+   assert(Number.isFinite(T0)&&Number.isFinite(Tf)&&T0>Tf&&Tf>0,'Exige T₀ > T_f > 0');
+   assert(Number.isSafeInteger(nSteps)&&nSteps>=2,'Exige N inteiro e N ≥ 2');
+   this.T0=T0;this.Tf=Tf;this.N=nSteps;this.alpha=Math.pow(Tf/T0,1/(nSteps-1));
+   assert(Number.isFinite(this.alpha)&&this.alpha>0&&this.alpha<1,'Exige 0 < alpha < 1');
+   this.validation=this.validate();Object.freeze(this);
+  }
+  atStep(n){assert(Number.isSafeInteger(n)&&n>=0&&n<this.N,'Índice de proposta fora de [0,N−1]');
+   // Endpoints are pinned only to remove floating-point accumulation error.
+   if(n===0)return this.T0;if(n===this.N-1)return this.Tf;
+   return this.T0*Math.pow(this.alpha,n);
+  }
+  validate(){const close=(a,b)=>Math.abs(a-b)<=1e-12*Math.max(Math.abs(a),Math.abs(b),Number.MIN_VALUE);
+   let finite=true,positive=true,monotonic=true,formula=true,previous=Infinity;
+   for(let n=0;n<this.N;n++){const T=this.atStep(n);finite=finite&&Number.isFinite(T);positive=positive&&T>0;
+    monotonic=monotonic&&T<=previous;formula=formula&&close(T,this.T0*Math.pow(this.alpha,n));previous=T;}
+   const checks={initial:this.atStep(0)===this.T0,final:this.atStep(this.N-1)===this.Tf,
+    derivedAlpha:this.alpha===Math.pow(this.Tf/this.T0,1/(this.N-1)),finite,positive,monotonic,formula};
+   assert(Object.values(checks).every(Boolean),'Falha na validação do schedule geométrico');
+   return Object.freeze({status:'PASS',T0:this.T0,Tf:this.Tf,N:this.N,alpha:this.alpha,
+    first:this.atStep(0),last:this.atStep(this.N-1),checks:Object.freeze(checks)});
+  }
+ }
+ class HistoryBuffer {
+  constructor(capacity){this.length=0;for(const k of ['t','T','e','best','mean','iteration','acceptance','uphill','uphillRate'])this[k]=new Float64Array(capacity);}
+  push(engine){const i=this.length++;assert(i<this.t.length,'Histórico sem espaço');
+   this.t[i]=engine.time;this.T[i]=engine.temperature;this.e[i]=engine.result.energy;
+   this.best[i]=engine.bestEnergy;this.mean[i]=engine.result.meanDelay;this.iteration[i]=engine.metrics.attempted;
+   this.acceptance[i]=engine.metrics.acceptance??NaN;this.uphill[i]=engine.metrics.uphillAccepted;
+   this.uphillRate[i]=engine.metrics.uphillAcceptance??NaN;}
+ }
+ class Metrics {
+  constructor(){this.attempted=0;this.accepted=0;this.uphillAccepted=0;this.uphillProposed=0;this.count=0;this.cursor=0;
+   this.windowAccepted=0;this.windowUphill=0;this.windowUphillAccepted=0;
+   this.ring=new Uint8Array(CONFIG.acceptanceWindow);this.upRing=new Uint8Array(CONFIG.acceptanceWindow);}
+  record(accepted,uphill){const i=this.cursor,oldA=this.ring[i],oldU=this.upRing[i],a=Number(accepted),u=Number(uphill);
+   this.windowAccepted+=a-oldA;this.windowUphill+=u-oldU;this.windowUphillAccepted+=a*u-oldA*oldU;
+   this.ring[i]=a;this.upRing[i]=u;this.cursor=(i+1)%CONFIG.acceptanceWindow;this.count=Math.min(this.count+1,CONFIG.acceptanceWindow);
+   this.attempted++;this.accepted+=a;this.uphillProposed+=u;this.uphillAccepted+=a*u;}
+  get acceptance(){return this.count?this.windowAccepted/this.count:null;}
+  get uphillAcceptance(){return this.windowUphill?this.windowUphillAccepted/this.windowUphill:null;}
  }
  class AnnealingEngine {
   constructor(network,seed){this.network=network;this.seed=seed;this.rng=new PRNG(seed);
-   this.state=new Float64Array(INITIAL_STATE);this.candidateState=this.state.slice();
+   this.ticks=0;this.totalTicks=Math.round(CONFIG.duration*CONFIG.simulationRate);this.totalSteps=Math.round(CONFIG.duration*CONFIG.proposalRate);
+   assert(CONFIG.duration>0&&CONFIG.simulationRate>0&&CONFIG.proposalRate>0&&this.totalTicks>=1,'Duração ou taxa inválida');
+   assert(Math.abs(this.totalTicks-CONFIG.duration*CONFIG.simulationRate)<1e-9&&Math.abs(this.totalSteps-CONFIG.duration*CONFIG.proposalRate)<1e-9,'Duração deve conter números inteiros de ticks e propostas');
+   this.schedule=new GeometricCoolingSchedule(CONFIG.temperatureInitial,CONFIG.temperatureFinal,this.totalSteps);
+   this.temperature=this.schedule.atStep(0);this.state=new Float64Array(INITIAL_STATE);this.candidateState=new Float64Array(this.state.length);
    this.result=EnergyModel.evaluate(network,this.state);this.candidateResult=EnergyModel.buffer(network);
-   this.bestEnergy=this.result.energy;this.bestState=this.state.slice();this.bestIteration=0;
-   this.bestTemperature=CONFIG.temperatureInitial;this.iteration=0;this.events=[];
-   this.beta=Math.log(CONFIG.temperatureInitial/CONFIG.temperatureFinal);}
-  temperatureAt(t){return CONFIG.temperatureInitial*Math.exp(-this.beta*Math.pow(clamp(t/CONFIG.annealingDuration,0,1),CONFIG.coolingPower));}
-  propose(time){const T=this.temperatureAt(time),i=Math.floor(this.rng.next()*this.state.length),before=this.result.energy;
+   this.initialEnergy=this.result.energy;this.initialMeanDelay=this.result.meanDelay;this.bestEnergy=this.result.energy;this.bestState=this.state.slice();
+   this.bestResult=copyResult(this.result);this.bestIteration=0;this.bestTime=0;
+   this.metrics=new Metrics();this.events=[];this.flashes=new Float64Array(this.state.length).fill(-10);
+   this.history=new HistoryBuffer(this.totalSteps+1);this.history.push(this);}
+  get time(){return this.ticks/CONFIG.simulationRate;}
+  get finished(){return this.ticks>=this.totalTicks;}
+  step(){if(this.finished)return;this.ticks++;
+   // Fixed scientific ticks schedule proposals; only the proposal index controls T.
+   const target=Math.min(this.totalSteps,Math.floor(this.ticks*CONFIG.proposalRate/CONFIG.simulationRate+1e-10));
+   while(this.metrics.attempted<target){this.propose();this.history.push(this);}
+   if(this.finished)assert(this.metrics.attempted===this.totalSteps,'Última proposta não executada');}
+  propose(){const n=this.metrics.attempted;this.temperature=this.schedule.atStep(n);
+   const i=Math.floor(this.rng.next()*this.state.length),oldValue=this.state[i],before=this.result.energy;
    this.candidateState.set(this.state);
-   let v=this.state[i]+(2*this.rng.next()-1)*CONFIG.proposalAmplitude;
-   // Same reflected proposal and RNG draw order as scene 04, including downhill moves.
+   // Symmetric uniform proposal, reflected at the bounds; no clipping or artificial boundary mass.
+   let v=oldValue+(2*this.rng.next()-1)*CONFIG.proposalAmplitude;
    while(v<CONFIG.minSignal||v>CONFIG.maxSignal){if(v<CONFIG.minSignal)v=2*CONFIG.minSignal-v;if(v>CONFIG.maxSignal)v=2*CONFIG.maxSignal-v;}
    this.candidateState[i]=v;EnergyModel.evaluate(this.network,this.candidateState,this.candidateResult);
-   const delta=this.candidateResult.energy-before,p=delta<=0?1:Math.exp(-delta/T),u=this.rng.next(),accepted=delta<=0||u<p;
-   this.iteration++;
+   const delta=this.candidateResult.energy-before,probability=delta<=0?1:Math.exp(-delta/this.temperature),u=this.rng.next();
+   const accepted=delta<=0||u<probability;
+   assert(this.temperature>0&&Number.isFinite(probability)&&probability>=0&&probability<=1,'Probabilidade inválida');
    if(accepted){const oldState=this.state,oldResult=this.result;this.state=this.candidateState;this.result=this.candidateResult;
-    this.candidateState=oldState;this.candidateResult=oldResult;
-    if(this.result.energy<this.bestEnergy){this.bestEnergy=this.result.energy;this.bestState=this.state.slice();
-     this.bestIteration=this.iteration;this.bestTemperature=T;}}
-   this.events.push({iteration:this.iteration,time,T,i,v,before,delta,p,u,accepted,after:this.result.energy,best:this.bestEnergy});
-  }
-  run(){const ticks=Math.round(CONFIG.annealingDuration*CONFIG.simulationRate);
-   for(let tick=1;tick<=ticks;tick++){const target=Math.floor(tick*CONFIG.proposalRate/CONFIG.simulationRate+1e-10);
-    while(this.iteration<target)this.propose(tick/CONFIG.simulationRate);}return this;}
+    this.candidateState=oldState;this.candidateResult=oldResult;this.flashes[i]=this.time;
+    if(this.result.energy<this.bestEnergy){this.bestEnergy=this.result.energy;this.bestState.set(this.state);
+     this.bestResult=copyResult(this.result);this.bestIteration=n+1;this.bestTime=this.time;}}
+   this.metrics.record(accepted,delta>0);
+   this.events.push({iteration:n+1,n,t:this.time,T:this.temperature,i,oldValue,proposedValue:v,before,delta,probability,u,accepted,after:this.result.energy});}
+  run(){while(!this.finished)this.step();return this;}
  }
- // Continuous, fixed transfer function copied from Simulation 04.
+ function validateTrajectory(engine){
+  const events=engine.events,h=engine.history,initial=engine.initialEnergy,final=engine.result.energy,tol=1e-12;
+  const early=events.filter(e=>e.t<=CONFIG.duration*3/16),late=events.filter(e=>e.t>CONFIG.duration*13.5/16);
+  const middle=events.filter(e=>e.t>=CONFIG.duration*5/16&&e.t<CONFIG.duration*9.5/16);
+  const mean=a=>a.reduce((sum,e)=>sum+e.after,0)/a.length;
+  const deviation=a=>{const m=mean(a);return Math.sqrt(a.reduce((sum,e)=>sum+(e.after-m)**2,0)/a.length);};
+  const rate=a=>a.filter(e=>e.accepted).length/a.length;
+  const uphillRate=a=>a.filter(e=>e.delta>0&&e.accepted).length/Math.max(1,a.filter(e=>e.delta>0).length);
+  const replay=new Float64Array(INITIAL_STATE),candidate=replay.slice(),result=EnergyModel.buffer(engine.network),rng=new PRNG(engine.seed);
+  const recordedBest=replay.slice();let bestIteration=0,bestTime=0;
+  let decisions=true,rejections=true,consistency=true,proposals=true,previous=initial,best=initial;
+  for(let n=0;n<events.length;n++){const e=events[n],i=Math.floor(rng.next()*replay.length);
+   let v=replay[i]+(2*rng.next()-1)*CONFIG.proposalAmplitude;
+   while(v<CONFIG.minSignal||v>CONFIG.maxSignal){if(v<CONFIG.minSignal)v=2*CONFIG.minSignal-v;if(v>CONFIG.maxSignal)v=2*CONFIG.maxSignal-v;}
+   const u=rng.next();proposals=proposals&&i===e.i&&v===e.proposedValue&&u===e.u;
+   candidate.set(replay);candidate[e.i]=e.proposedValue;
+   const expected=EnergyModel.evaluate(engine.network,candidate,result).energy,delta=expected-previous;
+   const p=delta<=0?1:Math.exp(-delta/e.T),accepted=delta<=0||e.u<p;
+   decisions=decisions&&accepted===e.accepted&&Math.abs(delta-e.delta)<tol&&p===e.probability&&e.T===engine.schedule.atStep(n)&&e.n===n&&e.iteration===n+1;
+   consistency=consistency&&e.oldValue===replay[e.i]&&e.before===previous;
+   if(e.accepted)replay[e.i]=e.proposedValue;else rejections=rejections&&e.after===previous;
+   const actual=EnergyModel.evaluate(engine.network,replay,result).energy;
+   consistency=consistency&&actual===e.after;previous=actual;
+   if(actual<best){best=actual;recordedBest.set(replay);bestIteration=e.iteration;bestTime=e.t;}
+  }
+  let finite=true,cooling=true,bestMonotone=true,historyConsistent=h.length===events.length+1,maxEnergy=0,historyBest=initial;
+  for(let i=0;i<h.length;i++){finite=finite&&Number.isFinite(h.e[i]+h.T[i]+h.mean[i]+h.best[i])&&h.T[i]>0;
+   historyBest=Math.min(historyBest,h.e[i]);bestMonotone=bestMonotone&&h.best[i]===historyBest;
+   if(i){cooling=cooling&&h.T[i]<=h.T[i-1];const e=events[i-1];
+    historyConsistent=historyConsistent&&!!e&&h.iteration[i]===i&&h.t[i]===e.t&&h.T[i]===e.T&&h.e[i]===e.after;}
+   maxEnergy=Math.max(maxEnergy,h.e[i]);}
+  const bestReplay=EnergyModel.evaluate(engine.network,engine.bestState);
+  const resultSame=['energy','meanDelay','weightedDelay'].every(k=>bestReplay[k]===engine.bestResult[k])&&
+   ['delays','capacities','rhos'].every(k=>bestReplay[k].every((v,i)=>v===engine.bestResult[k][i]));
+  const firstNear=events.find(e=>e.after<final*1.10);
+  const checks={schedule:engine.schedule.validate().status==='PASS',complete:engine.finished&&events.length===engine.totalSteps,
+   firstTemperature:events[0]?.T===CONFIG.temperatureInitial,lastTemperature:events.at(-1)?.T===CONFIG.temperatureFinal,
+   lowerFinal:final<initial,bestSignificantlyLower:engine.bestEnergy<initial*.75,
+   earlyUphill:early.filter(e=>e.accepted&&e.delta>0).length>=10,
+   acceptanceFalls:rate(early)>rate(late)+.30,uphillAcceptanceFalls:uphillRate(early)>uphillRate(late)+.30,
+   currentEnergyRises:events.filter(e=>e.after>e.before).length>=10,
+   temperatureDecreases:cooling,lowerMeanDelay:engine.result.meanDelay<engine.initialMeanDelay,
+   bestMeanDelayImproves:engine.bestResult.meanDelay<engine.initialMeanDelay,
+   finite,bestMonotone:bestMonotone&&best===engine.bestEnergy,metropolisCorrect:decisions,rejectionsUnchanged:rejections,
+   modelConsistent:consistency&&replay.every((v,i)=>v===engine.state[i]),reflectedProposalReplay:proposals,historyConsistent,
+   bestEnergyReplay:Math.abs(bestReplay.energy-engine.bestEnergy)<=tol&&resultSame,
+   bestBelowVisited:engine.bestEnergy<=initial+tol&&events.every(e=>engine.bestEnergy<=e.after+tol),
+   bestBelowFinal:engine.bestEnergy<=final+tol,
+   bestVisited:bestIteration===engine.bestIteration&&bestTime===engine.bestTime&&recordedBest.every((v,i)=>v===engine.bestState[i]),
+   smallerLateFluctuations:deviation(late)<deviation(early)*.15};
+  // The previous quadratic cooling demanded delayed visual progress. Keep its
+  // pacing test as a disclosed diagnostic; geometric cooling has different timing.
+  // Seed eligibility uses the physical/trajectory requirements of Block 4.
+  const diagnostics={legacyPacingPassed:firstNear!==undefined&&firstNear.t>CONFIG.duration*.25&&mean(early)>final*1.35&&mean(middle)>final*1.08,
+   firstNearFinalTime:firstNear?.t??null,earlyMean:mean(early),middleMean:mean(middle)};
+  return {seed:engine.seed,checks,diagnostics,valid:Object.values(checks).every(Boolean),cooling:engine.schedule.validation,
+   initialEnergy:initial,finalEnergy:final,bestEnergy:engine.bestEnergy,bestIteration:engine.bestIteration,bestTime:engine.bestTime,
+   reductionBest:100*(initial-engine.bestEnergy)/initial,reductionFinal:100*(initial-final)/initial,
+   initialMeanDelay:engine.initialMeanDelay,finalMeanDelay:engine.result.meanDelay,bestMeanDelay:engine.bestResult.meanDelay,
+   earlyAcceptance:rate(early),lateAcceptance:rate(late),finalWindowAcceptance:engine.metrics.acceptance,
+   earlyUphillAcceptance:uphillRate(early),lateUphillAcceptance:uphillRate(late),
+   earlyFluctuation:deviation(early),lateFluctuation:deviation(late),uphillAccepted:engine.metrics.uphillAccepted,
+   iterations:engine.metrics.attempted,maxEnergy};
+ }
+ function sameRun(a,b){return JSON.stringify(a.events)===JSON.stringify(b.events)&&a.bestEnergy===b.bestEnergy&&
+  a.bestIteration===b.bestIteration&&a.bestTime===b.bestTime&&a.state.every((v,i)=>v===b.state[i])&&a.bestState.every((v,i)=>v===b.bestState[i]);}
+ function validateAndSelect(network){const trials=[];
+  for(const seed of CONFIG.seeds){const trial=new AnnealingEngine(network,seed).run(),report=validateTrajectory(trial);
+   trials.push({seed,checks:report.checks,diagnostics:report.diagnostics});if(!report.valid)continue;
+   const replay=new AnnealingEngine(network,seed).run(),same=sameRun(trial,replay);
+   report.checks.reproducible=same;report.valid=report.valid&&same;
+   if(same)return {seed,report,trials,run:trial};
+  }
+  throw new Error('Nenhuma seed passou na validação. A trajetória não será fabricada. '+JSON.stringify(trials));
+ }
+ function continuitySnapshot(selection){const e=selection.run,r=e.schedule;
+  const serialResult=x=>({energy:x.energy,meanDelay:x.meanDelay,weightedDelay:x.weightedDelay,delays:Array.from(x.delays),capacities:Array.from(x.capacities),rhos:Array.from(x.rhos)});
+  return {modelVersion:NETWORK_CONFIG.version,seed:selection.seed,NETWORK_CONFIG:JSON.parse(JSON.stringify(NETWORK_CONFIG)),INITIAL_STATE:Array.from(INITIAL_STATE),
+   proposalRate:CONFIG.proposalRate,proposalAmplitude:CONFIG.proposalAmplitude,delayReference:CONFIG.delayReference,minSignal:CONFIG.minSignal,maxSignal:CONFIG.maxSignal,
+   T0:r.T0,Tf:r.Tf,N:r.N,alpha:r.alpha,coolingSchedule:'geometric',temperatureIndex:'n = 0..N-1; iteration = n+1',
+   scientificDuration:CONFIG.duration,closingDuration:CONFIG.closingDuration,initialEnergy:e.initialEnergy,
+   bestState:Array.from(e.bestState),bestEnergy:e.bestEnergy,bestResult:serialResult(e.bestResult),bestIteration:e.bestIteration,bestTime:e.bestTime,
+   finalState:Array.from(e.state),finalEnergy:e.result.energy,finalResult:serialResult(e.result),
+   validation:JSON.parse(JSON.stringify(selection.report)),selectionTrials:JSON.parse(JSON.stringify(selection.trials)),
+   source:'Validated complete run; playback does not change this continuity contract'};
+ }
+ return {AUTO_PLAY,RECORDING_MODE,RANDOM_SEED,CONFIG,NETWORK_CONFIG,INITIAL_STATE,PRNG,UrbanNetwork,TrafficModel,EnergyModel,
+  GeometricCoolingSchedule,HistoryBuffer,Metrics,AnnealingEngine,validateTrajectory,validateAndSelect,sameRun,continuitySnapshot,clamp,mix,smooth};
+})();
+</script>
+<script id="model">
+const Simulation05 = (() => {
+ 'use strict';
+ const {AUTO_PLAY,RECORDING_MODE,RANDOM_SEED,CONFIG:SCIENCE,NETWORK_CONFIG,INITIAL_STATE,PRNG,UrbanNetwork,
+  TrafficModel,EnergyModel,GeometricCoolingSchedule,AnnealingEngine,validateAndSelect,continuitySnapshot,clamp,mix,smooth}=Simulation04Core;
+ const CONFIG=Object.freeze({width:1920,height:1080,duration:12,annealingDuration:SCIENCE.duration,
+  simulationRate:SCIENCE.simulationRate,proposalRate:SCIENCE.proposalRate,proposalAmplitude:SCIENCE.proposalAmplitude,
+  minSignal:SCIENCE.minSignal,maxSignal:SCIENCE.maxSignal,temperatureInitial:SCIENCE.temperatureInitial,
+  temperatureFinal:SCIENCE.temperatureFinal,delayReference:SCIENCE.delayReference,
+  criticalDelay:.28,cycle:SCIENCE.cycle,hudRate:20});
+ const assert=(ok,message)=>{if(!ok)throw new Error(message);};
+ const deepFreeze=o=>{Object.values(o).forEach(v=>{if(v&&typeof v==='object')deepFreeze(v);});return Object.freeze(o);};
+ // Synchronous SHA-256 keeps offline validation independent of secure contexts.
+ // It fingerprints audited source and complete events; it never generates states.
+ function sha256(value){
+  const bytes=new TextEncoder().encode(value),length=Math.ceil((bytes.length+9)/64)*64,data=new Uint8Array(length);
+  data.set(bytes);data[bytes.length]=128;const view=new DataView(data.buffer);
+  view.setUint32(length-8,Math.floor(bytes.length/536870912));view.setUint32(length-4,(bytes.length*8)>>>0);
+  const K=[0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,
+   0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
+   0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,
+   0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
+   0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,
+   0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
+   0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,
+   0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
+  const H=[0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19],w=new Uint32Array(64),rotr=(x,n)=>(x>>>n)|(x<<(32-n));
+  for(let offset=0;offset<length;offset+=64){
+   for(let i=0;i<16;i++)w[i]=view.getUint32(offset+4*i);
+   for(let i=16;i<64;i++){const x=w[i-15],y=w[i-2],s0=rotr(x,7)^rotr(x,18)^(x>>>3),s1=rotr(y,17)^rotr(y,19)^(y>>>10);w[i]=(w[i-16]+s0+w[i-7]+s1)>>>0;}
+   let [a,b,c,d,e,f,g,h]=H;
+   for(let i=0;i<64;i++){const s1=rotr(e,6)^rotr(e,11)^rotr(e,25),ch=(e&f)^(~e&g),t1=(h+s1+ch+K[i]+w[i])>>>0;
+    const s0=rotr(a,2)^rotr(a,13)^rotr(a,22),maj=(a&b)^(a&c)^(b&c),t2=(s0+maj)>>>0;
+    h=g;g=f;f=e;e=(d+t1)>>>0;d=c;c=b;b=a;a=(t1+t2)>>>0;}
+   [a,b,c,d,e,f,g,h].forEach((v,i)=>H[i]=(H[i]+v)>>>0);
+  }
+  return H.map(v=>v.toString(16).padStart(8,'0')).join('');
+ }
+ const algorithmHashes=()=>Object.fromEntries(['PRNG','TrafficModel','EnergyModel','GeometricCoolingSchedule','AnnealingEngine','validateTrajectory','validateAndSelect'].map(k=>[k,sha256(Simulation04Core[k].toString())]));
+ const signature=c=>({modelVersion:c.modelVersion,networkVersion:c.NETWORK_CONFIG.version,networkSha256:sha256(JSON.stringify(c.NETWORK_CONFIG)),
+  scheduleType:c.coolingSchedule,seed:c.seed,T0:c.T0,Tf:c.Tf,N:c.N,alpha:c.alpha,proposalRate:c.proposalRate,
+  proposalAmplitude:c.proposalAmplitude,minSignal:c.minSignal,maxSignal:c.maxSignal,delayReference:c.delayReference});
+ function validateSimulation04Compatibility(expected,selection){
+  const actual=continuitySnapshot(selection),checks={},tol=1e-12;
+  const check=(ok,name)=>{checks[name]=!!ok;if(!ok)throw new Error('EXPERIMENT CONSISTENCY ERROR — Simulation 05 does not reproduce Simulation 04 best state. Check: '+name);};
+  const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b),close=(a,b)=>Number.isFinite(a)&&Number.isFinite(b)&&Math.abs(a-b)<=tol;
+  check(expected&&expected.sourceFile==='Simulation4_Convergence.html','reference source');
+  check(actual.modelVersion===expected.modelVersion,'model version');
+  check(same(actual.NETWORK_CONFIG,expected.NETWORK_CONFIG),'same network');
+  check(actual.INITIAL_STATE.length===expected.INITIAL_STATE.length&&actual.INITIAL_STATE.every((v,i)=>v===expected.INITIAL_STATE[i]),'same initial state');
+  for(const key of ['seed','proposalRate','proposalAmplitude','minSignal','maxSignal','delayReference','T0','Tf','N','alpha','scientificDuration'])check(actual[key]===expected[key],'same '+key);
+  check(actual.coolingSchedule==='geometric'&&actual.coolingSchedule===expected.coolingSchedule,'same schedule');
+  const logic=algorithmHashes();for(const key of Object.keys(logic))check(logic[key]===expected.algorithmSha256[key],'same algorithm '+key);
+  // Exact discrete decisions and visited states; floating-point model values use
+  // the stated tolerance across JavaScript engines (Math.pow/exp may differ by ulps).
+  const proposalTraceSha256=sha256(JSON.stringify(selection.run.events.map(e=>[e.iteration,e.n,e.t,e.i,e.oldValue,e.proposedValue,e.u,e.accepted])));
+  check(proposalTraceSha256===expected.proposalTraceSha256,'same complete proposal and decision sequence');
+  check(selection.run.events.every(e=>close(e.T,expected.T0*Math.pow(expected.alpha,e.n))),'all proposal temperatures match geometric formula');
+  let maxProbeError=0;
+  check(expected.numericProbes.every(p=>['T','before','delta','probability','after'].every(k=>{const value=selection.run.events[p.n][k];maxProbeError=Math.max(maxProbeError,Math.abs(value-p[k]));return close(value,p[k]);})),'numeric probes match within tolerance');
+  check(actual.bestState.length===expected.bestState.length&&actual.bestState.every((v,i)=>v===expected.bestState[i]),'same bestState component by component');
+  check(close(actual.bestEnergy,expected.bestEnergy),'same bestEnergy');
+  check(actual.bestIteration===expected.bestIteration&&actual.bestTime===expected.bestTime,'same best provenance');
+  check(['energy','meanDelay','weightedDelay'].every(k=>close(actual.bestResult[k],expected.bestResult[k]))&&['delays','capacities','rhos'].every(k=>actual.bestResult[k].every((v,i)=>close(v,expected.bestResult[k][i]))),'same bestResult within tolerance');
+  check(same(actual.finalState,expected.finalState)&&close(actual.finalEnergy,expected.finalEnergy),'same final current state');
+  check(selection.report.valid&&selection.report.checks.bestVisited&&selection.report.checks.bestEnergyReplay,'best really visited and energy replayed');
+  check(same(COLOR_STOPS,expected.visualScale)&&CONFIG.criticalDelay===expected.criticalDelay,'same delay scale and conceptual threshold');
+  const expectedSignature=signature(expected),reproducedSignature=signature(actual);
+  check(same(expectedSignature,reproducedSignature),'same model signature');
+  return deepFreeze({status:'PASS',checks,expectedSignature,reproducedSignature,algorithmSha256:logic,proposalTraceSha256,maxProbeError,
+   referenceSourceSha256:expected.sourceSha256,bestStateExact:true,tolerance:tol});
+ }
+ // One fixed transfer function for both panels, identical to Simulation 04.
  const COLOR_STOPS=deepFreeze([[.04,[139,233,253]],[.09,[80,250,123]],[.13,[255,184,108]],[.28,[255,85,85]]]);
  function delayColor(d){let k=0;while(k<COLOR_STOPS.length-2&&d>COLOR_STOPS[k+1][0])k++;
   const a=COLOR_STOPS[k],b=COLOR_STOPS[k+1],u=clamp((d-a[0])/(b[0]-a[0]),0,1);
   return `rgb(${Math.round(mix(a[1][0],b[1][0],u))},${Math.round(mix(a[1][1],b[1][1],u))},${Math.round(mix(a[1][2],b[1][2],u))})`;}
- const flowSpeed=d=>.055/(1+6*d); // Same phase speed as scene 04, conceptual units.
- const queueLoad=d=>d/(d+.16);
- const particleCount=e=>2*(8+Math.round(18*e.q)); // Depends ONLY on fixed demand, never on state.
+ const flowSpeed=d=>.055/(1+6*d);
+ const congestionLoad=d=>d/(d+.16);
+ const particleCount=e=>2*(8+Math.round(18*e.q));
  class Metrics {
-  static calculate(network,state){const r=EnergyModel.evaluate(network,state);
-   const delays=Array.from(r.delays),normalized=delays.map(d=>d/CONFIG.delayReference);
-   // New bounded queue diagnostic; not vehicles or seconds: Q=sum_j w_j*d_j/(d_j+.16).
-   const queue=network.edges.reduce((s,e,j)=>s+e.q/network.demand*queueLoad(delays[j]),0);
+  static calculate(network,state){const r=EnergyModel.evaluate(network,state),delays=Array.from(r.delays),normalized=delays.map(d=>d/CONFIG.delayReference);
+   // Dimensionless congestion proxy C = sum_j (q_j/sum(q))*d_j/(d_j+0.16).
+   // The proxy is derived from segment delay and is not a vehicle count.
+   const congestionProxy=network.edges.reduce((sum,e,j)=>sum+e.q/network.demand*congestionLoad(delays[j]),0);
    return deepFreeze({energy:r.energy,meanDelay:r.meanDelay,meanNormalized:r.meanDelay/CONFIG.delayReference,
-    maxDelay:Math.max(...delays),maxNormalized:Math.max(...normalized),queue,
-    critical:normalized.filter(d=>d>=CONFIG.criticalDelay/CONFIG.delayReference).length,
-    moderate:delays.filter(d=>d>=.13&&d<CONFIG.criticalDelay).length,
+    maxDelay:Math.max(...delays),maxNormalized:Math.max(...normalized),congestionProxy,
+    critical:delays.filter(d=>d>=CONFIG.criticalDelay).length,moderate:delays.filter(d=>d>=.13&&d<CONFIG.criticalDelay).length,
     delays,normalized,capacities:Array.from(r.capacities),rhos:Array.from(r.rhos)});
   }
  }
  class ComparisonData {
-  constructor(network){const initialMetrics=Metrics.calculate(network,INITIAL_STATE);this.trials=[];let selected;
-   for(const seed of CONFIG.seeds){const run=new AnnealingEngine(network,seed).run(),bestMetrics=Metrics.calculate(network,run.bestState);
-    const improvement=(initialMetrics.energy-bestMetrics.energy)/initialMetrics.energy;
-    const valid=improvement>CONFIG.minimumImprovement&&bestMetrics.meanDelay<initialMetrics.meanDelay;
-    this.trials.push({seed,improvement,valid});if(valid){selected={run,bestMetrics};break;}}
-   assert(selected,'Nenhuma seed passou na validação; nenhum resultado será fabricado.');
-   const {run,bestMetrics}=selected;this.network=network;this.seed=run.seed;
-   this.initialState=INITIAL_STATE;this.bestState=Array.from(run.bestState);
-   this.initialMetrics=initialMetrics;this.bestMetrics=bestMetrics;
-   this.bestIteration=run.bestIteration;this.bestTemperature=run.bestTemperature;
-   this.iterations=run.iteration;this.lastEnergy=run.result.energy;
-   this.totalChange=bestMetrics.energy-initialMetrics.energy;
-   this.energyReduction=-100*this.totalChange/initialMetrics.energy;
-   this.delayReduction=100*(initialMetrics.meanDelay-bestMetrics.meanDelay)/initialMetrics.meanDelay;
-   this.worse=bestMetrics.delays.filter((d,j)=>d>initialMetrics.delays[j]+1e-12).length;
-   this.improved=bestMetrics.delays.filter((d,j)=>d<initialMetrics.delays[j]-1e-12).length;
-   this.particles=network.edges.reduce((s,e)=>s+particleCount(e),0);this.events=run.events;
+  constructor(network,expected){
+   // Exactly Simulation 04's deterministic selection, never an independent search.
+   const selection=validateAndSelect(network),run=selection.run;
+   this.compatibility=validateSimulation04Compatibility(expected,selection);
+   this.network=network;this.seed=selection.seed;this.trials=selection.trials;this.trajectoryValidation=selection.report;
+   this.initialState=INITIAL_STATE;this.bestState=Array.from(run.bestState);this.finalState=Array.from(run.state);
+   this.initialMetrics=Metrics.calculate(network,this.initialState);this.bestMetrics=Metrics.calculate(network,this.bestState);
+   this.bestResult=continuitySnapshot(selection).bestResult;this.bestEnergy=run.bestEnergy;
+   this.bestIteration=run.bestIteration;this.bestTime=run.bestTime;
+   this.bestTemperature=run.bestIteration?run.events[run.bestIteration-1].T:run.schedule.T0;
+   this.iterations=run.metrics.attempted;this.lastEnergy=run.result.energy;this.schedule=run.schedule.validation;
+   const a=this.initialMetrics,b=this.bestMetrics;
+   this.totalChange=b.energy-a.energy;this.energyReduction=-100*this.totalChange/a.energy;
+   this.delayReduction=100*(a.meanDelay-b.meanDelay)/a.meanDelay;
+   this.metricChanges={criticalSegments:b.critical-a.critical,maxDelay:b.maxDelay-a.maxDelay,congestionProxy:b.congestionProxy-a.congestionProxy};
+   this.worse=b.delays.filter((d,j)=>d>a.delays[j]+1e-12).length;this.improved=b.delays.filter((d,j)=>d<a.delays[j]-1e-12).length;
+   this.particles=network.edges.reduce((sum,e)=>sum+particleCount(e),0);this.events=run.events;
    this.validation=this.validate(run);deepFreeze(this);
   }
-  validate(run){const n=this.network,a=this.initialMetrics,b=this.bestMetrics;
-   const state=new Float64Array(INITIAL_STATE),candidate=state.slice(),buffer=EnergyModel.buffer(n);
-   let previous=a.energy,best=previous,bestAt=0,decisions=true;let observedBest=Array.from(state);
-   for(const e of run.events){candidate.set(state);candidate[e.i]=e.v;
-    const delta=EnergyModel.evaluate(n,candidate,buffer).energy-previous,p=delta<=0?1:Math.exp(-delta/e.T);
-    const accept=delta<=0||e.u<p;
-    decisions=decisions&&e.delta===delta&&p===e.p&&accept===e.accepted&&e.T===run.temperatureAt(e.time);
-    if(accept)state[e.i]=e.v;
-    previous=EnergyModel.evaluate(n,state,buffer).energy;
-    decisions=decisions&&previous===e.after;
-    if(previous<best){best=previous;bestAt=e.iteration;observedBest=Array.from(state);}
-    decisions=decisions&&best===e.best;
-   }
-   const replay=new AnnealingEngine(n,this.seed).run();
-   const checks={finite:[a,b].every(m=>[m.energy,m.meanDelay,m.maxDelay,m.queue,...m.delays,...m.capacities,...m.rhos].every(Number.isFinite)),
-    improvement:b.energy<a.energy*(1-CONFIG.minimumImprovement),lowerMean:b.meanDelay<a.meanDelay,
-    bestObserved:best===b.energy&&bestAt===this.bestIteration&&observedBest.every((v,i)=>v===this.bestState[i]),
-    bestCopy:run.bestState!==run.state&&run.bestState!==run.candidateState,
-    bestNotWorseThanLast:b.energy<=run.result.energy,metropolisReplay:decisions,
-    reproducible:JSON.stringify(run.events)===JSON.stringify(replay.events),
-    sameNetwork:Object.isFrozen(n)&&n.nodes.every((v,i)=>v.x===NETWORK_CONFIG.nodes[i][0]&&v.y===NETWORK_CONFIG.nodes[i][1]),
-    fixedInputs:n.edges.every((e,i)=>e.q===NETWORK_CONFIG.edges[i][3]&&e.c===NETWORK_CONFIG.edges[i][4]),
-    sharedScale:Object.isFrozen(COLOR_STOPS)&&CONFIG.criticalDelay===.28,
-    sameParticles:n.edges.every(e=>Number.isInteger(particleCount(e))&&particleCount(e)>0)};
-   assert(Object.values(checks).every(Boolean),'Validação numérica falhou: '+JSON.stringify(checks));
-   return {status:'PASS',checks};
+  validate(run){const a=this.initialMetrics,b=this.bestMetrics,n=this.network,tol=1e-12;
+   const close=(x,y)=>Math.abs(x-y)<=tol,recomputed=EnergyModel.evaluate(n,this.bestState),initial=EnergyModel.evaluate(n,this.initialState);
+   const mean=d=>d.reduce((sum,v)=>sum+v,0)/d.length;
+   const proxy=d=>d.reduce((sum,v,j)=>sum+n.edges[j].q/n.demand*v/(v+.16),0);
+   const checks={compatibility:this.compatibility.status==='PASS',trajectory:this.trajectoryValidation.valid,
+    finite:[a,b].every(m=>[m.energy,m.meanDelay,m.maxDelay,m.congestionProxy,...m.delays,...m.capacities,...m.rhos].every(Number.isFinite)),
+    lowerCost:b.energy<a.energy,lowerMeanSegmentDelay:b.meanDelay<a.meanDelay,
+    energyReplay:close(initial.energy,a.energy)&&close(recomputed.energy,b.energy)&&close(b.energy,run.bestEnergy),
+    bestResultMatches:recomputed.delays.every((d,j)=>d===this.bestResult.delays[j])&&recomputed.meanDelay===this.bestResult.meanDelay,
+    bestObserved:this.trajectoryValidation.checks.bestVisited&&this.bestIteration===run.bestIteration,
+    bestCopy:run.bestState!==run.state&&run.bestState!==run.candidateState,bestNotWorseThanFinal:b.energy<=run.result.energy+tol,
+    energyReduction:close(this.energyReduction,100*(a.energy-b.energy)/a.energy),
+    meanReduction:close(this.delayReduction,100*(mean(a.delays)-mean(b.delays))/mean(a.delays)),
+    congestionProxy:[a,b].every(m=>close(m.congestionProxy,proxy(m.delays))&&m.congestionProxy>=0&&m.congestionProxy<1),
+    criticalSegments:[a,b].every(m=>m.critical===m.delays.filter(d=>d>=CONFIG.criticalDelay).length),
+    maxDelay:[a,b].every(m=>m.maxDelay===Math.max(...m.delays)),
+    metricChanges:this.metricChanges.criticalSegments===b.critical-a.critical&&close(this.metricChanges.maxDelay,b.maxDelay-a.maxDelay)&&close(this.metricChanges.congestionProxy,proxy(b.delays)-proxy(a.delays)),
+    sharedScale:Object.isFrozen(COLOR_STOPS)&&COLOR_STOPS.every(([d,rgb])=>delayColor(d)==='rgb('+rgb.join(',')+')'),
+    fixedParticles:n.edges.every(e=>Number.isInteger(particleCount(e))&&particleCount(e)>0)};
+   assert(Object.values(checks).every(Boolean),'EXPERIMENT CONSISTENCY ERROR — '+JSON.stringify(checks));
+   return {status:'PASS',checks,congestionProxyFormula:'C = sum_j (q_j/sum(q))*d_j/(d_j+0.16)',criticalThreshold:CONFIG.criticalDelay,
+    meanSegmentDelayFormula:'D = sum_j d_j / 26; display D/d_ref',maxDelayFormula:'max_j d_j; display max_j d_j/d_ref'};
   }
  }
- return {AUTO_PLAY,RECORDING_MODE,RANDOM_SEED,CONFIG,NETWORK_CONFIG,INITIAL_STATE,PRNG,UrbanNetwork,
-  TrafficModel,EnergyModel,AnnealingEngine,Metrics,ComparisonData,COLOR_STOPS,delayColor,flowSpeed,queueLoad,particleCount,clamp,mix,smooth};
+ return {AUTO_PLAY,RECORDING_MODE,RANDOM_SEED,CONFIG,NETWORK_CONFIG,INITIAL_STATE,PRNG,UrbanNetwork,TrafficModel,EnergyModel,
+  GeometricCoolingSchedule,AnnealingEngine,Metrics,ComparisonData,validateSimulation04Compatibility,COLOR_STOPS,delayColor,flowSpeed,
+  congestionLoad,particleCount,sha256,algorithmHashes,clamp,mix,smooth};
 })();
 </script>
-<script>
+<script id="presentation">
 (() => {
  'use strict';
- const {AUTO_PLAY,RECORDING_MODE,CONFIG,PRNG,UrbanNetwork,ComparisonData,delayColor,flowSpeed,queueLoad,particleCount,clamp,mix,smooth}=Simulation05;
+ const {AUTO_PLAY,RECORDING_MODE,CONFIG,PRNG,UrbanNetwork,ComparisonData,delayColor,flowSpeed,congestionLoad,particleCount,clamp,mix,smooth}=Simulation05;
  const $=id=>document.getElementById(id),TAU=Math.PI*2,MONO='Consolas,"Liberation Mono",monospace';
  const C={bg:'#0f111a',panel:'#151823',muted:'#8b93a7',text:'#f8f8f2',cyan:'#8be9fd',purple:'#bd93f9',green:'#50fa7b',orange:'#ffb86c',red:'#ff5555'};
  const number=(v,d=3)=>v.toFixed(d);
@@ -278,7 +493,7 @@ const Simulation05 = (() => {
    this.edges=data.network.edges.map(e=>{const a=this.nodes[e.a],b=this.nodes[e.b],dx=b.x-a.x,dy=b.y-a.y,L=Math.hypot(dx,dy);
     return {...e,aNode:a,bNode:b,dx,dy,nx:-dy/L,ny:dx/L,count:particleCount(e)/2,phase:rng.next()};});
    this.views=[data.initialMetrics,data.bestMetrics].map((m,index)=>({metrics:m,state:index?data.bestState:data.initialState,
-    colors:m.delays.map(delayColor),loads:m.delays.map(queueLoad),speeds:m.delays.map(flowSpeed),
+    colors:m.delays.map(delayColor),loads:m.delays.map(congestionLoad),speeds:m.delays.map(flowSpeed),
     worst:m.delays.map((d,j)=>j).sort((a,b)=>m.delays[b]-m.delays[a]).slice(0,2)}));
    this.background=document.createElement('canvas');this.layers=[document.createElement('canvas'),document.createElement('canvas')];this.resize();
   }
@@ -318,13 +533,13 @@ const Simulation05 = (() => {
    for(const j of v.worst){const e=this.edges[j],x=(e.aNode.x+e.bNode.x)/2,y=(e.aNode.y+e.bNode.y)/2-19;
     c.fillStyle=C.panel;c.fillRect(x-46,y-11,92,19);text(c,`e${String(j+1).padStart(2,'0')} d=${number(v.metrics.delays[j])}`,x,y+2,9,v.colors[j],'center');}
    text(c,'sᵢ / ARCO = FRAÇÃO DE VERDE',26,352,9,'#8b93a7');
-   text(c,side?`${this.data.worse} TRECHOS COM ATRASO MAIOR · CUSTO GLOBAL MENOR`:'CONFIGURAÇÃO SEMAFÓRICA INICIAL / SIMULAÇÃO 02',870,352,9,side?'#c5b395':'#8b93a7','right');
+   text(c,side?`${this.data.worse} TRECHOS COM ATRASO MAIOR · CUSTO AGREGADO MENOR`:'CONFIGURAÇÃO SEMAFÓRICA INICIAL / SIMULAÇÃO 02',870,352,9,side?'#c5b395':'#8b93a7','right');
   }}
  }
  class HUD {
-  constructor(data){this.cache=new Map();this.phase=-1;this.set('topology',`${data.network.nodes.length} NÓS / ${data.network.edges.length} SEGMENTOS · Σq = ${number(data.network.demand,2)} FIXA`);
+  constructor(data){this.cache=new Map();this.set('provenance-label','SIM. 02 / INITIAL STATE → SIM. 04 / BEST STATE FOUND · IDENTITY PASS');this.phase=-1;this.set('topology',`${data.network.nodes.length} NÓS / ${data.network.edges.length} SEGMENTOS · Σq = ${number(data.network.demand,2)} FIXA`);
    [['before',data.initialMetrics,data.initialState],['after',data.bestMetrics,data.bestState]].forEach(([side,m,state])=>{
-    for(const [id,value] of Object.entries({energy:m.energy,mean:m.meanNormalized,max:m.maxNormalized,queue:m.queue}))this.set(`${id}-${side}`,number(value));
+    for(const [id,value] of Object.entries({energy:m.energy,mean:m.meanNormalized,max:m.maxNormalized,proxy:m.congestionProxy}))this.set(`${id}-${side}`,number(value));
     this.set(`critical-${side}`,String(m.critical).padStart(2,'0'));
     this.set(`vector-${side}`,`${side==='before'?'x₀':'x*'} = [${state.slice(0,4).map(s=>number(s,2)).join(', ')}, …]`);
    });
@@ -336,9 +551,9 @@ const Simulation05 = (() => {
    this.set('critical-change',`${data.initialMetrics.critical} → ${data.bestMetrics.critical}`);
    this.set('residual',`${data.bestMetrics.moderate} TRECHOS AINDA MODERADOS`);
    this.set('best-iteration',`# ${integer(data.bestIteration)}`);this.set('run-detail',`ITERATION / ${integer(data.iterations)} PROPOSTAS`);
-   this.set('seed-label',`SEED ${data.seed} · DETERMINISTIC`);
-   this.set('local-tradeoff',`${data.improved} trechos melhoraram; ${data.worse} pioraram. Menor E observado nesta execução; sem garantia de ótimo global.`);
-   this.set('accessible-summary',`Modelo conceitual, sem dados reais. Energia inicial ${number(data.initialMetrics.energy,6)}, melhor ${number(data.bestMetrics.energy,6)}. Redução ${number(data.energyReduction,2)}%. Mesmo número de nós, vias, partículas e mesma demanda. ${data.worse} atrasos locais aumentaram. Melhor estado encontrado na iteração ${data.bestIteration}, sem garantia de ótimo global.`);
+   this.set('seed-label',`SEED ${data.seed} · GEOMETRIC · 04 MATCH PASS`);
+   this.set('local-tradeoff',`${data.improved} trechos melhoraram; ${data.worse} pioraram. LOCAL TRADE-OFFS MAY REMAIN.`);
+   this.set('accessible-summary',`Mesma rede e mesma demanda. Estado inicial à esquerda; melhor estado realmente visitado na Simulação 04 à direita. Energia inicial ${number(data.initialMetrics.energy,6)}, melhor ${number(data.bestMetrics.energy,6)}; redução do custo agregado ${number(data.energyReduction,2)}%. Atraso médio de segmentos reduzido em ${number(data.delayReduction,2)}%. Partículas ilustram fluxo agregado, não veículos individuais. Congestion proxy é um índice derivado do atraso. ${data.worse} atrasos locais aumentaram. Melhor estado visitado na iteração ${data.bestIteration}; sem garantia de ótimo global.`);
   }
   set(id,value){if(this.cache.get(id)!==value){$(id).textContent=value;this.cache.set(id,value);}}
   update(time,running){this.set('clock',`${time>=CONFIG.duration?'HOLD':running?'RUN':time?'PAUSE':'READY'} · ${number(time,2).padStart(5,'0')} / 12 s`);
@@ -372,7 +587,7 @@ const Simulation05 = (() => {
   sync(){$('play').textContent=this.loop.running?'Ⅱ PAUSE':'▶ PLAY';$('play').setAttribute('aria-pressed',String(this.loop.running));}
  }
  class MainLoop {
-  constructor(){this.data=new ComparisonData(new UrbanNetwork());this.time=0;this.running=AUTO_PLAY;this.last=performance.now();
+  constructor(){const reference=JSON.parse($('simulation04-reference').textContent);this.data=new ComparisonData(new UrbanNetwork(),reference);this.time=0;this.running=AUTO_PLAY;this.last=performance.now();
    this.lastDpr=window.devicePixelRatio;this.lastHud=-1;this.performance={frames:0,totalWorkMs:0,maxWorkMs:0,totalInterval:0};
    this.renderer=new Renderer(this.data);this.hud=new HUD(this.data);this.timeline=new Timeline();this.controls=new Controls(this);
    this.controls.sync();this.draw(true);this.log();
@@ -394,20 +609,34 @@ const Simulation05 = (() => {
    }catch(error){this.running=false;this.controls.sync();showError(error);}
    requestAnimationFrame(this.frame);
   }
-  log(){const d=this.data;console.info(`============================================\nSIMULATION 05 — BEFORE × AFTER\n============================================\nSeed: ${d.seed}\nInitial Energy: ${d.initialMetrics.energy}\nBest Energy: ${d.bestMetrics.energy}\nEnergy Reduction: ${d.energyReduction} %\nInitial Mean Delay: ${d.initialMetrics.meanDelay}\nBest Mean Delay: ${d.bestMetrics.meanDelay}\nInitial Critical Segments: ${d.initialMetrics.critical}\nBest Critical Segments: ${d.bestMetrics.critical}\nBest Iteration: ${d.bestIteration}\nValidation: ${d.validation.status}`);
-   console.info('Simulation 05 — audit',JSON.stringify({checks:d.validation.checks,trials:d.trials,lastEnergy:d.lastEnergy,bestTemperature:d.bestTemperature,localDelaysIncreased:d.worse,moderateRemaining:d.bestMetrics.moderate,particlesPerPanel:d.particles}));}
+  log(){const d=this.data,c=d.compatibility,a=d.initialMetrics,b=d.bestMetrics;
+   console.info('============================================================\nSIMULATION 05 — BEFORE × AFTER VALIDATION\n============================================================');
+   console.info('EXPECTED MODEL SIGNATURE',JSON.stringify(c.expectedSignature));console.info('REPRODUCED MODEL SIGNATURE',JSON.stringify(c.reproducedSignature));
+   console.info('SIMULATION 04 MATCH',JSON.stringify(c));
+   const metrics=m=>({energy:m.energy,meanSegmentDelay:m.meanDelay,criticalSegments:m.critical,maxDelay:m.maxDelay,congestionProxy:m.congestionProxy});
+   console.info('BEFORE',JSON.stringify(metrics(a)));console.info('AFTER / BEST',JSON.stringify(metrics(b)));
+   console.info('REDUCTIONS',JSON.stringify({aggregateCostPercent:d.energyReduction,meanSegmentDelayPercent:d.delayReduction,changes:d.metricChanges}));
+   console.info('PROVENANCE',JSON.stringify({bestIteration:d.bestIteration,bestTime:d.bestTime,finalCurrentEnergy:d.lastEnergy,localTradeoffs:d.worse,sourceSha256:c.referenceSourceSha256}));
+   console.info('VALIDATION STATUS: '+d.validation.status,JSON.stringify(d.validation));
+  }
  }
  function fitStage(){$('stage').style.transform=`translate(-50%,-50%) scale(${Math.min(innerWidth/CONFIG.width,innerHeight/CONFIG.height)})`;}
- function showError(error){$('error').hidden=false;$('error').textContent=`Não foi possível validar a comparação. ${error.message}`;console.error(error);}
+ function showError(error){$('error').hidden=false;$('error').textContent=`EXPERIMENT CONSISTENCY ERROR\n${error.message}`;console.error(error);}
  try{document.body.classList.toggle('recording',RECORDING_MODE);fitStage();const app=new MainLoop();
   // Read-only diagnostics return copies; no interface can edit the scientific states.
-  Object.defineProperty(window,'ComparisonExperiment',{value:Object.freeze({
-   snapshot:()=>({time:app.time,running:app.running,seed:app.data.seed,initialState:[...app.data.initialState],bestState:[...app.data.bestState],
-    initialMetrics:JSON.parse(JSON.stringify(app.data.initialMetrics)),bestMetrics:JSON.parse(JSON.stringify(app.data.bestMetrics)),
-    energyReduction:app.data.energyReduction,delayReduction:app.data.delayReduction,bestIteration:app.data.bestIteration,
-    lastEnergy:app.data.lastEnergy,particlesPerPanel:app.data.particles,validation:JSON.parse(JSON.stringify(app.data.validation)),performance:{...app.performance}}),
-   history:()=>app.data.events.map(e=>({...e}))
-  })});
+  const copy=o=>JSON.parse(JSON.stringify(o));
+  const api=Object.freeze({
+   snapshot:()=>({time:app.time,running:app.running,seed:app.data.seed,modelVersion:Simulation05.NETWORK_CONFIG.version,
+    NETWORK_CONFIG:copy(Simulation05.NETWORK_CONFIG),INITIAL_STATE:[...app.data.initialState],initialState:[...app.data.initialState],
+    bestState:[...app.data.bestState],finalState:[...app.data.finalState],bestEnergy:app.data.bestEnergy,finalEnergy:app.data.lastEnergy,
+    bestResult:copy(app.data.bestResult),initialMetrics:copy(app.data.initialMetrics),bestMetrics:copy(app.data.bestMetrics),
+    energyReduction:app.data.energyReduction,delayReduction:app.data.delayReduction,metricChanges:copy(app.data.metricChanges),
+    bestIteration:app.data.bestIteration,bestTime:app.data.bestTime,lastEnergy:app.data.lastEnergy,schedule:copy(app.data.schedule),
+    particlesPerPanel:app.data.particles,visual:app.renderer.views.map(v=>({state:Array.from(v.state),delayColors:[...v.colors]})),compatibility:copy(app.data.compatibility),validation:copy(app.data.validation),performance:{...app.performance}}),
+   history:()=>copy(app.data.events)
+  });
+  Object.defineProperty(window,'ComparisonExperiment',{writable:false,configurable:false,value:api});
+  Object.defineProperty(window,'Simulation05Experiment',{writable:false,configurable:false,value:api});
  }catch(error){showError(error);}
 })();
 </script>

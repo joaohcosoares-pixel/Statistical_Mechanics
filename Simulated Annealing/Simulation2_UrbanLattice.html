@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="dark">
-<meta name="description" content="Simulação 02 — Rede urbana / estado inicial. Modelo conceitual de recozimento simulado, offline e determinístico.">
+<meta name="description" content="Simulação 02: rede urbana sintética, custo ponderado por demanda e exploração em alta temperatura computacional. Próxima etapa: mínimos locais. Offline e determinística.">
 <title>SIMULAÇÃO 02 — REDE URBANA / ESTADO INICIAL</title>
 <style>
 :root{color-scheme:dark;--bg:#0f111a;--panel:#151823;--secondary:#191c2a;--text:#f8f8f2;--muted:#8b93a7;--cyan:#8be9fd;--purple:#bd93f9;--green:#50fa7b;--orange:#ffb86c;--red:#ff5555;--line:#2a303f;--mono:"SFMono-Regular",Consolas,"Liberation Mono",monospace;font-family:"Segoe UI",Arial,sans-serif}
@@ -26,12 +26,13 @@ h1{font-size:43px;font-weight:500;letter-spacing:-.035em;margin:20px 0 12px}h1 s
 #temperatureMetric{padding-top:18px}#temperature{color:var(--orange)}#energy{color:var(--purple)}#acceptance{color:var(--cyan)}
 #energyGraph{display:block;width:504px;height:78px;margin-top:4px}.chart-notes{display:flex;justify-content:space-between;color:var(--muted);font:10px var(--mono)}
 .accept-metric{padding-top:13px}.accept-metric .value{font-size:45px}.counts{display:flex;gap:24px;font:11px var(--mono);color:var(--muted);margin-top:9px}.counts b{font-weight:400;color:var(--text);font-size:14px;margin-left:6px}
-.secondary{display:grid;grid-template-columns:1fr 1fr;gap:22px;padding:16px 0 13px;border-bottom:1px solid var(--line)}.secondary .label{font-size:10px}.secondary .number{font:23px var(--mono);margin-top:5px}
-.microstate{padding:13px 0}.microstate .label{font-size:10px}.vector{font:13px var(--mono);color:#c3b1dc;margin-top:8px}.phase{border-left:2px solid var(--orange);padding-left:12px;font:11px var(--mono);letter-spacing:.05em;color:var(--orange);margin-top:3px}
+.secondary{display:grid;grid-template-columns:1.35fr 1fr;gap:22px;padding:12px 0 9px;border-bottom:1px solid var(--line)}.secondary .label{font-size:10px}.secondary .number{font:23px var(--mono);margin-top:5px}.secondary .note{font-size:9px;margin-top:4px}
+.microstate{padding:10px 0}.microstate .label{font-size:10px}.vector{font:13px var(--mono);color:#c3b1dc;margin-top:8px}.phase{border-left:2px solid var(--orange);padding-left:12px;font:11px var(--mono);letter-spacing:.05em;color:var(--orange);margin-top:3px}
 .emphasis .tag{color:var(--text)}.emphasis #temperatureMetric,.emphasis .accept-metric{background:linear-gradient(90deg,transparent,rgba(189,147,249,.06));border-bottom-color:#51445f}
 #timeline{position:absolute;left:48px;right:48px;top:913px}.time-track{position:relative;height:3px;background:#292f3d}.time-progress{position:absolute;inset:0;background:#b9cbd6;transform:scaleX(0);transform-origin:left}.ticks{display:grid;grid-template-columns:2fr 4fr 5fr 3fr;margin-top:13px;font:10px var(--mono);color:#78849a;letter-spacing:.06em}.ticks span.active{color:#dae5ec}.ticks b{font-weight:400;opacity:.6;margin-right:8px}.clock{position:absolute;right:0;top:-28px;font:13px var(--mono);color:#bcc7d6}
 #narrative{position:absolute;left:48px;right:48px;top:969px;height:46px;display:flex;align-items:center;justify-content:space-between}.concept{font-size:19px;color:#bec9d9;letter-spacing:.01em}.concept .arrow{color:#626e85;margin:0 17px}.formula{font:13px var(--mono);color:var(--muted)}
-#bridge{position:absolute;inset:-9px 0 -6px;background:var(--bg);opacity:0;pointer-events:none;display:flex;justify-content:space-between;align-items:center}.bridge-main{font:14px/1.8 var(--mono);color:#d0c0e9}.bridge-main strong{font-weight:500;color:var(--orange)}.bridge-next{text-align:right;font:11px/1.8 var(--mono);color:var(--muted)}.bridge-next strong{font-weight:500;font-size:19px;color:var(--cyan);letter-spacing:.02em}
+#objective-note{position:absolute;right:0;top:89px;width:676px;border-left:2px solid #51445f;padding-left:16px;font:11px/1.65 var(--mono);color:var(--muted)}#objective-note strong{font-size:13px;font-weight:400;color:#d0c0e9}
+#bridge{position:absolute;left:48px;right:48px;top:224px;height:664px;z-index:3;border:1px solid #343c4a;border-radius:5px;padding:86px;gap:70px;background:rgba(15,17,26,.94);opacity:0;visibility:hidden;pointer-events:none;display:grid;grid-template-columns:1.1fr 1fr;align-items:center}.bridge-main{font:36px/1.45 var(--mono);color:var(--text)}.bridge-main strong{font-weight:500;color:var(--orange)}.bridge-kicker{font:12px/1.8 var(--mono);color:var(--muted);letter-spacing:.08em;margin-bottom:25px}.bridge-next{font:20px/1.8 var(--mono);color:#bdc7d8;border-left:1px solid #343c4a;padding-left:54px}.bridge-next strong{display:block;margin-top:25px;font-weight:500;font-size:29px;color:var(--cyan);letter-spacing:.02em}
 footer{position:absolute;left:48px;right:48px;bottom:18px;padding-top:13px;border-top:1px solid #242a38;display:flex;justify-content:space-between;align-items:center;font-size:9px;letter-spacing:.04em;color:var(--muted)}
 #controls{display:flex;gap:8px;align-items:center}button{height:29px;padding:0 11px;border:1px solid #344052;background:#181e2a;color:#c3d4e0;border-radius:3px;font-size:9px;letter-spacing:.05em;cursor:pointer}button:hover{border-color:var(--cyan);color:var(--cyan)}button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}#play{border-color:#47606f}.key-help{margin-left:8px;font-size:9px}#controls.hidden{visibility:hidden}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}#error{position:absolute;inset:0;z-index:20;background:var(--bg);color:var(--orange);padding:140px;font:24px/1.7 var(--mono)}#error[hidden]{display:none}
@@ -43,27 +44,29 @@ footer{position:absolute;left:48px;right:48px;bottom:18px;padding-top:13px;borde
   <div class="eyebrow">SEMANA DA FÍSICA / UFG <span>·</span> COMPUTATIONAL PHYSICS <span>·</span> SIMULAÇÃO 02</div>
   <h1>URBAN NETWORK <span>//</span> INITIAL STATE</h1>
   <p class="subtitle">Simulated Annealing // High-Temperature Regime</p>
-  <p class="origin">Conceptual Urban Model Inspired by Goiânia <span style="color:#536078"> / </span> REDE URBANA ESQUEMÁTICA</p>
-  <div class="identity"><span class="badge">ANIMAÇÃO COMPUTACIONAL</span><p>02 / 04 &nbsp; REDE URBANA / ESTADO INICIAL</p></div>
+  <p class="origin">Modelo conceitual inspirado qualitativamente em Goiânia <span style="color:#536078"> / </span> REDE SINTÉTICA NÃO GEOREFERENCIADA</p>
+  <div class="identity"><span class="badge">ANIMAÇÃO COMPUTACIONAL</span><p>02 / 05 &nbsp; REDE URBANA / ESTADO INICIAL</p></div>
+  <aside id="objective-note" aria-label="Definição do custo computacional"><strong>OBJECTIVE · E(x) = Σⱼ wⱼ dⱼ(x) / d_ref</strong><br>wⱼ = qⱼ / Σₖ qₖ · E: custo computacional adimensional<br>dⱼ: atraso conceitual do segmento · qⱼ: demanda relativa fixa<br>d_ref = 0.25 · escala fixa de normalização</aside>
  </header>
  <section id="network-panel" aria-label="Modelo urbano conceitual inspirado em Goiânia">
   <div class="panel-head"><span>MICROSTATE FIELD <span style="color:#5d6b82">/</span> CONFIGURAÇÃO SEMAFÓRICA</span><span id="topology"></span></div>
-  <canvas id="network" aria-label="Rede esquemática: a cor representa atraso conceitual; partículas representam intensidade relativa de fluxo.">Visualização da rede urbana em Canvas 2D.</canvas>
-  <div class="map-foot"><div class="legend"><span>ATRASO dⱼ</span><span><i class="swatch" style="background:var(--cyan)"></i>BAIXO</span><span><i class="swatch" style="background:var(--orange)"></i>MODERADO</span><span><i class="swatch" style="background:var(--red)"></i>ALTO</span></div><span>FLUXO ILUSTRATIVO · DENSIDADE RELATIVA</span></div>
+  <canvas id="network" role="img" aria-label="Rede sintética: a cor representa atraso conceitual do segmento; partículas representam intensidade relativa de fluxo, sem contagem de veículos.">Rede urbana conceitual com 16 sinais e 26 segmentos. Os arcos representam as frações de verde do estado x.</canvas>
+  <div class="map-foot"><div class="legend"><span>ATRASO CONCEITUAL DO SEGMENTO dⱼ</span><span><i class="swatch" style="background:var(--cyan)"></i>BAIXO</span><span><i class="swatch" style="background:var(--orange)"></i>MODERADO</span><span><i class="swatch" style="background:var(--red)"></i>ALTO</span></div><span>FLUXO ILUSTRATIVO · DENSIDADE RELATIVA</span></div>
  </section>
  <aside id="hud" aria-label="Métricas computacionais">
   <div class="hud-head"><span>URBAN NETWORK STATE</span><span class="orange">● HIGH-T</span></div>
   <section class="metric" id="temperatureMetric"><div class="label">TEMPERATURE T</div><div class="metric-line"><span class="value" id="temperature">—</span><span class="unit">T / T₀</span><span class="tag">HIGH</span></div><div class="track"><div class="fill" id="temperatureBar"></div></div><div class="note">T = temperatura computacional · <span id="actualT"></span></div></section>
-  <section class="metric"><div class="label">OBJECTIVE ENERGY E</div><div class="metric-line"><span class="value" id="energy">—</span><span class="tag" id="energyLevel"></span></div><div class="note">E = Σⱼ wⱼ dⱼ / d_ref · normalized computational metric</div><canvas id="energyGraph" aria-label="Histórico real de E(t)"></canvas><div class="chart-notes"><span>E(t) · <span id="energyRange"></span></span><span>0 — 14 s</span></div></section>
+  <section class="metric"><div class="label">OBJECTIVE ENERGY E</div><div class="metric-line"><span class="value" id="energy">—</span><span class="tag" id="energyLevel"></span></div><div class="note">CUSTO PONDERADO NORMALIZADO · ADIMENSIONAL</div><canvas id="energyGraph" role="img" aria-label="Histórico real de E(t): o custo instantâneo pode subir.">Histórico em degraus da energia da cadeia de alta temperatura.</canvas><div class="chart-notes"><span>E(t) · <span id="energyRange"></span></span><span>CURRENT COST CAN RISE · 0—14 s</span></div></section>
   <section class="metric accept-metric"><div class="label">ACCEPTANCE RATE</div><div class="metric-line"><span class="value" id="acceptance">—</span><span class="unit">% / acumulada</span></div><div class="counts"><span>ACCEPTED <b id="accepted">0</b></span><span>REJECTED <b id="rejected">0</b></span><span>ΔE &gt; 0 ✓ <b id="uphill">0</b></span></div></section>
-  <section class="secondary"><div><div class="label">MEAN DELAY / d_ref</div><div class="number" id="meanDelay">—</div></div><div><div class="label">ITERATION</div><div class="number" id="iteration">00000</div></div></section>
+  <section class="secondary"><div><div class="label" id="diagnosticLabel">MEAN SEGMENT DELAY / d_ref</div><div class="number" id="meanDelay">—</div><div class="note">Média simples dos 26 segmentos · diagnóstico</div></div><div><div class="label">ITERATION</div><div class="number" id="iteration">00000</div></div></section>
   <section class="microstate"><div class="label">MICROSTATE x · GREEN SPLITS sᵢ ∈ [0.20, 0.80]</div><div class="vector" id="stateVector"></div></section>
-  <div class="phase" id="phase">INITIAL CONFIGURATION</div>
+  <div class="phase" id="phase" aria-live="polite" aria-atomic="true">INITIAL CONFIGURATION</div>
  </aside>
- <section id="timeline" aria-label="Sequência de 14 segundos"><div class="clock"><span id="time">00.00</span> / 14.00 s</div><div class="time-track"><div class="time-progress" id="progress"></div></div><div class="ticks"><span><b>00—02</b>ESTADO INICIAL</span><span><b>02—06</b>HIGH-T EXPLORATION</span><span><b>06—11</b>ACTIVE EXPLORATION</span><span><b>11—14</b>RUMO A METRÓPOLIS</span></div></section>
- <div id="narrative"><div class="concept"><span class="orange">T alta</span><span class="arrow">→</span>exploração intensa<span class="arrow">→</span>muitas configurações acessíveis</div><div class="formula">P_acc = min[1, exp(−ΔE/T)] &nbsp; · &nbsp; k_B = 1</div><div id="bridge"><div class="bridge-main"><strong>ALTA TEMPERATURA → ATÉ CONFIGURAÇÕES PIORES PODEM SER ACEITAS</strong><br>POR QUE ACEITAR UMA CONFIGURAÇÃO PIOR?</div><div class="bridge-next">MAS COMO ESSA DECISÃO É TOMADA?<br><strong>→ CRITÉRIO DE METRÓPOLIS</strong></div></div></div>
+ <section id="timeline" aria-label="Sequência de 14 segundos, terminando em mínimos locais"><div class="clock"><span id="time">00.00</span> / 14.00 s</div><div class="time-track"><div class="time-progress" id="progress"></div></div><div class="ticks"><span><b>00—02</b>ESTADO INICIAL</span><span><b>02—06</b>HIGH-T EXPLORATION</span><span><b>06—11</b>ACTIVE EXPLORATION</span><span id="nextTick"><b>11—14</b>NEXT: LOCAL MINIMA</span></div></section>
+ <div id="narrative"><div class="concept"><span class="orange">T alta</span><span class="arrow">→</span>exploração intensa<span class="arrow">→</span>muitas configurações acessíveis</div><div class="formula">P_acc = min[1, exp(−ΔE/T)] &nbsp; · &nbsp; k_B = 1</div></div>
+ <section id="bridge" aria-label="Próxima etapa: problema dos mínimos locais" aria-hidden="true"><div class="bridge-main"><div class="bridge-kicker">HIGH-T EXPLORATION → MANY CONFIGURATIONS VISITED</div>POR QUE NÃO ACEITAR<br><strong>APENAS AS MELHORIAS?</strong></div><div class="bridge-next" id="bridgeNext">UMA BUSCA PURAMENTE GULOSA<br>PODE FICAR PRESA.<strong>→ MÍNIMOS LOCAIS</strong></div></section>
  <footer><span>MODELO URBANO CONCEITUAL — NÃO SÃO DADOS REAIS DE TRÁFEGO <span style="color:#525f75">/</span> SEM PREVISÃO DE TRÂNSITO</span><div id="controls"><button id="play" type="button" aria-label="Play / Pause">▶ PLAY</button><button id="restart" type="button" aria-label="Restart">↺ RESTART</button><span class="key-help">SPACE play/pause &nbsp; R restart &nbsp; H ocultar</span></div><span id="seedLabel"></span></footer>
- <p class="sr-only">Modelo urbano reduzido com dados sintéticos. A função de atraso é conceitual. O objetivo é explicar a estrutura matemática do recozimento simulado. Não representa temperatura física ou previsões reais de trânsito.</p>
+ <p class="sr-only">Modelo urbano sintético e não georreferenciado, com 16 frações de verde e 26 segmentos. E é o custo adimensional dos atrasos conceituais ponderados pela demanda relativa fixa, dividido por d_ref = 0.25. A média simples dos atrasos dos segmentos é um diagnóstico separado. A temperatura computacional alta permite exploração intensa e a aceitação de algumas pioras: E pode subir. Não há dados reais nem previsão de trânsito. A próxima etapa apresenta o problema dos mínimos locais e pergunta por que não aceitar apenas melhorias.</p>
  <div id="error" role="alert" hidden></div>
 </main>
 <noscript>Ative JavaScript para executar a simulação offline.</noscript>
@@ -189,16 +192,99 @@ const Simulation02 = (() => {
     const chosen=trials.filter(r=>r.valid).sort((a,b)=>a.score-b.score)[0];
     assert(chosen,'Calibration failed: no valid high-T trajectory');
     return Object.freeze(chosen);}
+  // Independent audit layer: never consumes the displayed engine's RNG, changes
+  // a state, or changes the original calibration, proposal and acceptance rules.
+  const segmentDiagnostic=result=>result.meanDelay/CONFIG.delayReference;
+  function validateExperiment(engine,calibration){
+    const tol=1e-12,checks=new Set(),n=engine.network;
+    const check=(ok,label)=>{assert(ok,'VALIDATION FAILED: '+label);checks.add(label);};
+    const close=(a,b)=>Number.isFinite(a)&&Number.isFinite(b)&&Math.abs(a-b)<tol;
+    check(n.nodes.length===16&&n.edges.length===26&&INITIAL_STATE.length===16,'Canonical dimensions');
+    check(CONFIG.minSignal===.20&&CONFIG.maxSignal===.80&&CONFIG.delayReference===.25,'Canonical bounds and normalization');
+    check(n.nodes.every((r,i)=>r.x===NETWORK_CONFIG.nodes[i][0]&&r.y===NETWORK_CONFIG.nodes[i][1]&&r.offset===NETWORK_CONFIG.offsets[i]),'Canonical coordinates and offsets');
+    check(n.edges.every((r,i)=>['a','b','axis','q','c','main'].every((key,k)=>r[key]===NETWORK_CONFIG.edges[i][k])&&r.q>0&&r.c>0),'Canonical links, demands and capacities');
+    const demand=n.edges.reduce((sum,r)=>sum+r.q,0),weights=n.edges.map(r=>r.q/demand),sumWeights=weights.reduce((sum,w)=>sum+w,0);
+    check(close(sumWeights,1),'Sum of demand weights equals one');
+    let maxObjectiveError=0,maxDiagnosticError=0,evaluatedStates=0;
+    function auditState(state,result){
+      check(state.values.length===16&&state.values.every(s=>Number.isFinite(s)&&s>=.20&&s<=.80),'Finite bounded signal state');
+      check(result.roads.length===26&&result.roads.every(r=>r.capacity>0&&Number.isFinite(r.capacity)&&Number.isFinite(r.rho)&&r.delay>=0&&Number.isFinite(r.delay)),'Positive capacities and finite nonnegative delays');
+      // Sum normalized weights independently instead of repeating E's numerator.
+      let weighted=0,plain=0;
+      for(let j=0;j<n.edges.length;j++){weighted+=weights[j]*result.roads[j].delay;plain+=result.roads[j].delay;}
+      const energyCheck=weighted/CONFIG.delayReference,meanCheck=plain/n.edges.length;
+      const diagnosticCheck=meanCheck/CONFIG.delayReference;
+      maxObjectiveError=Math.max(maxObjectiveError,Math.abs(energyCheck-result.energy));
+      maxDiagnosticError=Math.max(maxDiagnosticError,Math.abs(diagnosticCheck-segmentDiagnostic(result)));
+      check(result.energy>=0&&close(energyCheck,result.energy),'Independent weighted objective matches E');
+      check(close(meanCheck,result.meanDelay)&&close(diagnosticCheck,segmentDiagnostic(result)),'Simple segment diagnostic matches meanDelay / d_ref');
+      evaluatedStates++;
+    }
+    check(engine.time===CONFIG.duration&&engine.amplitude===calibration.amplitude&&engine.temperature0===calibration.temperature0,'Completed calibrated high-T trajectory');
+    let state=new SignalConfiguration(),result=EnergyFunction.evaluate(n,state),lastTime=0,accepted=0,rejected=0,uphill=0,uphillProposed=0;
+    const rng=new PRNG(CONFIG.seed);auditState(state,result);
+    check(engine.history.points.length===engine.events.length+1,'Complete energy history');
+    check(engine.history.points[0].t===0&&close(engine.history.points[0].e,result.energy),'Initial history entry');
+    for(let k=0;k<engine.events.length;k++){
+      const event=engine.events[k],proposal=state.propose(rng,engine.amplitude);
+      const candidate=EnergyFunction.evaluate(n,proposal.state),u=rng.next();auditState(proposal.state,candidate);
+      const changed=state.values.map((s,i)=>s===proposal.state.values[i]?-1:i).filter(i=>i>=0);
+      check(changed.length===1&&changed[0]===proposal.i&&event.i===proposal.i,'Single component proposal');
+      check(event.t>lastTime&&event.t>2&&event.t<=CONFIG.duration,'Ordered proposal times');lastTime=event.t;
+      const temperature=engine.temperature0*(1+(CONFIG.temperatureEnd-1)*event.t/CONFIG.duration);
+      const delta=candidate.energy-result.energy,probability=delta<=0?1:Math.exp(-delta/temperature),take=u<probability;
+      check(close(event.before,result.energy)&&close(event.delta,delta),'Delta equals candidate energy minus previous energy');
+      check(temperature>0&&close(event.temperature,temperature)&&close(event.probability,probability),'Actual temperature and Metropolis probability');
+      check(event.u===u&&u>=0&&u<1&&event.accepted===take,'Exact PRNG replay and unrounded acceptance decision');
+      if(delta>0)uphillProposed++;
+      if(take){accepted++;if(delta>0)uphill++;state=proposal.state;result=candidate;}else rejected++;
+      check(close(event.after,result.energy),'Accepted candidate or preserved previous state');
+      const point=engine.history.points[k+1];check(point.t===event.t&&close(point.e,result.energy),'Recorded history matches actual decisions');
+    }
+    auditState(engine.state,engine.result);
+    check(state.values.every((s,i)=>s===engine.state.values[i])&&close(result.energy,engine.result.energy),'Final state equals replay');
+    check(result.roads.every((r,j)=>Object.keys(r).every(key=>close(r[key],engine.result.roads[j][key]))),'Final road metrics equal replay');
+    // These probes distinguish reflection from clipping without changing the RNG.
+    for(const [bound,draw,expected] of [[.20,0,.32],[.80,1,.68]]){
+      const values=INITIAL_STATE.slice();values[0]=bound;let calls=0;
+      const p=new SignalConfiguration(values).propose({next:()=>calls++===0?0:draw},.12);
+      check(p.i===0&&close(p.state.values[0],expected)&&p.state.values.slice(1).every((s,i)=>s===values[i+1]),'Reflected boundary probe '+bound);
+    }
+    const m=engine.metrics,acceptance=accepted/(accepted+rejected),summary=summarize(engine,calibration.reference);
+    check(m.accepted===accepted&&m.rejected===rejected&&m.uphillAccepted===uphill&&m.uphillProposed===uphillProposed&&close(m.acceptance,acceptance),'Measured acceptance counters');
+    check(acceptance>=.65&&acceptance<=.89&&uphill>=25&&summary.initialHigh>1.18&&summary.min/calibration.reference>1.12&&summary.final/summary.initial>.85&&summary.oscillation>.12,'Original high-T calibration criteria');
+    check(engine.events.some(e=>e.after>e.before)&&engine.events.some(e=>e.after<e.before),'Nonmonotonic energy; genuine uphill and downhill visits');
+    check(['temperature0','amplitude','acceptance','uphill','initial','final','min','max','iterations'].every(key=>close(summary[key],calibration[key])),'Calibration statistics match displayed trajectory');
+    return deepFreeze({status:'PASS',seed:CONFIG.seed,tolerance:tol,checks:[...checks],
+      model:{nodes:16,links:26,stateDimension:16,bounds:[.20,.80],delayReference:.25,energyFormula:'E = sum(w_j*d_j) / d_ref; w_j = q_j / sum(q)',sumWeights},
+      objective:{status:'PASS',evaluatedStates,maxObjectiveError,maxDiagnosticError},
+      trajectory:{status:'PASS',iterations:engine.events.length,accepted,rejected,acceptance,uphillAccepted:uphill,uphillProposed,nonmonotonic:true,temperature0:engine.temperature0,temperatureFinal:engine.temperature},
+      proposal:{singleComponent:'PASS',reflection:'PASS',replay:'PASS'}});
+  }
   return {AUTO_PLAY,RECORDING_MODE,RANDOM_SEED,CONFIG,NETWORK_CONFIG,INITIAL_STATE,PRNG,UrbanNetwork,
-    SignalConfiguration,TrafficModel,EnergyFunction,HistoryBuffer,Metrics,AnnealingEngine,calibrate,findReference,summarize,clamp,mix,smooth};
+    SignalConfiguration,TrafficModel,EnergyFunction,HistoryBuffer,Metrics,AnnealingEngine,calibrate,findReference,summarize,segmentDiagnostic,validateExperiment,clamp,mix,smooth};
 })();
 </script>
 <script>
 (() => {
   'use strict';
-  const {CONFIG,NETWORK_CONFIG,INITIAL_STATE,PRNG,UrbanNetwork,AnnealingEngine,calibrate,
+  const {CONFIG,NETWORK_CONFIG,INITIAL_STATE,PRNG,UrbanNetwork,AnnealingEngine,calibrate,segmentDiagnostic,validateExperiment,
     AUTO_PLAY,RECORDING_MODE,clamp,mix,smooth}=Simulation02;
   const $=id=>document.getElementById(id),TAU=Math.PI*2;
+  const PRESENTATION=Object.freeze({highStart:2,activeStart:6,nextStart:11,
+    bridgeStart:12.3,bridgeFull:13.0,bridgeNextStart:12.65,bridgeNextFull:13.2,
+    phases:Object.freeze(['INITIAL CONFIGURATION','HIGH-T EXPLORATION','ACTIVE EXPLORATION','NEXT: LOCAL MINIMA'])});
+  const phaseIndex=t=>t<PRESENTATION.highStart?0:t<PRESENTATION.activeStart?1:t<PRESENTATION.nextStart?2:3;
+  function validateNarrative(){
+    const check=(ok,message)=>{if(!ok)throw new Error('NARRATIVE VALIDATION FAILED: '+message);};
+    check($('objective-note').textContent.includes('E(x) = Σⱼ wⱼ dⱼ(x) / d_ref')&&$('objective-note').textContent.includes('wⱼ = qⱼ / Σₖ qₖ')&&$('objective-note').textContent.includes('d_ref = 0.25'),'Objective definition');
+    check($('diagnosticLabel').textContent==='MEAN SEGMENT DELAY / d_ref','Diagnostic label');
+    check($('nextTick').textContent.includes('NEXT: LOCAL MINIMA')&&PRESENTATION.phases[phaseIndex(CONFIG.duration)]==='NEXT: LOCAL MINIMA','Timeline and phase destination');
+    const bridge=$('bridge').textContent;
+    check(bridge.includes('POR QUE NÃO ACEITAR')&&bridge.includes('APENAS AS MELHORIAS?')&&bridge.includes('PODE FICAR PRESA.')&&bridge.includes('MÍNIMOS LOCAIS'),'Bridge destination');
+    check(!/metr[oó]polis|P_acc|Acceptance Rule|u\s*</i.test(bridge),'No acceptance tutorial in final card');
+    return Object.freeze({status:'PASS',objectiveDefinition:'PASS',diagnosticLabel:'PASS',nextScene:'LOCAL MINIMA'});
+  }
   const C={bg:'#0f111a',panel:'#151823',muted:'#8b93a7',text:'#f8f8f2',cyan:'#8be9fd',
     purple:'#bd93f9',orange:'#ffb86c',red:'#ff5555',line:'#2a303f'};
   const mono='Consolas,"Liberation Mono",monospace';
@@ -273,16 +359,22 @@ const Simulation02 = (() => {
       const m=engine.metrics,t=engine.time,r=engine.result;
       $('temperature').textContent=engine.temperatureNorm.toFixed(2);$('actualT').textContent=`T = ${engine.temperature.toFixed(4)} u.c.`;
       $('temperatureBar').style.transform=`scaleX(${engine.temperatureNorm})`;$('energy').textContent=r.energy.toFixed(3);
-      $('energyLevel').textContent=r.energy/this.calibration.reference>=1.4?'HIGH DELAY':'ELEVATED DELAY';
+      $('energyLevel').textContent=r.energy/this.calibration.reference>=1.4?'HIGH COST':'ELEVATED COST';
       $('energyLevel').title='Custo relativo a uma referência viável calculada por busca local; não é um ótimo global.';
       $('acceptance').textContent=m.acceptance===null?'—':(m.acceptance*100).toFixed(1);
       $('accepted').textContent=m.accepted;$('rejected').textContent=m.rejected;$('uphill').textContent=m.uphillAccepted;
-      $('meanDelay').textContent=(r.meanDelay/CONFIG.delayReference).toFixed(3);$('iteration').textContent=String(m.iteration).padStart(5,'0');
+      $('meanDelay').textContent=segmentDiagnostic(r).toFixed(3);$('iteration').textContent=String(m.iteration).padStart(5,'0');
       $('stateVector').textContent=`x = [${engine.state.values.slice(0,5).map(s=>s.toFixed(2)).join(', ')}, …]`;
       $('time').textContent=t.toFixed(2).padStart(5,'0');$('progress').style.transform=`scaleX(${t/CONFIG.duration})`;
-      $('phase').textContent=t<2?'PHASE / INITIAL CONFIGURATION':t<6?'PHASE / HIGH-T EXPLORATION':t<11?'PHASE / ACTIVE EXPLORATION':'PHASE / HIGH-T · NEXT: METROPOLIS';
-      $('hud').classList.toggle('emphasis',t>=12.5);$('bridge').style.opacity=smooth(12.5,13.2,t);
-      document.querySelectorAll('.ticks span').forEach((el,i)=>el.classList.toggle('active',i===(t<2?0:t<6?1:t<11?2:3)));
+      const phase=phaseIndex(t),phaseText='PHASE / '+PRESENTATION.phases[phase];
+      if($('phase').textContent!==phaseText)$('phase').textContent=phaseText;
+      const bridge=smooth(PRESENTATION.bridgeStart,PRESENTATION.bridgeFull,t);
+      $('hud').classList.toggle('emphasis',t>=PRESENTATION.nextStart);$('bridge').style.opacity=bridge;
+      $('bridge').style.visibility=bridge>0?'visible':'hidden';$('bridge').setAttribute('aria-hidden',String(bridge===0));
+      const next=smooth(PRESENTATION.bridgeNextStart,PRESENTATION.bridgeNextFull,t);
+      $('bridgeNext').style.opacity=next;$('bridgeNext').setAttribute('aria-hidden',String(next===0));
+      $('narrative').style.opacity=1-bridge;$('narrative').style.visibility=bridge===1?'hidden':'visible';$('narrative').setAttribute('aria-hidden',String(bridge===1));
+      document.querySelectorAll('.ticks span').forEach((el,i)=>el.classList.toggle('active',i===phase));
       this.lastIteration=m.iteration;this.drawGraph(engine);}
     drawGraph(engine){const ctx=this.ctx,w=504,h=78,x=t=>t/CONFIG.duration*w,y=e=>h-5-e/this.ymax*(h-12);
       ctx.clearRect(0,0,w,h);for(let k=1;k<4;k++)line(ctx,0,k*h/4,w,k*h/4,'#262c3a',.7);
@@ -304,34 +396,66 @@ const Simulation02 = (() => {
   }
   class MainLoop {
     constructor(){this.network=new UrbanNetwork();this.calibration=calibrate(this.network);
+      // Audit a complete deterministic run before presenting any frame. The
+      // displayed run starts fresh and is checked against this certified prefix.
+      this.certified=new AnnealingEngine(this.network,this.calibration.temperature0,this.calibration.amplitude).run();
+      this.validation=validateExperiment(this.certified,this.calibration);this.narrative=validateNarrative();
       this.renderer=new Renderer(this.network);this.hud=new HUD(this.calibration);this.running=false;this.accumulator=0;this.last=performance.now();
       this.controls=new Controls(this);this.restart();this.running=AUTO_PLAY;this.controls.sync();
       // Diagnostics are internal and never substitute invented values into the HUD.
-      console.info('Simulation 02: deterministic calibration',this.calibration);
-      this.performance={frames:0,totalDrawMs:0,maxDrawMs:0};this.lastDpr=window.devicePixelRatio;
+      this.logValidation();this.lastDpr=window.devicePixelRatio;
       window.addEventListener('resize',()=>this.resize());document.addEventListener('visibilitychange',()=>{if(document.hidden){this.running=false;this.accumulator=0;this.controls.sync();}this.last=performance.now();});
       requestAnimationFrame(t=>this.frame(t));}
     resize(){const scale=Math.min(window.innerWidth/CONFIG.width,window.innerHeight/CONFIG.height);$('stage').style.transform=`translate(-50%,-50%) scale(${scale})`;
       this.renderer.resize();this.hud.resize();this.hud.reset();this.draw();}
     restart(){this.running=false;this.accumulator=0;this.last=performance.now();
       this.engine=new AnnealingEngine(this.network,this.calibration.temperature0,this.calibration.amplitude);
+      this.verifiedEvents=0;this.performance={frames:0,totalDrawMs:0,maxDrawMs:0,totalFrameSeconds:0};
       this.renderer.reset(this.engine);this.hud.reset();this.controls.sync();this.draw();}
-    draw(){this.renderer.render(this.engine);this.hud.update(this.engine);}
+    verifyLive(){for(;this.verifiedEvents<this.engine.events.length;this.verifiedEvents++){
+        const actual=this.engine.events[this.verifiedEvents],expected=this.certified.events[this.verifiedEvents];
+        if(!expected||Object.keys(expected).some(key=>actual[key]!==expected[key]))throw new Error('Live trajectory differs from certified event '+this.verifiedEvents);
+      }
+      if(this.engine.time===CONFIG.duration&&this.engine.state.values.some((s,i)=>s!==this.certified.state.values[i]))throw new Error('Final live state differs from certified state');}
+    draw(){this.verifyLive();this.renderer.render(this.engine);this.hud.update(this.engine);}
+    logValidation(){const v=this.validation;console.info([
+        '============================================================',
+        'SIMULATION 02 — URBAN HIGH-T MODEL',
+        'MODEL: 16 nodes / 26 links / 16 signal fractions in [0.20, 0.80]',
+        'OBJECTIVE: E = Σ w_j d_j / d_ref; w_j = q_j / Σq; d_ref = 0.25',
+        'Sum weights: '+v.model.sumWeights+' / formula check: PASS / dimensionless E',
+        'Mean segment delay / d_ref: independent simple diagnostic / PASS',
+        'High-T calibration: PASS / acceptance: '+(v.trajectory.acceptance*100).toFixed(6)+' %',
+        'Accepted uphill moves: '+v.trajectory.uphillAccepted+' / finite, nonmonotonic energies: PASS',
+        'PROPOSAL: single component / reflection / exact PRNG replay: PASS',
+        'NARRATIVE: objective definition matches / next scene = LOCAL MINIMA: PASS',
+        'VALIDATION STATUS: PASS','============================================================'].join('\n'));
+      console.info('Simulation 02 — audit',JSON.stringify({validation:v,narrative:this.narrative,calibration:this.calibration}));}
     frame(now){const elapsed=clamp((now-this.last)/1000,0,.25);this.last=now;
-      if(window.devicePixelRatio!==this.lastDpr){this.lastDpr=window.devicePixelRatio;this.resize();}
+      try{if(window.devicePixelRatio!==this.lastDpr){this.lastDpr=window.devicePixelRatio;this.resize();}
       if(this.running){this.accumulator+=elapsed;while(this.accumulator>=CONFIG.dt){this.engine.step();this.renderer.update(this.engine,CONFIG.dt);this.accumulator-=CONFIG.dt;
           if(this.engine.time>=CONFIG.duration){this.running=false;this.accumulator=0;this.controls.sync();break;}}
         const start=performance.now();this.draw();const cost=performance.now()-start;
-        this.performance.frames++;this.performance.totalDrawMs+=cost;this.performance.maxDrawMs=Math.max(this.performance.maxDrawMs,cost);}
+        this.performance.frames++;this.performance.totalDrawMs+=cost;this.performance.maxDrawMs=Math.max(this.performance.maxDrawMs,cost);this.performance.totalFrameSeconds+=elapsed;
+        if(!this.running)console.info('Simulation 02 — completed',JSON.stringify({verifiedEvents:this.verifiedEvents,seconds:this.engine.time,frames:this.performance.frames,observedFps:this.performance.frames/this.performance.totalFrameSeconds,averageDrawMs:this.performance.totalDrawMs/this.performance.frames,maxDrawMs:this.performance.maxDrawMs}));}
+      }catch(error){this.running=false;this.controls.sync();showError(error);throw error;}
       requestAnimationFrame(t=>this.frame(t));}
   }
+  function showError(error){$('error').hidden=false;$('error').textContent=`Não foi possível validar a simulação. ${error.message}`;console.error(error);}
   try{document.body.classList.toggle('recording',RECORDING_MODE);
     $('stage').style.transform=`translate(-50%,-50%) scale(${Math.min(innerWidth/CONFIG.width,innerHeight/CONFIG.height)})`;
     // A read-only snapshot API supports numerical audits and scene 04 reuse.
-    const app=new MainLoop();Object.defineProperty(window,'UrbanSimulation',{value:Object.freeze({
-      snapshot:()=>JSON.parse(JSON.stringify({time:app.engine.time,state:app.engine.state.values,energy:app.engine.result.energy,
-        metrics:app.engine.metrics,history:app.engine.history.points,events:app.engine.events,calibration:app.calibration,performance:app.performance}))})});
-  }catch(error){$('error').hidden=false;$('error').textContent=`Não foi possível validar a simulação. ${error.message}`;console.error(error);}
+    const app=new MainLoop(),copy=value=>JSON.parse(JSON.stringify(value));
+    const diagnostics=Object.freeze({snapshot:()=>copy({seed:CONFIG.seed,time:app.engine.time,running:app.running,
+        phase:PRESENTATION.phases[phaseIndex(app.engine.time)],state:app.engine.state.values,energy:app.engine.result.energy,
+        meanSegmentDelay:app.engine.result.meanDelay,displayedDiagnostic:segmentDiagnostic(app.engine.result),
+        temperature:app.engine.temperature,temperatureRatio:app.engine.temperatureNorm,acceptance:app.engine.metrics.acceptance,
+        uphillAccepted:app.engine.metrics.uphillAccepted,metrics:app.engine.metrics,history:app.engine.history.points,events:app.engine.events,
+        calibration:app.calibration,model:{...app.validation.model,config:NETWORK_CONFIG,initialState:INITIAL_STATE},
+        validation:{...app.validation,narrative:app.narrative,scope:'Complete certified trajectory; live event prefix checked',liveVerifiedEvents:app.verifiedEvents},performance:app.performance}),
+      history:()=>copy(app.engine.history.points),events:()=>copy(app.engine.events)});
+    for(const name of ['Simulation02Experiment','UrbanSimulation'])Object.defineProperty(window,name,{value:diagnostics,writable:false,configurable:false});
+  }catch(error){showError(error);throw error;}
 })();
 </script>
 </body>

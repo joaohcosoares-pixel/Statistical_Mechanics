@@ -82,6 +82,22 @@
     .ensemble-head span:first-child { color: #acb7c9; }
     .ensemble-foot { padding-top: 8px; padding-bottom: 21px; }
     .tiny-cross { color: #8b9bac; font-size: 16px; line-height: 0.7; }
+    .narrative-band {
+      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+      height: 132px; flex-shrink: 0; padding: 16px 26px 18px; pointer-events: none;
+    }
+    #phase-overlay { flex: 1; min-width: 0; }
+    #phase-kicker { color: var(--thermal); font: 10px var(--mono); letter-spacing: .12em; margin-bottom: 10px; }
+    #phase-title { font-size: clamp(17px, 1.3vw, 25px); font-weight: 500; line-height: 1.3; letter-spacing: -.015em; white-space: pre-line; }
+    .boltzmann {
+      flex: 0 0 320px; padding: 12px 15px; border: 1px solid #354253; border-radius: 3px;
+      background: #151c27; opacity: 0;
+    }
+    .boltzmann-label { font: 9px var(--mono); letter-spacing: .09em; color: var(--muted); }
+    .boltzmann-equation { margin: 9px 0 7px; font: 23px Georgia, "Times New Roman", serif; color: #cfe8ef; }
+    .boltzmann-equation sup { font-size: .65em; }
+    .boltzmann-note { font-size: 10px; line-height: 1.4; color: #aeb8ca; }
+    .boltzmann-note span { display: block; }
     .canvas-wrap { position: relative; flex: 1; min-height: 0; margin: 0 16px; }
     .recording .canvas-wrap { cursor: none; }
     #particles { position: absolute; width: 100%; height: 100%; display: block; }
@@ -122,8 +138,8 @@
     .timeline-progress { position: absolute; inset: 0; transform-origin: left; transform: scaleX(0); background: #b4cddd; }
     .timeline-needle { position: absolute; left: 0; width: 2px; height: 11px; background: #f8f8f2; top: -4px; }
     .timeline-tick { position: absolute; height: 7px; top: -2px; width: 1px; background: #798397; }
-    .timeline-labels { display: grid; grid-template-columns: 3.5fr 7fr 3fr 1.5fr; margin-top: 13px; gap: 14px; font: 9px var(--mono); letter-spacing: .06em; color: var(--dim); }
-    .timeline-labels span { transition: color 250ms; white-space: nowrap; }
+    .timeline-labels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 13px; gap: 14px; font: 9px var(--mono); letter-spacing: .06em; color: var(--dim); }
+    .timeline-labels span { white-space: nowrap; }
     .timeline-labels .active { color: #d9e7ee; }
     .timeline-labels b { color: inherit; font-weight: normal; opacity: .6; margin-right: 8px; }
     .concept-footer { flex-shrink: 0; min-height: 90px; display: flex; align-items: center; justify-content: space-between; gap: 22px; padding: 21px 0 15px; }
@@ -132,7 +148,8 @@
     .concept-caption .arrow { color: #617286; margin: 0 12px; }
     .bridge { opacity: 0; flex-shrink: 0; text-align: right; padding-left: 20px; font: 10px/1.8 var(--mono); letter-spacing: .1em; color: var(--muted); }
     .bridge strong { display: block; font-weight: normal; font-size: 12px; color: var(--cyan); }
-    .bridge-arrow { display: inline-block; margin-left: 6px; color: var(--cyan); }
+    .bridge-arrow { display: block; color: var(--cyan); line-height: 1.3; }
+    #concept-caption { opacity: 0; }
     .transport { flex-shrink: 0; min-height: 52px; border-top: 1px solid #252b38; display: flex; justify-content: space-between; align-items: center; gap: 20px; padding-top: 14px; }
     .controls { display: flex; gap: 8px; align-items: center; }
     .controls button { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 35px; padding: 8px 15px; border-radius: 3px; border: 1px solid #333d4c; background: #181e2a; color: #c9d6e3; font: 10px var(--mono); letter-spacing: .06em; cursor: pointer; }
@@ -169,6 +186,9 @@
       .timeline-labels { font-size: 8px; letter-spacing: 0; gap: 5px; }
       .timeline-labels b { display: none; }
       .key-help { gap: 12px; }
+      .narrative-band { gap: 16px; padding-inline: 20px; height: 166px; }
+      .boltzmann { flex-basis: 235px; }
+      .boltzmann-equation { font-size: 21px; }
     }
     @media (min-width: 741px) and (max-height: 1000px) {
       .hud-title { padding-bottom: 12px; }
@@ -211,12 +231,18 @@
       .time-total { font-size: 9px; }
       .phase-label { font-size: 8px; margin-bottom: 6px; }
       #phase { font-size: 10px; }
-      .timeline-labels { grid-template-columns: repeat(4, 1fr) !important; font-size: 7px; white-space: normal; gap: 6px; }
+      .timeline-labels { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; font-size: 7px; white-space: normal; gap: 6px; }
       .timeline-labels span { white-space: normal; }
       .concept-footer { flex-direction: column; align-items: flex-start; gap: 10px; padding-top: 24px; }
       .concept-caption { font-size: 11px; }
       .bridge { min-height: 32px; padding-left: 0; text-align: left; }
-      .bridge strong { display: inline; padding-left: 5px; }
+      .bridge strong { display: block; }
+      .narrative-band { flex-direction: column; align-items: flex-start; justify-content: center; height: 224px; padding: 12px 14px; gap: 14px; }
+      #phase-overlay { flex: none; min-height: 74px; }
+      #phase-kicker { font-size: 8px; margin-bottom: 7px; }
+      #phase-title { font-size: 16px; }
+      .boltzmann { flex: none; width: 100%; max-width: 320px; padding: 9px 12px; }
+      .boltzmann-equation { margin: 6px 0; font-size: 20px; }
       .transport { align-items: flex-start; flex-direction: column; gap: 16px; }
       .controls { gap: 7px; }
       .controls button { padding: 10px 12px; min-height: 38px; }
@@ -228,10 +254,10 @@
   </style>
 </head>
 <body>
-  <main class="instrument" aria-label="Animação conceitual de recozimento físico">
+  <main class="instrument" aria-label="Simulação 01: recozimento físico, animação conceitual" aria-describedby="concept-description">
     <header class="masthead">
       <div>
-        <div class="eyebrow">01 / RECOZIMENTO FÍSICO</div>
+        <div class="eyebrow">SIMULAÇÃO 01 / RECOZIMENTO FÍSICO</div>
         <h1>THERMAL ANNEALING</h1>
         <p class="subtitle">Statistical Mechanics // Conceptual Model</p>
       </div>
@@ -241,8 +267,20 @@
     <section class="workspace" aria-label="Sistema de partículas e indicadores conceituais">
       <div class="ensemble">
         <div class="ensemble-head"><span>2D PARTICLE ENSEMBLE</span><span id="particle-count">N = 96</span></div>
+        <div class="narrative-band">
+          <div id="phase-overlay" aria-hidden="true">
+            <div id="phase-kicker">01 / HIGH T</div>
+            <div id="phase-title">T ALTA
+FLUTUAÇÕES INTENSAS</div>
+          </div>
+          <div class="boltzmann" id="boltzmann" aria-hidden="true">
+            <div class="boltzmann-label">DISTRIBUIÇÃO DE BOLTZMANN</div>
+            <div class="boltzmann-equation" role="math" aria-label="p de x proporcional a exponencial de menos E de x dividido por k B vezes T"><i>p</i>(<i>x</i>) ∝ e<sup>−<i>E</i>(<i>x</i>)/(<i>k</i><sub>B</sub><i>T</i>)</sup></div>
+            <div class="boltzmann-note"><span>MOTIVAÇÃO FÍSICA</span>Baixa T penaliza mais as energias altas.</div>
+          </div>
+        </div>
         <div class="canvas-wrap">
-          <canvas id="particles" role="img" aria-label="96 partículas: a agitação diminui e uma rede triangular emerge durante o resfriamento.">
+          <canvas id="particles" role="img" aria-label="Animação conceitual de 96 partículas: alta temperatura produz maior agitação; o resfriamento reduz as flutuações e favorece configurações de menor energia relativa, com distorções residuais.">
             Animação conceitual de partículas em um processo de recozimento. Utilize um navegador com suporte a Canvas 2D.
           </canvas>
         </div>
@@ -268,14 +306,14 @@
           <div class="chart-caption" aria-hidden="true"><span>E(t)</span><span id="chart-duration">0 — 15 s</span></div>
         </section>
         <section class="metric">
-          <h2 class="metric-label">STRUCTURAL ORDER</h2>
+          <h2 class="metric-label">ORDER</h2>
           <div class="metric-row"><output class="metric-value" id="order">0.100</output><span class="range-note">Q ∈ [0, 1]</span></div>
-          <div class="metric-note">conceptual indicator</div>
+          <div class="metric-note">conceptual order parameter</div>
           <div class="order-track" role="meter" aria-label="Ordem estrutural conceitual" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0.1" id="order-meter"><div class="order-fill" id="order-fill"></div></div>
         </section>
         <div class="run-data">
           <div class="time-row"><span class="time-label">TIME</span><span><output class="time-value" id="time">00.0</output><span class="time-total" id="time-total"> / 15.0 s</span></span></div>
-          <div class="phase-card" id="phase-card"><div class="phase-label">PHASE</div><output id="phase">HIGH-T EXPLORATION</output></div>
+          <div class="phase-card" id="phase-card"><div class="phase-label">PHASE</div><output id="phase">HIGH T</output></div>
         </div>
       </aside>
     </section>
@@ -283,16 +321,16 @@
     <div class="timeline" aria-label="Progresso da sequência de 15 segundos" role="progressbar" aria-valuemin="0" aria-valuemax="15" aria-valuenow="0" id="timeline">
       <div class="timeline-track" aria-hidden="true">
         <div class="timeline-progress" id="timeline-progress"></div>
-        <span class="timeline-tick" id="tick-cooling"></span><span class="timeline-tick" id="tick-ordering"></span><span class="timeline-tick" id="tick-hold"></span>
+        <span class="timeline-tick" id="tick-cooling"></span><span class="timeline-tick" id="tick-lower-energy"></span>
         <span class="timeline-needle" id="timeline-needle"></span>
       </div>
       <div class="timeline-labels" aria-hidden="true" id="timeline-labels">
-        <span class="active"><b>01</b>HIGH-T EXPLORATION</span><span><b>02</b>COOLING</span><span><b>03</b>ORDERING</span><span><b>04</b>LOW-T STATE</span>
+        <span class="active"></span><span></span><span></span>
       </div>
     </div>
 
     <footer class="concept-footer">
-      <p class="concept-caption"><span class="t-down">T ↓</span><span class="arrow">→</span> flutuações térmicas ↓ <span class="arrow">→</span> configurações de menor energia favorecidas</p>
+      <p class="concept-caption" id="concept-caption" aria-hidden="true"><span class="t-down">T ↓</span><span class="arrow">→</span> flutuações térmicas ↓ <span class="arrow">→</span> configurações de menor energia favorecidas</p>
       <div class="bridge" id="bridge" aria-hidden="true">PHYSICAL IDEA <span class="bridge-arrow">↓</span><strong>SIMULATED ANNEALING</strong></div>
     </footer>
 
@@ -305,6 +343,7 @@
       </div>
       <div class="key-help" aria-hidden="true"><span><kbd>SPACE</kbd> play / pause</span><span><kbd>R</kbd> restart</span><span><kbd>H</kbd> controls</span><span><kbd>F</kbd> fullscreen</span></div>
     </nav>
+    <p class="sr-only" id="concept-description">Animação conceitual: alta temperatura corresponde a maior agitação. O resfriamento reduz as flutuações e favorece configurações de menor energia. A distribuição de Boltzmann aparece como motivação física; o motor não realiza amostragem canônica exata nem dinâmica molecular quantitativa. Temperatura normalizada, energia relativa e ordem conceitual, sem unidades físicas atribuídas. A estrutura mantém distorções residuais. Ao final, a ideia física conduz ao Simulated Annealing.</p>
     <p class="sr-only" id="announcement" role="status" aria-live="polite">Pronto. Pressione Espaço para iniciar.</p>
   </main>
   <noscript>Ative o JavaScript para reproduzir esta animação conceitual.</noscript>
@@ -316,8 +355,15 @@
 const RANDOM_SEED = 20260910;
 const RECORDING_MODE = true;
 
+// Limites narrativos e térmicos na mesma referência temporal.
+const PHASES = Object.freeze({
+  highTEnd: 3.5,
+  coolingEnd: 10.5,
+  finalEnd: 15.0
+});
+
 const CONFIG = Object.freeze({
-  duration: 15,
+  duration: PHASES.finalEnd,
   particleCount: 96,
   physicsDt: 1 / 120,
   worldWidth: 1200,
@@ -328,13 +374,11 @@ const CONFIG = Object.freeze({
   temperatureMin: 0.02,
   // Tempos gráficos em uma sequência de referência de 15 s. Alterar duration
   // redistribui todas as fases e rearranjos proporcionalmente.
-  referenceDuration: 15,
-  coolingStartFraction: 3.5 / 15,
-  coolingEndFraction: 10.5 / 15,
-  orderingEndFraction: 13.5 / 15,
+  referenceDuration: PHASES.finalEnd,
+  coolingStartFraction: PHASES.highTEnd / PHASES.finalEnd,
+  coolingEndFraction: PHASES.coolingEnd / PHASES.finalEnd,
   get coolingStart() { return this.duration * this.coolingStartFraction; },
   get coolingEnd() { return this.duration * this.coolingEndFraction; },
-  get orderingEnd() { return this.duration * this.orderingEndFraction; },
   coolingShape: 3.1,
   settlingStart: 4.5,
   settlingDuration: 5.2,
@@ -403,7 +447,7 @@ class AnnealingModel {
     this.phaseTimes = Object.freeze({
       coolingStart: config.duration * config.coolingStartFraction,
       coolingEnd: config.duration * config.coolingEndFraction,
-      orderingEnd: config.duration * config.orderingEndFraction
+      finalEnd: config.duration
     });
   }
   temperatureAt(time) {
@@ -416,7 +460,7 @@ class AnnealingModel {
   }
   phaseAt(time) {
     const phases = this.phaseTimes;
-    return time < phases.coolingStart ? 0 : time < phases.coolingEnd ? 1 : time < phases.orderingEnd ? 2 : 3;
+    return time < phases.coolingStart ? 0 : time < phases.coolingEnd ? 1 : 2;
   }
 }
 
@@ -597,7 +641,18 @@ class ParticleSystem {
 // independent metric tween, or frame-dependent particle motion is introduced.
 const VIEW = Object.freeze({
   hudHz: 15,
-  phaseNames: ['HIGH-T EXPLORATION', 'COOLING', 'ORDERING', 'LOW-T STATE'],
+  phaseNames: Object.freeze(['HIGH T', 'CONTROLLED COOLING', 'LOWER ENERGY FAVORED']),
+  phaseTitles: Object.freeze(['T ALTA\nFLUTUAÇÕES INTENSAS', 'RESFRIAMENTO\nCONTROLADO', 'CONFIGURAÇÕES DE MENOR ENERGIA\nTORNAM-SE FAVORECIDAS']),
+  phaseAnnouncements: Object.freeze([
+    'T alta: flutuações intensas nesta animação conceitual.',
+    'Resfriamento controlado: a agitação térmica diminui.',
+    'Em baixa temperatura, configurações de menor energia ficam favorecidas. A ordem permanece conceitual, com distorções residuais.'
+  ]),
+  boltzmannStart: 1.6,
+  boltzmannEnd: 7.4,
+  boltzmannFadeSeconds: 0.4,
+  phaseFadeSeconds: 0.4,
+  captionFadeSeconds: 0.7,
   thermalHot: [255, 184, 108],
   thermalMid: [189, 147, 249],
   thermalCold: [139, 233, 253],
@@ -605,8 +660,7 @@ const VIEW = Object.freeze({
   trailMaxLength: 30,
   gridSpacing: 60,
   bridgeFadeSeconds: 0.65,
-  bridgeLastSeconds: 1,
-  phasePulseSeconds: 0.65
+  bridgeLastSeconds: 2.8
 });
 
 /** Fixed world coordinates are uniformly mapped, never stretched on resize.
@@ -801,23 +855,32 @@ class HUD {
     this.nodes = {};
     const ids = ['temperature', 'energy', 'order', 'time', 'time-total', 'phase', 'phase-card',
       'temperature-fill', 'temperature-marker', 'temperature-meter', 'order-fill', 'order-meter',
-      'timeline', 'timeline-progress', 'timeline-needle', 'timeline-labels', 'bridge', 'announcement'];
+      'timeline', 'timeline-progress', 'timeline-needle', 'timeline-labels', 'bridge', 'announcement',
+      'phase-overlay', 'phase-kicker', 'phase-title', 'boltzmann', 'concept-caption'];
     for (const id of ids) this.nodes[id] = document.getElementById(id);
     this.chart = new EnergyChart(document.getElementById('energy-plot'));
     this.lastTime = -Infinity;
     this.lastPhase = -1;
+    this.boltzmannVisible = false;
+    this.bridgeVisible = false;
     const c = system.config;
     this.nodes['time-total'].textContent = ` / ${c.duration.toFixed(1)} s`;
     this.nodes.timeline.setAttribute('aria-valuemax', c.duration);
     this.nodes.timeline.setAttribute('aria-label', `Progresso da sequência de ${c.duration} segundos`);
     document.getElementById('chart-duration').textContent = `0 — ${c.duration} s`;
     document.getElementById('particle-count').textContent = `N = ${c.particleCount}`;
-    document.getElementById('particles').setAttribute('aria-label', `${c.particleCount} partículas: a agitação diminui e uma rede triangular emerge durante o resfriamento.`);
+    document.getElementById('particles').setAttribute('aria-label', `Animação conceitual de ${c.particleCount} partículas: alta temperatura produz maior agitação; o resfriamento reduz as flutuações e favorece configurações de menor energia relativa, com distorções residuais.`);
     const phases = system.model.phaseTimes;
-    const boundaries = [phases.coolingStart, phases.coolingEnd, phases.orderingEnd];
-    const ticks = ['tick-cooling', 'tick-ordering', 'tick-hold'];
+    const boundaries = [phases.coolingStart, phases.coolingEnd];
+    const ticks = ['tick-cooling', 'tick-lower-energy'];
     for (let i = 0; i < ticks.length; i++) document.getElementById(ticks[i]).style.left = `${boundaries[i] / c.duration * 100}%`;
-    this.nodes['timeline-labels'].style.gridTemplateColumns = `${phases.coolingStart}fr ${phases.coolingEnd - phases.coolingStart}fr ${phases.orderingEnd - phases.coolingEnd}fr ${c.duration - phases.orderingEnd}fr`;
+    this.nodes['timeline-labels'].style.gridTemplateColumns = `${phases.coolingStart}fr ${phases.coolingEnd - phases.coolingStart}fr ${c.duration - phases.coolingEnd}fr`;
+    const starts = [0, phases.coolingStart, phases.coolingEnd];
+    const ends = [phases.coolingStart, phases.coolingEnd, phases.finalEnd];
+    const labels = this.nodes['timeline-labels'].children;
+    for (let i = 0; i < labels.length; i++) {
+      labels[i].textContent = `${starts[i].toFixed(1)}–${ends[i].toFixed(1)} s  ${VIEW.phaseNames[i]}`;
+    }
   }
   temperatureColor(value) {
     const low = value < 0.5;
@@ -850,9 +913,11 @@ class HUD {
     if (s.phase !== this.lastPhase) {
       this.lastPhase = s.phase;
       n.phase.textContent = VIEW.phaseNames[s.phase];
+      n['phase-kicker'].textContent = `${String(s.phase + 1).padStart(2, '0')} / ${VIEW.phaseNames[s.phase]}`;
+      n['phase-title'].textContent = VIEW.phaseTitles[s.phase];
       const labels = n['timeline-labels'].children;
       for (let i = 0; i < labels.length; i++) labels[i].classList.toggle('active', i === s.phase);
-      n.announcement.textContent = `Fase ${s.phase + 1}: ${VIEW.phaseNames[s.phase]}.`;
+      n.announcement.textContent = VIEW.phaseAnnouncements[s.phase];
     }
   }
   animate() {
@@ -862,13 +927,30 @@ class HUD {
     n['timeline-progress'].style.transform = `scaleX(${s.progress})`;
     n['timeline-needle'].style.left = `${s.progress * 100}%`;
     const phases = s.model.phaseTimes;
-    const starts = [0, phases.coolingStart, phases.coolingEnd, phases.orderingEnd];
+    const starts = [0, phases.coolingStart, phases.coolingEnd];
     const phaseAge = s.time - starts[s.phase];
-    const pulse = s.phase > 0 ? 0.055 * Math.pow(1 - clamp(phaseAge / VIEW.phasePulseSeconds), 2) : 0;
-    n['phase-card'].style.setProperty('--phase-pulse', pulse);
-    const bridge = smoothstep((s.time - (s.config.duration - VIEW.bridgeLastSeconds)) / VIEW.bridgeFadeSeconds);
+    const timeScale = s.config.duration / PHASES.finalEnd;
+    const phaseReveal = s.phase === 0 ? 1 : smoothstep(phaseAge / (VIEW.phaseFadeSeconds * timeScale));
+    n['phase-overlay'].style.opacity = 0.55 + 0.45 * phaseReveal;
+    n['phase-overlay'].style.transform = `translateY(${4 * (1 - phaseReveal)}px)`;
+    const referenceTime = s.time / timeScale;
+    const weight = smoothstep((referenceTime - VIEW.boltzmannStart) / VIEW.boltzmannFadeSeconds)
+      * smoothstep((VIEW.boltzmannEnd - referenceTime) / VIEW.boltzmannFadeSeconds);
+    n.boltzmann.style.opacity = weight;
+    n.boltzmann.style.transform = `translateY(${4 * (1 - weight)}px)`;
+    n.boltzmann.setAttribute('aria-hidden', weight === 0 ? 'true' : 'false');
+    if (weight > 0 && !this.boltzmannVisible) {
+      n.announcement.textContent = 'Distribuição de Boltzmann como motivação física: p de x é proporcional a exp de menos E de x sobre k B vezes T. Em baixa T, energias altas são mais penalizadas. O motor é conceitual, sem amostragem canônica exata.';
+    }
+    this.boltzmannVisible = weight > 0;
+    const caption = smoothstep((s.time - phases.coolingEnd) / (VIEW.captionFadeSeconds * timeScale));
+    n['concept-caption'].style.opacity = caption;
+    n['concept-caption'].setAttribute('aria-hidden', caption === 0 ? 'true' : 'false');
+    const bridge = smoothstep((referenceTime - (PHASES.finalEnd - VIEW.bridgeLastSeconds)) / VIEW.bridgeFadeSeconds);
     n.bridge.style.opacity = bridge;
     n.bridge.setAttribute('aria-hidden', bridge === 0 ? 'true' : 'false');
+    if (bridge > 0 && !this.bridgeVisible) n.announcement.textContent = 'Ideia física: reduzir a temperatura reduz as flutuações e favorece configurações de menor energia. Essa ideia motiva o Simulated Annealing.';
+    this.bridgeVisible = bridge > 0;
   }
 }
 
@@ -983,7 +1065,7 @@ class Controls {
     if (wasPlaying !== timeline.playing) {
       controls.sync();
       if (!timeline.playing && system.time === CONFIG.duration) {
-        document.getElementById('announcement').textContent = 'Sequência concluída. Configuração mais ordenada e de menor energia relativa. Pressione R para reproduzir novamente.';
+        document.getElementById('announcement').textContent = 'Sequência conceitual concluída. Configurações de menor energia favorecidas, com distorções residuais. A ideia física motiva o Simulated Annealing. Pressione R para reproduzir novamente.';
       }
       wasPlaying = timeline.playing;
     }
