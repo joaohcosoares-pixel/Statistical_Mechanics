@@ -1,0 +1,392 @@
+[
+  {
+    "simulation": 2,
+    "downloadObservedOnDisk": true,
+    "scientificDataMatchesWithinMachinePrecision": true,
+    "decisionsStatesAndRandomDrawsExact": true,
+    "maxAbsoluteRuntimeDifference": 1.2212453270876722e-15,
+    "presentationContractStatus": "PASS",
+    "checks": 13,
+    "sha256": "0bd87c46f77492826c0e7083ea0b1f366ee12a801087f88af50604fbbc6000ab",
+    "roundoffDifferences": [
+      {
+        "field": ".calibration.min",
+        "chromium": 0.6430624439100275,
+        "node": 0.6430624439100274,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".calibration.oscillation",
+        "chromium": 0.6418547795763387,
+        "node": 0.6418547795763389,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".summary.min",
+        "chromium": 0.6430624439100275,
+        "node": 0.6430624439100274,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".summary.oscillation",
+        "chromium": 0.6418547795763387,
+        "node": 0.6418547795763389,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".events[9].probability",
+        "chromium": 0.7543355458678355,
+        "node": 0.7543355458678356,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".events[15].probability",
+        "chromium": 0.7043122652559545,
+        "node": 0.7043122652559546,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".events[24].delta",
+        "chromium": -0.009864985154257488,
+        "node": -0.0098649851542576,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".events[24].after",
+        "chromium": 0.9935413429507612,
+        "node": 0.9935413429507611,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".events[25].delta",
+        "chromium": 0.018483319072565618,
+        "node": 0.01848331907256573,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".events[25].probability",
+        "chromium": 0.8212970582325553,
+        "node": 0.8212970582325543,
+        "absoluteDifference": 9.992007221626409e-16
+      },
+      {
+        "field": ".events[25].before",
+        "chromium": 0.9935413429507612,
+        "node": 0.9935413429507611,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".events[49].probability",
+        "chromium": 0.385068603883242,
+        "node": 0.38506860388324204,
+        "absoluteDifference": 5.551115123125783e-17
+      },
+      {
+        "field": ".events[74].probability",
+        "chromium": 0.7127326066543008,
+        "node": 0.7127326066543007,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".events[93].probability",
+        "chromium": 0.973455870689874,
+        "node": 0.9734558706898739,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".events[134].delta",
+        "chromium": 0.005291885106360805,
+        "node": 0.005291885106360916,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".events[134].probability",
+        "chromium": 0.9433678217338435,
+        "node": 0.9433678217338423,
+        "absoluteDifference": 1.2212453270876722e-15
+      },
+      {
+        "field": ".events[180].delta",
+        "chromium": 0.0005580735763680567,
+        "node": 0.0005580735763679456,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".events[180].probability",
+        "chromium": 0.9937809724653606,
+        "node": 0.9937809724653618,
+        "absoluteDifference": 1.2212453270876722e-15
+      },
+      {
+        "field": ".events[180].after",
+        "chromium": 0.813015446682052,
+        "node": 0.8130154466820518,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".events[181].delta",
+        "chromium": 0.00025162146886548165,
+        "node": 0.00025162146886559267,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".events[181].probability",
+        "chromium": 0.9971902960299543,
+        "node": 0.9971902960299531,
+        "absoluteDifference": 1.2212453270876722e-15
+      },
+      {
+        "field": ".events[181].before",
+        "chromium": 0.813015446682052,
+        "node": 0.8130154466820518,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".events[182].delta",
+        "chromium": 0.006390646619346962,
+        "node": 0.006390646619346851,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".events[182].probability",
+        "chromium": 0.9310114129749134,
+        "node": 0.9310114129749145,
+        "absoluteDifference": 1.1102230246251565e-15
+      },
+      {
+        "field": ".events[182].after",
+        "chromium": 0.8196577147702644,
+        "node": 0.8196577147702643,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".events[183].before",
+        "chromium": 0.8196577147702644,
+        "node": 0.8196577147702643,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".events[183].after",
+        "chromium": 0.8111650398268959,
+        "node": 0.8111650398268958,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".events[184].delta",
+        "chromium": -0.031439132857428276,
+        "node": -0.031439132857428165,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".events[184].before",
+        "chromium": 0.8111650398268959,
+        "node": 0.8111650398268958,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".events[187].delta",
+        "chromium": 0.06592965192711431,
+        "node": 0.0659296519271142,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".events[187].probability",
+        "chromium": 0.4777591856767002,
+        "node": 0.4777591856767008,
+        "absoluteDifference": 5.551115123125783e-16
+      },
+      {
+        "field": ".events[187].after",
+        "chromium": 0.8225453242868885,
+        "node": 0.8225453242868884,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".events[188].delta",
+        "chromium": -0.00330332740543704,
+        "node": -0.003303327405436929,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".events[188].before",
+        "chromium": 0.8225453242868885,
+        "node": 0.8225453242868884,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".events[233].probability",
+        "chromium": 0.37452331728585214,
+        "node": 0.3745233172858522,
+        "absoluteDifference": 5.551115123125783e-17
+      },
+      {
+        "field": ".events[237].probability",
+        "chromium": 0.812152746095422,
+        "node": 0.8121527460954221,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".events[256].probability",
+        "chromium": 0.6332004364842959,
+        "node": 0.633200436484296,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".events[270].delta",
+        "chromium": -0.006029753075406652,
+        "node": -0.006029753075406763,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".events[270].after",
+        "chromium": 0.6430624439100275,
+        "node": 0.6430624439100274,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".events[271].delta",
+        "chromium": 0.004328652012516865,
+        "node": 0.004328652012516976,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".events[271].probability",
+        "chromium": 0.9513006391494615,
+        "node": 0.9513006391494603,
+        "absoluteDifference": 1.2212453270876722e-15
+      },
+      {
+        "field": ".events[271].before",
+        "chromium": 0.6430624439100275,
+        "node": 0.6430624439100274,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".history[25].e",
+        "chromium": 0.9935413429507612,
+        "node": 0.9935413429507611,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".history[181].e",
+        "chromium": 0.813015446682052,
+        "node": 0.8130154466820518,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".history[183].e",
+        "chromium": 0.8196577147702644,
+        "node": 0.8196577147702643,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".history[184].e",
+        "chromium": 0.8111650398268959,
+        "node": 0.8111650398268958,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".history[188].e",
+        "chromium": 0.8225453242868885,
+        "node": 0.8225453242868884,
+        "absoluteDifference": 1.1102230246251565e-16
+      },
+      {
+        "field": ".history[271].e",
+        "chromium": 0.6430624439100275,
+        "node": 0.6430624439100274,
+        "absoluteDifference": 1.1102230246251565e-16
+      }
+    ]
+  },
+  {
+    "simulation": 3,
+    "downloadObservedOnDisk": true,
+    "scientificDataMatchesWithinMachinePrecision": true,
+    "decisionsStatesAndRandomDrawsExact": true,
+    "maxAbsoluteRuntimeDifference": 2.7755575615628914e-17,
+    "presentationContractStatus": "PASS",
+    "checks": 19,
+    "sha256": "3e4d590c5f5f5cc62176669858080175502a7d90a3d00ff0bdf75a708f615e4d",
+    "roundoffDifferences": [
+      {
+        "field": ".caseA.currentResult.roads[11].delay",
+        "chromium": 0.12149303453163898,
+        "node": 0.12149303453163901,
+        "absoluteDifference": 2.7755575615628914e-17
+      },
+      {
+        "field": ".caseA.currentResult.roads[25].delay",
+        "chromium": 0.11590563408708414,
+        "node": 0.11590563408708415,
+        "absoluteDifference": 1.3877787807814457e-17
+      },
+      {
+        "field": ".caseA.candidateResult.roads[11].delay",
+        "chromium": 0.12149303453163898,
+        "node": 0.12149303453163901,
+        "absoluteDifference": 2.7755575615628914e-17
+      },
+      {
+        "field": ".caseA.candidateResult.roads[25].delay",
+        "chromium": 0.11590563408708414,
+        "node": 0.11590563408708415,
+        "absoluteDifference": 1.3877787807814457e-17
+      },
+      {
+        "field": ".pairedUphill.currentResult.roads[11].delay",
+        "chromium": 0.12149303453163898,
+        "node": 0.12149303453163901,
+        "absoluteDifference": 2.7755575615628914e-17
+      },
+      {
+        "field": ".pairedUphill.currentResult.roads[25].delay",
+        "chromium": 0.11590563408708414,
+        "node": 0.11590563408708415,
+        "absoluteDifference": 1.3877787807814457e-17
+      },
+      {
+        "field": ".pairedUphill.candidateResult.roads[11].delay",
+        "chromium": 0.12149303453163898,
+        "node": 0.12149303453163901,
+        "absoluteDifference": 2.7755575615628914e-17
+      },
+      {
+        "field": ".pairedUphill.candidateResult.roads[25].delay",
+        "chromium": 0.11590563408708414,
+        "node": 0.11590563408708415,
+        "absoluteDifference": 1.3877787807814457e-17
+      }
+    ]
+  },
+  {
+    "simulation": 4,
+    "downloadObservedOnDisk": true,
+    "scientificDataMatchesWithinMachinePrecision": true,
+    "decisionsStatesAndRandomDrawsExact": true,
+    "maxAbsoluteRuntimeDifference": 2.7755575615628914e-17,
+    "presentationContractStatus": "PASS",
+    "checks": 17,
+    "sha256": "6aba1934b1d98ab91ec8227962baf037cf10db017a93bb0b5f424808d98a5617",
+    "roundoffDifferences": [
+      {
+        "field": ".bestResult.delays[8]",
+        "chromium": 0.1103914070244802,
+        "node": 0.11039140702448018,
+        "absoluteDifference": 2.7755575615628914e-17
+      },
+      {
+        "field": ".finalResult.delays[8]",
+        "chromium": 0.1103914070244802,
+        "node": 0.11039140702448018,
+        "absoluteDifference": 2.7755575615628914e-17
+      },
+      {
+        "field": ".validation.lateFluctuation",
+        "chromium": 0.00010191456483240998,
+        "node": 0.00010191456483240718,
+        "absoluteDifference": 2.8053731213062427e-18
+      }
+    ]
+  }
+]

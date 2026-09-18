@@ -1,75 +1,25 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="dark">
-<meta name="description" content="Simulação 02: rede urbana sintética, custo ponderado por demanda e exploração em alta temperatura computacional. Próxima etapa: mínimos locais. Offline e determinística.">
-<title>SIMULAÇÃO 02 — REDE URBANA / ESTADO INICIAL</title>
-<style>
-:root{color-scheme:dark;--bg:#0f111a;--panel:#151823;--secondary:#191c2a;--text:#f8f8f2;--muted:#8b93a7;--cyan:#8be9fd;--purple:#bd93f9;--green:#50fa7b;--orange:#ffb86c;--red:#ff5555;--line:#2a303f;--mono:"SFMono-Regular",Consolas,"Liberation Mono",monospace;font-family:"Segoe UI",Arial,sans-serif}
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#090b11;color:var(--text)}
-body{display:grid;place-items:center}body.recording{user-select:none;-webkit-user-select:none}.recording canvas{cursor:none}
-#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;flex-shrink:0;background:var(--bg);transform-origin:center;overflow:hidden}
-header{position:absolute;left:48px;right:48px;top:39px}.eyebrow,.mono,.label,.badge,button,footer{font-family:var(--mono);font-variant-numeric:tabular-nums}
-.eyebrow{font-size:12px;letter-spacing:.14em;color:var(--muted);display:flex;align-items:center;gap:14px}.eyebrow::before{content:"";width:26px;height:1px;background:var(--cyan)}
-h1{font-size:43px;font-weight:500;letter-spacing:-.035em;margin:20px 0 12px}h1 span{color:var(--muted);font-weight:300}
-.subtitle{font:15px var(--mono);color:#b0b9cb;margin:0}.origin{font:12px var(--mono);color:var(--muted);margin-top:13px}
-.identity{position:absolute;right:0;top:0;text-align:right}.badge{display:inline-flex;align-items:center;gap:10px;border:1px solid #354151;padding:10px 14px;border-radius:3px;color:#c5d3df;font-size:11px;letter-spacing:.09em}.badge::before{content:"";width:5px;height:5px;background:var(--cyan);border-radius:50%}.identity p{color:var(--muted);font:11px var(--mono);margin-top:16px;letter-spacing:.07em}
-#network-panel{position:absolute;left:48px;top:224px;width:1264px;height:664px;border:1px solid #303847;border-radius:5px;background:radial-gradient(ellipse at 50% 45%,#171d2a,#121620 78%);overflow:hidden}
-.panel-head{position:absolute;left:26px;right:26px;top:23px;display:flex;justify-content:space-between;align-items:center;font:11px var(--mono);letter-spacing:.08em;color:#aeb9cc}.panel-head span:last-child{color:var(--muted)}
-#network{position:absolute;left:0;top:52px;width:1264px;height:570px}.map-foot{position:absolute;left:26px;right:26px;bottom:19px;display:flex;align-items:center;justify-content:space-between;color:var(--muted);font:10px var(--mono);letter-spacing:.04em}
-.legend{display:flex;align-items:center;gap:17px}.swatch{display:inline-block;width:17px;height:3px;margin-right:6px;vertical-align:middle}.cyan{color:var(--cyan)}.purple{color:var(--purple)}.orange{color:var(--orange)}
-#hud{position:absolute;left:1360px;right:48px;top:226px;height:662px}.hud-head{font:12px var(--mono);letter-spacing:.12em;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:16px;display:flex;justify-content:space-between}
-.metric{border-bottom:1px solid var(--line);padding:17px 0 14px;position:relative}.label{font-size:12px;letter-spacing:.09em;color:#b6bfd0}.metric-line{display:flex;justify-content:space-between;align-items:baseline;margin-top:5px}.value{font:52px/1.13 var(--mono);letter-spacing:-.055em}.unit{font:11px var(--mono);color:var(--muted)}.tag{font:10px var(--mono);letter-spacing:.10em;color:var(--orange)}.note{font:10px/1.5 var(--mono);color:var(--muted);margin-top:6px}
-.track{height:4px;background:#292c3a;margin-top:12px;overflow:hidden;border-radius:2px}.fill{height:100%;width:100%;transform-origin:left;background:linear-gradient(90deg,var(--purple),var(--orange))}
-#temperatureMetric{padding-top:18px}#temperature{color:var(--orange)}#energy{color:var(--purple)}#acceptance{color:var(--cyan)}
-#energyGraph{display:block;width:504px;height:78px;margin-top:4px}.chart-notes{display:flex;justify-content:space-between;color:var(--muted);font:10px var(--mono)}
-.accept-metric{padding-top:13px}.accept-metric .value{font-size:45px}.counts{display:flex;gap:24px;font:11px var(--mono);color:var(--muted);margin-top:9px}.counts b{font-weight:400;color:var(--text);font-size:14px;margin-left:6px}
-.secondary{display:grid;grid-template-columns:1.35fr 1fr;gap:22px;padding:12px 0 9px;border-bottom:1px solid var(--line)}.secondary .label{font-size:10px}.secondary .number{font:23px var(--mono);margin-top:5px}.secondary .note{font-size:9px;margin-top:4px}
-.microstate{padding:10px 0}.microstate .label{font-size:10px}.vector{font:13px var(--mono);color:#c3b1dc;margin-top:8px}.phase{border-left:2px solid var(--orange);padding-left:12px;font:11px var(--mono);letter-spacing:.05em;color:var(--orange);margin-top:3px}
-.emphasis .tag{color:var(--text)}.emphasis #temperatureMetric,.emphasis .accept-metric{background:linear-gradient(90deg,transparent,rgba(189,147,249,.06));border-bottom-color:#51445f}
-#timeline{position:absolute;left:48px;right:48px;top:913px}.time-track{position:relative;height:3px;background:#292f3d}.time-progress{position:absolute;inset:0;background:#b9cbd6;transform:scaleX(0);transform-origin:left}.ticks{display:grid;grid-template-columns:2fr 4fr 5fr 3fr;margin-top:13px;font:10px var(--mono);color:#78849a;letter-spacing:.06em}.ticks span.active{color:#dae5ec}.ticks b{font-weight:400;opacity:.6;margin-right:8px}.clock{position:absolute;right:0;top:-28px;font:13px var(--mono);color:#bcc7d6}
-#narrative{position:absolute;left:48px;right:48px;top:969px;height:46px;display:flex;align-items:center;justify-content:space-between}.concept{font-size:19px;color:#bec9d9;letter-spacing:.01em}.concept .arrow{color:#626e85;margin:0 17px}.formula{font:13px var(--mono);color:var(--muted)}
-#objective-note{position:absolute;right:0;top:89px;width:676px;border-left:2px solid #51445f;padding-left:16px;font:11px/1.65 var(--mono);color:var(--muted)}#objective-note strong{font-size:13px;font-weight:400;color:#d0c0e9}
-#bridge{position:absolute;left:48px;right:48px;top:224px;height:664px;z-index:3;border:1px solid #343c4a;border-radius:5px;padding:86px;gap:70px;background:rgba(15,17,26,.94);opacity:0;visibility:hidden;pointer-events:none;display:grid;grid-template-columns:1.1fr 1fr;align-items:center}.bridge-main{font:36px/1.45 var(--mono);color:var(--text)}.bridge-main strong{font-weight:500;color:var(--orange)}.bridge-kicker{font:12px/1.8 var(--mono);color:var(--muted);letter-spacing:.08em;margin-bottom:25px}.bridge-next{font:20px/1.8 var(--mono);color:#bdc7d8;border-left:1px solid #343c4a;padding-left:54px}.bridge-next strong{display:block;margin-top:25px;font-weight:500;font-size:29px;color:var(--cyan);letter-spacing:.02em}
-footer{position:absolute;left:48px;right:48px;bottom:18px;padding-top:13px;border-top:1px solid #242a38;display:flex;justify-content:space-between;align-items:center;font-size:9px;letter-spacing:.04em;color:var(--muted)}
-#controls{display:flex;gap:8px;align-items:center}button{height:29px;padding:0 11px;border:1px solid #344052;background:#181e2a;color:#c3d4e0;border-radius:3px;font-size:9px;letter-spacing:.05em;cursor:pointer}button:hover{border-color:var(--cyan);color:var(--cyan)}button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}#play{border-color:#47606f}.key-help{margin-left:8px;font-size:9px}#controls.hidden{visibility:hidden}
-.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}#error{position:absolute;inset:0;z-index:20;background:var(--bg);color:var(--orange);padding:140px;font:24px/1.7 var(--mono)}#error[hidden]{display:none}
-</style>
-</head>
-<body>
-<main id="stage" aria-label="Simulação 02 — Rede urbana / estado inicial">
- <header>
-  <div class="eyebrow">SEMANA DA FÍSICA / UFG <span>·</span> COMPUTATIONAL PHYSICS <span>·</span> SIMULAÇÃO 02</div>
-  <h1>URBAN NETWORK <span>//</span> INITIAL STATE</h1>
-  <p class="subtitle">Simulated Annealing // High-Temperature Regime</p>
-  <p class="origin">Modelo conceitual inspirado qualitativamente em Goiânia <span style="color:#536078"> / </span> REDE SINTÉTICA NÃO GEOREFERENCIADA</p>
-  <div class="identity"><span class="badge">ANIMAÇÃO COMPUTACIONAL</span><p>02 / 05 &nbsp; REDE URBANA / ESTADO INICIAL</p></div>
-  <aside id="objective-note" aria-label="Definição do custo computacional"><strong>OBJECTIVE · E(x) = Σⱼ wⱼ dⱼ(x) / d_ref</strong><br>wⱼ = qⱼ / Σₖ qₖ · E: custo computacional adimensional<br>dⱼ: atraso conceitual do segmento · qⱼ: demanda relativa fixa<br>d_ref = 0.25 · escala fixa de normalização</aside>
- </header>
- <section id="network-panel" aria-label="Modelo urbano conceitual inspirado em Goiânia">
-  <div class="panel-head"><span>MICROSTATE FIELD <span style="color:#5d6b82">/</span> CONFIGURAÇÃO SEMAFÓRICA</span><span id="topology"></span></div>
-  <canvas id="network" role="img" aria-label="Rede sintética: a cor representa atraso conceitual do segmento; partículas representam intensidade relativa de fluxo, sem contagem de veículos.">Rede urbana conceitual com 16 sinais e 26 segmentos. Os arcos representam as frações de verde do estado x.</canvas>
-  <div class="map-foot"><div class="legend"><span>ATRASO CONCEITUAL DO SEGMENTO dⱼ</span><span><i class="swatch" style="background:var(--cyan)"></i>BAIXO</span><span><i class="swatch" style="background:var(--orange)"></i>MODERADO</span><span><i class="swatch" style="background:var(--red)"></i>ALTO</span></div><span>FLUXO ILUSTRATIVO · DENSIDADE RELATIVA</span></div>
- </section>
- <aside id="hud" aria-label="Métricas computacionais">
-  <div class="hud-head"><span>URBAN NETWORK STATE</span><span class="orange">● HIGH-T</span></div>
-  <section class="metric" id="temperatureMetric"><div class="label">TEMPERATURE T</div><div class="metric-line"><span class="value" id="temperature">—</span><span class="unit">T / T₀</span><span class="tag">HIGH</span></div><div class="track"><div class="fill" id="temperatureBar"></div></div><div class="note">T = temperatura computacional · <span id="actualT"></span></div></section>
-  <section class="metric"><div class="label">OBJECTIVE ENERGY E</div><div class="metric-line"><span class="value" id="energy">—</span><span class="tag" id="energyLevel"></span></div><div class="note">CUSTO PONDERADO NORMALIZADO · ADIMENSIONAL</div><canvas id="energyGraph" role="img" aria-label="Histórico real de E(t): o custo instantâneo pode subir.">Histórico em degraus da energia da cadeia de alta temperatura.</canvas><div class="chart-notes"><span>E(t) · <span id="energyRange"></span></span><span>CURRENT COST CAN RISE · 0—14 s</span></div></section>
-  <section class="metric accept-metric"><div class="label">ACCEPTANCE RATE</div><div class="metric-line"><span class="value" id="acceptance">—</span><span class="unit">% / acumulada</span></div><div class="counts"><span>ACCEPTED <b id="accepted">0</b></span><span>REJECTED <b id="rejected">0</b></span><span>ΔE &gt; 0 ✓ <b id="uphill">0</b></span></div></section>
-  <section class="secondary"><div><div class="label" id="diagnosticLabel">MEAN SEGMENT DELAY / d_ref</div><div class="number" id="meanDelay">—</div><div class="note">Média simples dos 26 segmentos · diagnóstico</div></div><div><div class="label">ITERATION</div><div class="number" id="iteration">00000</div></div></section>
-  <section class="microstate"><div class="label">MICROSTATE x · GREEN SPLITS sᵢ ∈ [0.20, 0.80]</div><div class="vector" id="stateVector"></div></section>
-  <div class="phase" id="phase" aria-live="polite" aria-atomic="true">INITIAL CONFIGURATION</div>
- </aside>
- <section id="timeline" aria-label="Sequência de 14 segundos, terminando em mínimos locais"><div class="clock"><span id="time">00.00</span> / 14.00 s</div><div class="time-track"><div class="time-progress" id="progress"></div></div><div class="ticks"><span><b>00—02</b>ESTADO INICIAL</span><span><b>02—06</b>HIGH-T EXPLORATION</span><span><b>06—11</b>ACTIVE EXPLORATION</span><span id="nextTick"><b>11—14</b>NEXT: LOCAL MINIMA</span></div></section>
- <div id="narrative"><div class="concept"><span class="orange">T alta</span><span class="arrow">→</span>exploração intensa<span class="arrow">→</span>muitas configurações acessíveis</div><div class="formula">P_acc = min[1, exp(−ΔE/T)] &nbsp; · &nbsp; k_B = 1</div></div>
- <section id="bridge" aria-label="Próxima etapa: problema dos mínimos locais" aria-hidden="true"><div class="bridge-main"><div class="bridge-kicker">HIGH-T EXPLORATION → MANY CONFIGURATIONS VISITED</div>POR QUE NÃO ACEITAR<br><strong>APENAS AS MELHORIAS?</strong></div><div class="bridge-next" id="bridgeNext">UMA BUSCA PURAMENTE GULOSA<br>PODE FICAR PRESA.<strong>→ MÍNIMOS LOCAIS</strong></div></section>
- <footer><span>MODELO URBANO CONCEITUAL — NÃO SÃO DADOS REAIS DE TRÁFEGO <span style="color:#525f75">/</span> SEM PREVISÃO DE TRÂNSITO</span><div id="controls"><button id="play" type="button" aria-label="Play / Pause">▶ PLAY</button><button id="restart" type="button" aria-label="Restart">↺ RESTART</button><span class="key-help">SPACE play/pause &nbsp; R restart &nbsp; H ocultar</span></div><span id="seedLabel"></span></footer>
- <p class="sr-only">Modelo urbano sintético e não georreferenciado, com 16 frações de verde e 26 segmentos. E é o custo adimensional dos atrasos conceituais ponderados pela demanda relativa fixa, dividido por d_ref = 0.25. A média simples dos atrasos dos segmentos é um diagnóstico separado. A temperatura computacional alta permite exploração intensa e a aceitação de algumas pioras: E pode subir. Não há dados reais nem previsão de trânsito. A próxima etapa apresenta o problema dos mínimos locais e pergunta por que não aceitar apenas melhorias.</p>
- <div id="error" role="alert" hidden></div>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Animação didática de recozimento simulado, com modelo conceitual e dados sintéticos. Funciona sem conexão."><link rel="icon" href="data:,">
+<title>Simulação 02 · O que o computador está tentando melhorar? — UFG</title><style>
+:root{color-scheme:dark;--bg:#0f111a;--text:#f8f8f2;--muted:#9da8bd;--cyan:#8be9fd;--purple:#bd93f9;--green:#50fa7b;--orange:#ffb86c;--red:#ff6868}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#090b11;color:var(--text);font-family:Arial,Helvetica,sans-serif}
+#stage{position:absolute;width:1920px;height:1080px;overflow:hidden;transform-origin:top left;background:var(--bg)}canvas{position:absolute;inset:0;width:1920px;height:1080px}
+header{position:absolute;left:76px;right:76px;top:50px;display:flex;justify-content:space-between;align-items:flex-start}header .series{color:var(--purple);font-size:16px;letter-spacing:2px;margin-bottom:20px}h1{font-size:46px;line-height:1.13;letter-spacing:-1.3px;font-weight:500;margin:0;max-width:1550px}#subtitle{font-size:25px;line-height:1.4;margin-top:18px;color:var(--muted)}.event{text-align:right;color:var(--muted);font-size:14px;line-height:1.7;letter-spacing:1px}.event b{color:var(--cyan);font-size:28px;letter-spacing:4px;font-weight:400}
+.mono,.value{font-family:Consolas,'Liberation Mono',monospace;font-variant-numeric:tabular-nums}.cyan{color:var(--cyan)}.purple{color:var(--purple)}.green{color:var(--green)}.orange{color:var(--orange)}.red{color:var(--red)}.muted{color:var(--muted)}
+#panel{position:absolute;left:1230px;top:302px;width:604px}#center{position:absolute;left:160px;right:160px;top:330px;text-align:center}#center.flow{top:294px}#center .concept{font-size:44px;line-height:1.3}#center .hero{font-size:64px;line-height:1.25;font-weight:500;letter-spacing:-1px}#center .detail{font-size:27px}.eyebrow{font-size:20px;letter-spacing:1.4px;margin:0 0 22px;color:var(--purple)}.concept{font-size:38px;line-height:1.28;font-weight:500;margin:0 0 25px;letter-spacing:-.4px}.detail{font-size:25px;line-height:1.5;color:var(--muted);margin:22px 0}.formula{font-size:30px;line-height:1.5;margin:28px 0}.note{font-size:16px;color:var(--muted);line-height:1.5}.value{font-size:58px;font-weight:400;line-height:1.15}.metric-label{font-size:20px;letter-spacing:.7px;margin-bottom:12px}.metric{margin-bottom:28px}.two{display:flex;gap:50px}.two>.metric{flex:1}.two .value{font-size:50px}.separator{height:1px;background:#2a3040;margin:30px 0}.big-symbol{font-size:94px;margin:12px 0 26px}.arrow{color:var(--muted);padding:0 32px;font-size:44px}.flow-row{display:flex;align-items:center;justify-content:center;gap:60px;margin:40px 0 54px}.flow-row small{display:block;font:22px Arial,sans-serif;color:var(--muted);margin-top:18px}.flow-row .symbol{font-size:100px}.pill{border-left:4px solid var(--purple);padding-left:24px;margin:32px 0}.comparison{display:flex;gap:140px;justify-content:center;text-align:left;margin:30px auto 0}.comparison>div{width:600px}.comparison .concept{font-size:38px}.comparison .value{font-size:52px}.summary{display:flex;justify-content:center;gap:100px;margin-top:55px}.summary>div{width:380px;text-align:left}.summary .metric-label{height:54px}.summary .value{font-size:54px}.bar{height:12px;border-radius:6px;background:#2a3040;overflow:hidden;margin:18px 0 34px}.bar>span{display:block;height:100%;background:var(--orange)}
+#mapCaption{position:absolute;left:92px;top:897px;color:var(--muted);font-size:18px;line-height:1.5;max-width:1050px}#mapCaption b{font-weight:400;color:var(--cyan)}footer{position:absolute;left:76px;right:76px;bottom:38px;display:flex;justify-content:space-between;font-size:15px;line-height:1.5;color:#8c98ae;border-top:1px solid #252b3b;padding-top:22px}#progress{position:absolute;bottom:0;height:3px;background:var(--purple);opacity:.7}#controls{position:absolute;bottom:100px;left:76px;right:76px;display:flex;align-items:center;gap:12px;padding:14px 18px;background:#151a28f5;border:1px solid #384058;border-radius:8px;font-size:17px;z-index:5}button,input,select{font:inherit;color:var(--text);border:1px solid #455069;background:#202737;border-radius:5px;padding:9px 12px}button{cursor:pointer}button:hover{border-color:var(--cyan)}:focus-visible{outline:3px solid var(--cyan);outline-offset:4px}#seek{width:106px}#chapters{max-width:360px}#clock{margin-left:auto;white-space:nowrap}.recording,.recording *{cursor:none!important;user-select:none!important}.recording #controls,.recording #debug{display:none!important;visibility:hidden!important;pointer-events:none!important}#debug{position:absolute;z-index:9;inset:220px 120px 170px;background:#111725f7;border:1px solid var(--purple);padding:32px;overflow:auto;font:16px/1.6 Consolas,monospace;white-space:pre-wrap}#debug[hidden],[hidden]{display:none!important}.sr-only{position:absolute!important;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}#error{position:absolute;z-index:20;left:200px;right:200px;top:400px;background:#30202b;padding:40px;border:2px solid var(--red);font-size:24px}
+
+#contextNote{font-size:16px;color:#929fb5;margin-top:14px;letter-spacing:.3px}.metric-label{font-size:23px}.eyebrow{font-size:23px}.series{font-size:16px!important}#mode{width:125px}#controls{gap:10px;padding:12px;font-size:16px}#chapters{max-width:310px}#clock{font-size:15px}.network-key{font-size:27px;line-height:1.9;color:var(--muted)}#center.comparison05{left:92px;right:92px;top:257px;text-align:left}.compare-05{display:grid;grid-template-columns:1fr 1fr;gap:150px}.compare-05 h2{font-size:30px;line-height:1.3;min-height:78px;margin:12px 0}.compare-05 .eyebrow{margin-bottom:12px}.compare-05 .metric{margin-top:465px}.compare-05 .value{font-size:56px}.compare-05 .metric-label{font-size:24px}.comparison-note{position:absolute;top:928px;left:94px;right:94px;font-size:16px;color:var(--muted)}
+
+</style></head>
+<body><main id="stage" aria-label="Simulação 02: O que o computador está tentando melhorar?">
+<canvas id="scene" width="1920" height="1080" role="img" aria-label="Rede urbana conceitual, com cores que indicam o atraso do modelo e pontos de fluxo ilustrativo">Os estados e resultados desta animação são descritos no texto da cena.</canvas>
+<header><div><div class="series">SIMULAÇÃO 02 · RECOZIMENTO SIMULADO</div><h1 id="title">O que o computador está tentando melhorar?</h1><div id="subtitle"></div><div id="contextNote"></div></div><div class="event"><b>UFG</b><br>XLIII SEMANA<br>DA FÍSICA</div></header>
+<section id="panel" aria-label="Explicação da cena"></section><section id="center" aria-label="Ideia principal"></section><div id="mapCaption"></div>
+<footer><span>MODELO CONCEITUAL · DADOS SINTÉTICOS · REDE NÃO GEORREFERENCIADA</span><span id="chapterLabel"></span></footer><div id="progress"></div>
+<nav id="controls" aria-label="Controles da animação"><label>Versão <select id="mode" aria-label="Versão da apresentação"><option value="video">Vídeo</option><option value="full">Completa</option></select></label><button id="play">Reproduzir</button><button id="restart">Reiniciar</button><label>Tempo <input id="seek" type="number" min="0" step="0.1" value="0" aria-label="Tempo da apresentação em segundos"></label><label>Cena <select id="chapters" aria-label="Escolher cena"></select></label><button id="record">Gravar do início</button><button id="export">Exportar JSON</button><button id="inspect" aria-expanded="false">Validações</button><span id="clock" class="mono"></span></nav>
+<pre id="debug" hidden aria-label="Relatório de validação"></pre><p id="status" class="sr-only" role="status" aria-live="polite"></p><div id="error" role="alert" hidden></div>
 </main>
-<noscript>Ative JavaScript para executar a simulação offline.</noscript>
 <script id="model">
 const Simulation02 = (() => {
   'use strict';
@@ -265,198 +215,272 @@ const Simulation02 = (() => {
     SignalConfiguration,TrafficModel,EnergyFunction,HistoryBuffer,Metrics,AnnealingEngine,calibrate,findReference,summarize,segmentDiagnostic,validateExperiment,clamp,mix,smooth};
 })();
 </script>
-<script>
-(() => {
-  'use strict';
-  const {CONFIG,NETWORK_CONFIG,INITIAL_STATE,PRNG,UrbanNetwork,AnnealingEngine,calibrate,segmentDiagnostic,validateExperiment,
-    AUTO_PLAY,RECORDING_MODE,clamp,mix,smooth}=Simulation02;
-  const $=id=>document.getElementById(id),TAU=Math.PI*2;
-  const PRESENTATION=Object.freeze({highStart:2,activeStart:6,nextStart:11,
-    bridgeStart:12.3,bridgeFull:13.0,bridgeNextStart:12.65,bridgeNextFull:13.2,
-    phases:Object.freeze(['INITIAL CONFIGURATION','HIGH-T EXPLORATION','ACTIVE EXPLORATION','NEXT: LOCAL MINIMA'])});
-  const phaseIndex=t=>t<PRESENTATION.highStart?0:t<PRESENTATION.activeStart?1:t<PRESENTATION.nextStart?2:3;
-  function validateNarrative(){
-    const check=(ok,message)=>{if(!ok)throw new Error('NARRATIVE VALIDATION FAILED: '+message);};
-    check($('objective-note').textContent.includes('E(x) = Σⱼ wⱼ dⱼ(x) / d_ref')&&$('objective-note').textContent.includes('wⱼ = qⱼ / Σₖ qₖ')&&$('objective-note').textContent.includes('d_ref = 0.25'),'Objective definition');
-    check($('diagnosticLabel').textContent==='MEAN SEGMENT DELAY / d_ref','Diagnostic label');
-    check($('nextTick').textContent.includes('NEXT: LOCAL MINIMA')&&PRESENTATION.phases[phaseIndex(CONFIG.duration)]==='NEXT: LOCAL MINIMA','Timeline and phase destination');
-    const bridge=$('bridge').textContent;
-    check(bridge.includes('POR QUE NÃO ACEITAR')&&bridge.includes('APENAS AS MELHORIAS?')&&bridge.includes('PODE FICAR PRESA.')&&bridge.includes('MÍNIMOS LOCAIS'),'Bridge destination');
-    check(!/metr[oó]polis|P_acc|Acceptance Rule|u\s*</i.test(bridge),'No acceptance tutorial in final card');
-    return Object.freeze({status:'PASS',objectiveDefinition:'PASS',diagnosticLabel:'PASS',nextScene:'LOCAL MINIMA'});
+<script id="presentation-common">/* Presentation only: no proposal, random draw, energy or acceptance is computed here. */
+const VideoPresentation = (() => {
+ 'use strict';
+ const C={bg:'#0f111a',text:'#f8f8f2',muted:'#9da8bd',cyan:'#8be9fd',purple:'#bd93f9',green:'#50fa7b',orange:'#ffb86c',red:'#ff6868'};
+ const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v)),lerp=(a,b,t)=>a+(b-a)*t;
+ const fmt=(v,n=3)=>Number(v).toLocaleString('pt-BR',{minimumFractionDigits:n,maximumFractionDigits:n});
+ const signed=(v,n=3)=>(v>0?'+':'')+fmt(v,n);
+ const metric=(label,value,color='cyan')=>`<div class="metric"><div class="metric-label">${label}</div><div class="value ${color}">${value}</div></div>`;
+ const concept=(text,color='')=>`<h2 class="concept ${color}">${text}</h2>`;
+ const detail=text=>`<p class="detail">${text}</p>`;
+ const note=text=>`<p class="note">${text}</p>`;
+ const eyebrow=text=>`<div class="eyebrow">${text}</div>`;
+ const phaseAt=(phases,t)=>phases.findLast(p=>t>=p.start)||phases[0];
+ const rgb=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+ function delayColor(d){const stops=[[.04,C.cyan],[.09,C.green],[.13,C.orange],[.28,'#ff5555']];let k=1;while(k<3&&d>stops[k][0])k++;const [a,ca]=stops[k-1],[b,cb]=stops[k],f=clamp((d-a)/(b-a)),aa=rgb(ca),bb=rgb(cb);return `rgb(${aa.map((v,i)=>Math.round(lerp(v,bb[i],f))).join(',')})`;}
+ function label(ctx,text,x,y,size=22,color=C.muted,align='left'){ctx.fillStyle=color;ctx.font=`${size}px Arial`;ctx.textAlign=align;ctx.fillText(text,x,y);ctx.textAlign='left';}
+ function line(ctx,x1,y1,x2,y2,color,width=2){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.strokeStyle=color;ctx.lineWidth=width;ctx.stroke();}
+ function dot(ctx,x,y,r,color){ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();}
+ function map(ctx,network,state,result,time,{rect={x:85,y:293,w:1065,h:562},focus=-1,opacity=1,particles=true,colorScale=delayColor}={}){
+  // Uniform affine transform preserves the canonical coordinates and all angles.
+  const scale=Math.min(rect.w/1100,rect.h/650),ox=rect.x+(rect.w-1100*scale)/2,oy=rect.y+(rect.h-650*scale)/2;
+  const points=network.nodes.map(n=>({x:ox+n.x*scale,y:oy+n.y*scale}));
+  ctx.save();ctx.globalAlpha=opacity;ctx.lineCap='round';
+  network.edges.forEach((e,j)=>{
+   const a=points[e.a],b=points[e.b],near=focus<0||e.a===focus||e.b===focus,d=result.roads?result.roads[j].delay:result.delays[j];
+   ctx.globalAlpha=opacity*(near?1:.14);line(ctx,a.x,a.y,b.x,b.y,'#242b3b',17);line(ctx,a.x,a.y,b.x,b.y,colorScale(d),5);
+   if(particles){const count=Math.max(3,Math.round(e.q*17));for(let k=0;k<count;k++){
+    const u=(k/count+time*(.035/(1+2*d))+(j*.137)%1)%1;
+    dot(ctx,lerp(a.x,b.x,u),lerp(a.y,b.y,u),2.7,'#f4f7ff');}}
+  });
+  points.forEach((p,i)=>{
+   const near=focus<0||i===focus;ctx.globalAlpha=opacity*(near?1:.16);
+   if(i===focus){const r=38;const grad=ctx.createRadialGradient(p.x,p.y,5,p.x,p.y,65);grad.addColorStop(0,'#bd93f94a');grad.addColorStop(1,'#bd93f900');ctx.fillStyle=grad;ctx.fillRect(p.x-65,p.y-65,130,130);ctx.strokeStyle=C.purple;ctx.lineWidth=2;ctx.beginPath();ctx.arc(p.x,p.y,r,0,Math.PI*2);ctx.stroke();}
+   dot(ctx,p.x,p.y,14,C.bg);ctx.strokeStyle=near?'#7f8ba4':'#394258';ctx.lineWidth=2;ctx.beginPath();ctx.arc(p.x,p.y,14,0,Math.PI*2);ctx.stroke();
+   const g=state.values?state.values[i]:state[i],green=((time/4.8+network.nodes[i].offset)%1)<g;
+   dot(ctx,p.x-5,p.y,3.7,green?C.green:C.red);dot(ctx,p.x+5,p.y,3.7,green?C.red:C.green);
+   if(i===focus)label(ctx,String(i+1).padStart(2,'0'),p.x,p.y+66,26,C.purple,'center');
+  });ctx.restore();return points;
+ }
+ function chart(ctx,points,{x=1230,y=685,w=594,h=180,duration=16,best=true,highlight='',max=1.1}={}){
+  const px=t=>x+clamp(t/duration)*w,py=e=>y+h-clamp(e/max)*h;
+  ctx.save();ctx.lineCap='round';
+  for(let k=0;k<=2;k++){const yy=y+k*h/2;line(ctx,x,yy,x+w,yy,'#293044',1);}
+  const draw=(key,color,width)=>{ctx.beginPath();points.forEach((p,i)=>{if(i)ctx.lineTo(px(p.t),py(p[key]));else ctx.moveTo(px(p.t),py(p[key]));});ctx.lineWidth=width;ctx.strokeStyle=color;ctx.stroke();};
+  draw('e',C.cyan,3);if(best)draw('best',C.green,4);
+  const last=points.at(-1);if(last){dot(ctx,px(last.t),py(last.e),5,C.cyan);if(best)dot(ctx,px(last.t),py(last.best),5,C.green);
+   if(highlight){const key=highlight==='best'?'best':'e',color=key==='best'?C.green:C.cyan;ctx.strokeStyle=color;ctx.lineWidth=2;ctx.beginPath();ctx.arc(px(last.t),py(last[key]),13,0,Math.PI*2);ctx.stroke();}}
+  label(ctx,'início',x,y+h+28,17);label(ctx,'fim da execução',x+w,y+h+28,17,C.muted,'right');label(ctx,'E',x-18,y+6,18);
+  ctx.restore();
+ }
+ function ruler(ctx,P,u,{x=1230,y=688,w=594,showU=false,showTest=false,decision=null,stationary=false}={}){
+  ctx.save();ctx.fillStyle='#33303e';ctx.fillRect(x,y,w,30);ctx.fillStyle='#50fa7b99';ctx.fillRect(x,y,w*P,30);
+  label(ctx,'0',x,y+61,20);label(ctx,'1',x+w,y+61,20,C.muted,'right');
+  label(ctx,'ACEITA',x,y+99,20,C.green);label(ctx,'REJEITA',x+w,y+99,20,C.red,'right');
+  line(ctx,x+w*P,y-28,x+w*P,y+34,C.green,3);
+  label(ctx,`P = ${fmt(P)}`,x+w*P,y-44,22,C.green,'center');
+  if(showU){const ux=x+w*u;line(ctx,ux,y+32,ux,y+123,C.purple,3);dot(ctx,ux,y+15,7,C.purple);label(ctx,`u = ${fmt(u)}${stationary?' · não muda':''}`,ux,y+154,22,C.purple,'center');}
+  if(showTest)label(ctx,decision===null?(u<P?'u < P':'u ≥ P'):(decision?'✓ ACEITAR':'× REJEITAR'),x+w/2,y+215,36,decision===null?C.text:decision?C.green:C.red,'center');
+  ctx.restore();
+ }
+ function commonContract(spec,frames){
+  const checks=[];const check=(ok,label)=>{checks.push({label,pass:!!ok});};
+  check(document.documentElement.lang==='pt-BR','Idioma da apresentação: português');
+  check(document.querySelectorAll('#scene').length===1,'Um único Canvas de apresentação');
+  check(!document.querySelector('script[src],link[rel="stylesheet"]'),'Sem bibliotecas ou folhas externas');
+  check(frames.every(f=>!/(URBAN NETWORK|INITIAL STATE|HIGH.T EXPLORATION|ACCEPTANCE RATE|CURRENT ENERGY|BEST ENERGY FOUND|RUNNING MINIMUM)/.test([f.title,f.subtitle,f.panel,f.center,f.caption].join(' '))),'Conceitos visíveis em português');
+  check(frames.every(f=>(f.graphs||0)<=1&&(f.pair||(f.importantNumbers||0)<=3)),'Até um gráfico e três números principais; exceção explícita para a comparação pareada');
+  const styles=[...document.styleSheets].flatMap(s=>[...s.cssRules].map(r=>r.cssText)).join('\n');
+  check(styles.includes('.recording #controls')&&styles.includes('display: none !important'),'Controles ocultos no modo de gravação');
+  check(styles.includes('cursor: none !important'),'Cursor oculto em toda a gravação');
+  check(frames.every(f=>!/(ÓTIMO GLOBAL|SOLUÇÃO ÓTIMA|MELHOR CONFIGURAÇÃO POSSÍVEL)/.test([f.title,f.panel,f.center].join(' ').replaceAll('SEM GARANTIA DE ÓTIMO GLOBAL',''))),'Sem promessa de ótimo global');
+  return checks;
+ }
+ function mount(spec){
+  const $=id=>document.getElementById(id),params=new URLSearchParams(location.search),canvas=$('scene'),ctx=canvas.getContext('2d');
+  let recording=params.has('recording')?params.get('recording')!=='0':spec.mode==='video',time=clamp(Number(params.get('t'))||0,0,spec.duration),running=params.has('autoplay')?params.get('autoplay')==='1':recording,last=performance.now(),lastPhase='',lastHUD=-Infinity;
+  const setRecording=v=>{recording=v;document.body.classList.toggle('recording',v);$('controls').inert=v;$('debug').hidden=true;$('inspect').setAttribute('aria-expanded','false');};
+  setRecording(recording);$('seek').max=spec.duration;
+  $('mode').value=spec.mode;
+  $('mode').onchange=()=>{const url=new URL(location.href);url.searchParams.set('mode',$('mode').value);url.searchParams.set('recording','0');url.searchParams.set('autoplay','0');url.searchParams.delete('t');location.href=url.href;};
+  spec.phases.forEach(p=>{const o=document.createElement('option');o.value=p.start;o.textContent=p.name;$('chapters').append(o);});
+  function resize(){const s=Math.min(innerWidth/1920,innerHeight/1080),stage=$('stage');stage.style.transform=`scale(${s})`;stage.style.left=(innerWidth-1920*s)/2+'px';stage.style.top=(innerHeight-1080*s)/2+'px';}
+  function setHTML(el,html){if(el.innerHTML!==html)el.innerHTML=html;}
+  function render(force=false){
+   const f=spec.at(time),phase=phaseAt(spec.phases,time);ctx.clearRect(0,0,1920,1080);spec.draw(ctx,f,time);
+   if(force||time-lastHUD>=.1||lastPhase!==phase.name||!running){
+    $('title').textContent=f.title??spec.title;$('subtitle').textContent=f.subtitle||'';
+    $('contextNote').textContent=spec.context||'';
+    setHTML($('panel'),f.panel||'');setHTML($('center'),f.center||'');$('center').className=f.centerClass||'';
+    $('panel').hidden=!f.panel;$('center').hidden=!f.center;setHTML($('mapCaption'),f.caption||'');
+    $('chapterLabel').textContent=phase.name;$('clock').textContent=fmt(time,1)+' / '+fmt(spec.duration,1)+' s';
+    if(document.activeElement!==$('seek'))$('seek').value=time.toFixed(1);
+    $('chapters').value=phase.start;$('play').textContent=running?'Pausar':'Reproduzir';$('play').setAttribute('aria-label',running?'Pausar animação':'Reproduzir animação');lastHUD=time;
+   }
+   // Gentle entry belongs to presentation time, never to the scientific clock.
+   const enter=clamp((time-phase.start)/.45);$('panel').style.opacity=.35+.65*enter;$('center').style.opacity=.35+.65*enter;
+   $('progress').style.width=1920*time/spec.duration+'px';
+   canvas.setAttribute('aria-label',f.accessible||'Rede conceitual: cores indicam atraso do modelo; pontos são fluxo ilustrativo.');
+   $('stage').dataset.phase=phase.name;$('stage').dataset.time=time.toFixed(3);$('stage').dataset.scientificTime=String(f.scientificTime??'');
+   $('stage').dataset.decision=f.decision===undefined?'':String(f.decision);$('stage').dataset.validation=spec.presentationValidation.status;
+   $('stage').dataset.mode=spec.mode;$('stage').dataset.duration=String(spec.duration);$('stage').dataset.probability=f.showRuler?String(f.P):'';$('stage').dataset.draw=f.showU?String(f.u):'';$('stage').dataset.drawPosition=f.showU?String(1230+594*f.u):'';
+   if(lastPhase!==phase.name){$('status').textContent=phase.name+'. '+(f.accessible||'');lastPhase=phase.name;}
   }
-  const C={bg:'#0f111a',panel:'#151823',muted:'#8b93a7',text:'#f8f8f2',cyan:'#8be9fd',
-    purple:'#bd93f9',orange:'#ffb86c',red:'#ff5555',line:'#2a303f'};
-  const mono='Consolas,"Liberation Mono",monospace';
-  function fitCanvas(canvas,w,h){const rect=canvas.getBoundingClientRect(),dpr=window.devicePixelRatio||1;
-    canvas.width=Math.max(1,Math.round(rect.width*dpr));canvas.height=Math.max(1,Math.round(rect.height*dpr));
-    const ctx=canvas.getContext('2d');ctx.setTransform(canvas.width/w,0,0,canvas.height/h,0,0);return ctx;}
-  function line(ctx,x1,y1,x2,y2,color,width=1){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.strokeStyle=color;ctx.lineWidth=width;ctx.stroke();}
-  function circle(ctx,x,y,r,color){ctx.beginPath();ctx.arc(x,y,r,0,TAU);ctx.fillStyle=color;ctx.fill();}
-  function text(ctx,value,x,y,size=11,color=C.muted,align='left'){ctx.font=`${size}px ${mono}`;ctx.fillStyle=color;ctx.textAlign=align;ctx.fillText(value,x,y);}
-  function delayColor(delay){const stops=[[.04,[139,233,253]],[.13,[255,184,108]],[.28,[255,85,85]]];
-    const lo=delay<.13?stops[0]:stops[1],hi=delay<.13?stops[1]:stops[2],a=clamp((delay-lo[0])/(hi[0]-lo[0]),0,1);
-    return `rgb(${lo[1].map((v,i)=>Math.round(mix(v,hi[1][i],a))).join(',')})`;}
-  class Renderer {
-    constructor(network){this.network=network;this.canvas=$('network');this.background=document.createElement('canvas');
-      this.nodes=network.nodes.map(n=>({...n,x:n.x+47,y:n.y*.77+14}));
-      this.edges=network.edges.map(e=>{const a=this.nodes[e.a],b=this.nodes[e.b],dx=b.x-a.x,dy=b.y-a.y,length=Math.hypot(dx,dy);
-        return {...e,aNode:a,bNode:b,dx,dy,length,nx:-dy/length,ny:dx/length};});this.resize();}
-    resize(){this.ctx=fitCanvas(this.canvas,1264,570);this.background.width=this.canvas.width;this.background.height=this.canvas.height;
-      const ctx=this.background.getContext('2d');ctx.setTransform(this.canvas.width/1264,0,0,this.canvas.height/570,0,0);
-      // Restrained survey grid and schematic blocks. These are not map features.
-      for(let x=42;x<1230;x+=38)for(let y=22;y<540;y+=38){ctx.fillStyle='#334051';ctx.globalAlpha=.24;ctx.fillRect(x,y,1,1);}ctx.globalAlpha=1;
-      const blocks=[[0,1,5,4],[1,2,6,5],[2,3,7,6],[4,5,9,8],[5,6,10,9],[6,7,11,10],[8,9,13,12],[9,10,14,13],[10,11,15,14]];
-      blocks.forEach((ids,i)=>{const points=ids.map(id=>this.nodes[id]),cx=points.reduce((s,n)=>s+n.x,0)/4,cy=points.reduce((s,n)=>s+n.y,0)/4;
-        ctx.beginPath();points.forEach((n,k)=>{const x=mix(cx,n.x,.75),y=mix(cy,n.y,.68);if(k)ctx.lineTo(x,y);else ctx.moveTo(x,y);});
-        ctx.closePath();ctx.fillStyle=i%3?'#171c28':'#19202b';ctx.fill();ctx.strokeStyle='#27313e';ctx.lineWidth=.8;ctx.stroke();
-        text(ctx,`B${String(i+1).padStart(2,'0')}`,cx,cy+4,10,'#414d61','center');});
-      this.edges.forEach(e=>{ctx.lineCap='round';line(ctx,e.aNode.x,e.aNode.y,e.bNode.x,e.bNode.y,'#28303d',e.main?26:20);
-        line(ctx,e.aNode.x,e.aNode.y,e.bNode.x,e.bNode.y,'#10151f',e.main?23:17);});
-      text(ctx,'TOPOLOGIA SINTÉTICA',26,551,9,'#626f86');text(ctx,'SEM ESCALA GEOGRÁFICA',1236,551,9,'#626f86','right');}
-    reset(engine){this.visualDelay=engine.result.roads.map(r=>r.delay);this.motion=0;this.rng=new PRNG(NETWORK_CONFIG.geometrySeed^0x59D3);
-      this.travel=this.edges.map(()=>this.rng.next());this.visualSignals=INITIAL_STATE.slice();}
-    update(engine,dt){const alpha=1-Math.exp(-dt/.13),speed=1-.60*smooth(12.5,14,engine.time);this.motion+=dt*speed;
-      this.visualDelay.forEach((d,j)=>{this.visualDelay[j]=mix(d,engine.result.roads[j].delay,alpha);
-        this.travel[j]+=dt*speed*.17/(1+5*this.visualDelay[j]);});
-      this.visualSignals.forEach((s,i)=>this.visualSignals[i]=mix(s,engine.state.values[i],alpha));}
-    render(engine){const ctx=this.ctx;ctx.clearRect(0,0,1264,570);ctx.drawImage(this.background,0,0,1264,570);
-      ctx.save();ctx.globalAlpha=.76+.24*smooth(0,1.7,engine.time);ctx.lineCap='round';
-      this.edges.forEach((e,j)=>{const d=this.visualDelay[j],color=delayColor(d),load=d/(d+.16);
-        ctx.globalAlpha=.72;line(ctx,e.aNode.x,e.aNode.y,e.bNode.x,e.bNode.y,color,e.main?5.5:3.3);ctx.globalAlpha=1;
-        const count=8+Math.floor(load*19),power=1+load*3.2;
-        // Particles encode delay and relative occupancy, not conserved vehicle trajectories.
-        // One fill per road keeps the 2D rendering cost small at recording resolution.
-        ctx.beginPath();
-        for(let side=0;side<2;side++)for(let k=0;k<count;k++){
-          const u=(k/count+this.travel[j]+side*.19)%1,packed=.055+.89*(1-Math.pow(1-u,power)),p=side?1-packed:packed;
-          const offset=(side?1:-1)*(e.main?7:5),x=e.aNode.x+e.dx*p+e.nx*offset,y=e.aNode.y+e.dy*p+e.ny*offset;
-          ctx.moveTo(x+1.55,y);ctx.arc(x,y,1.55,0,TAU);
-        }ctx.globalAlpha=.42+.38*load;ctx.fillStyle=color;ctx.fill();ctx.globalAlpha=1;
-      });
-      this.nodes.forEach((n,i)=>{const s=this.visualSignals[i],phase=(this.motion/CONFIG.cycle+n.offset)%1,green=phase<engine.state.values[i];
-        circle(ctx,n.x,n.y,15,'#10151f');ctx.beginPath();ctx.arc(n.x,n.y,12,-Math.PI/2,TAU-Math.PI/2);ctx.strokeStyle='#354054';ctx.lineWidth=2;ctx.stroke();
-        ctx.beginPath();ctx.arc(n.x,n.y,12,-Math.PI/2,TAU*s-Math.PI/2);ctx.strokeStyle=C.purple;ctx.lineWidth=2.5;ctx.stroke();
-        line(ctx,n.x-6,n.y,n.x+6,n.y,green?C.cyan:'#414c5d',2.5);line(ctx,n.x,n.y-6,n.x,n.y+6,green?'#414c5d':C.cyan,2.5);
-        text(ctx,String(i+1).padStart(2,'0'),n.x-21,n.y-18,10,'#a0adc1');
-        const age=engine.time-engine.flashes[i];if(age>=0&&age<.55){ctx.globalAlpha=(1-age/.55)*.8;ctx.beginPath();ctx.arc(n.x,n.y,17+age*20,0,TAU);ctx.strokeStyle=C.purple;ctx.lineWidth=1;ctx.stroke();ctx.globalAlpha=1;}
-      });
-      const worst=engine.result.roads.map((r,j)=>({j,d:r.delay})).sort((a,b)=>b.d-a.d).slice(0,2);
-      worst.forEach(({j,d})=>{const e=this.edges[j],x=(e.aNode.x+e.bNode.x)/2,y=(e.aNode.y+e.bNode.y)/2-26;
-        ctx.fillStyle='#151823';ctx.fillRect(x-55,y-14,110,22);text(ctx,`e${String(j+1).padStart(2,'0')} / d ${d.toFixed(2)}`,x,y,10,delayColor(d),'center');});
-      ctx.restore();
-      text(ctx,'sᵢ',26,25,12,C.purple);text(ctx,'ARCO = FRAÇÃO DE VERDE',54,25,9,'#6e7e96');
-      const critical=engine.result.roads.filter(r=>r.delay>=.28).length;
-      text(ctx,`${String(critical).padStart(2,'0')} / ${this.edges.length} SEGMENTOS COM ALTO ATRASO`,1236,25,10,critical?C.red:C.muted,'right');}
-  }
-  class HUD {
-    constructor(calibration){this.calibration=calibration;this.lastTick=-1;this.lastIteration=-1;this.chart=$('energyGraph');this.resize();
-      $('seedLabel').textContent=`SEED ${CONFIG.seed} / 14 s`;$('topology').textContent=`${NETWORK_CONFIG.nodes.length} NODES / ${NETWORK_CONFIG.edges.length} LINKS`;
-      this.ymax=Math.ceil(calibration.max*1.1*10)/10;$('energyRange').textContent=`0—${this.ymax.toFixed(1)}`;}
-    resize(){this.ctx=fitCanvas(this.chart,504,78);this.lastIteration=-1;}
-    reset(){this.lastTick=-1;this.lastIteration=-1;}
-    update(engine){if(this.lastTick===engine.ticks)return;this.lastTick=engine.ticks;
-      const m=engine.metrics,t=engine.time,r=engine.result;
-      $('temperature').textContent=engine.temperatureNorm.toFixed(2);$('actualT').textContent=`T = ${engine.temperature.toFixed(4)} u.c.`;
-      $('temperatureBar').style.transform=`scaleX(${engine.temperatureNorm})`;$('energy').textContent=r.energy.toFixed(3);
-      $('energyLevel').textContent=r.energy/this.calibration.reference>=1.4?'HIGH COST':'ELEVATED COST';
-      $('energyLevel').title='Custo relativo a uma referência viável calculada por busca local; não é um ótimo global.';
-      $('acceptance').textContent=m.acceptance===null?'—':(m.acceptance*100).toFixed(1);
-      $('accepted').textContent=m.accepted;$('rejected').textContent=m.rejected;$('uphill').textContent=m.uphillAccepted;
-      $('meanDelay').textContent=segmentDiagnostic(r).toFixed(3);$('iteration').textContent=String(m.iteration).padStart(5,'0');
-      $('stateVector').textContent=`x = [${engine.state.values.slice(0,5).map(s=>s.toFixed(2)).join(', ')}, …]`;
-      $('time').textContent=t.toFixed(2).padStart(5,'0');$('progress').style.transform=`scaleX(${t/CONFIG.duration})`;
-      const phase=phaseIndex(t),phaseText='PHASE / '+PRESENTATION.phases[phase];
-      if($('phase').textContent!==phaseText)$('phase').textContent=phaseText;
-      const bridge=smooth(PRESENTATION.bridgeStart,PRESENTATION.bridgeFull,t);
-      $('hud').classList.toggle('emphasis',t>=PRESENTATION.nextStart);$('bridge').style.opacity=bridge;
-      $('bridge').style.visibility=bridge>0?'visible':'hidden';$('bridge').setAttribute('aria-hidden',String(bridge===0));
-      const next=smooth(PRESENTATION.bridgeNextStart,PRESENTATION.bridgeNextFull,t);
-      $('bridgeNext').style.opacity=next;$('bridgeNext').setAttribute('aria-hidden',String(next===0));
-      $('narrative').style.opacity=1-bridge;$('narrative').style.visibility=bridge===1?'hidden':'visible';$('narrative').setAttribute('aria-hidden',String(bridge===1));
-      document.querySelectorAll('.ticks span').forEach((el,i)=>el.classList.toggle('active',i===phase));
-      this.lastIteration=m.iteration;this.drawGraph(engine);}
-    drawGraph(engine){const ctx=this.ctx,w=504,h=78,x=t=>t/CONFIG.duration*w,y=e=>h-5-e/this.ymax*(h-12);
-      ctx.clearRect(0,0,w,h);for(let k=1;k<4;k++)line(ctx,0,k*h/4,w,k*h/4,'#262c3a',.7);
-      for(let k=1;k<7;k++)line(ctx,k*w/7,0,k*w/7,h,'#222836',.6);
-      ctx.setLineDash([3,5]);line(ctx,0,y(engine.history.points[0].e),w,y(engine.history.points[0].e),'#4c425f',.8);ctx.setLineDash([]);
-      const points=engine.history.points;ctx.beginPath();points.forEach((p,i)=>{if(i){ctx.lineTo(x(p.t),y(points[i-1].e));ctx.lineTo(x(p.t),y(p.e));}else ctx.moveTo(x(p.t),y(p.e));});ctx.lineTo(x(engine.time),y(engine.result.energy));
-      ctx.strokeStyle=C.purple;ctx.lineWidth=1.8;ctx.lineJoin='round';ctx.stroke();
-      const last=points[points.length-1];circle(ctx,x(engine.time),y(last.e),2.5,C.cyan);}
-  }
-  class Controls {
-    constructor(loop){this.loop=loop;this.hidden=false;$('play').addEventListener('click',()=>this.toggle());
-      $('restart').addEventListener('click',()=>loop.restart());
-      document.addEventListener('keydown',e=>{if(e.repeat||e.ctrlKey||e.metaKey||e.altKey||/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)||e.target.isContentEditable)return;
-        if(e.code==='Space'){e.preventDefault();this.toggle();}else if(e.code==='KeyR'){e.preventDefault();loop.restart();}
-        else if(e.code==='KeyH'){e.preventDefault();this.hidden=!this.hidden;if(this.hidden&&$('controls').contains(document.activeElement))document.activeElement.blur();$('controls').classList.toggle('hidden',this.hidden);}});}
-    toggle(){if(this.loop.engine.time>=CONFIG.duration){this.loop.restart();}this.loop.running=!this.loop.running;
-      this.loop.last=performance.now();this.loop.accumulator=0;this.sync();}
-    sync(){$('play').textContent=this.loop.running?'Ⅱ PAUSE':'▶ PLAY';$('play').setAttribute('aria-pressed',String(this.loop.running));}
-  }
-  class MainLoop {
-    constructor(){this.network=new UrbanNetwork();this.calibration=calibrate(this.network);
-      // Audit a complete deterministic run before presenting any frame. The
-      // displayed run starts fresh and is checked against this certified prefix.
-      this.certified=new AnnealingEngine(this.network,this.calibration.temperature0,this.calibration.amplitude).run();
-      this.validation=validateExperiment(this.certified,this.calibration);this.narrative=validateNarrative();
-      this.renderer=new Renderer(this.network);this.hud=new HUD(this.calibration);this.running=false;this.accumulator=0;this.last=performance.now();
-      this.controls=new Controls(this);this.restart();this.running=AUTO_PLAY;this.controls.sync();
-      // Diagnostics are internal and never substitute invented values into the HUD.
-      this.logValidation();this.lastDpr=window.devicePixelRatio;
-      window.addEventListener('resize',()=>this.resize());document.addEventListener('visibilitychange',()=>{if(document.hidden){this.running=false;this.accumulator=0;this.controls.sync();}this.last=performance.now();});
-      requestAnimationFrame(t=>this.frame(t));}
-    resize(){const scale=Math.min(window.innerWidth/CONFIG.width,window.innerHeight/CONFIG.height);$('stage').style.transform=`translate(-50%,-50%) scale(${scale})`;
-      this.renderer.resize();this.hud.resize();this.hud.reset();this.draw();}
-    restart(){this.running=false;this.accumulator=0;this.last=performance.now();
-      this.engine=new AnnealingEngine(this.network,this.calibration.temperature0,this.calibration.amplitude);
-      this.verifiedEvents=0;this.performance={frames:0,totalDrawMs:0,maxDrawMs:0,totalFrameSeconds:0};
-      this.renderer.reset(this.engine);this.hud.reset();this.controls.sync();this.draw();}
-    verifyLive(){for(;this.verifiedEvents<this.engine.events.length;this.verifiedEvents++){
-        const actual=this.engine.events[this.verifiedEvents],expected=this.certified.events[this.verifiedEvents];
-        if(!expected||Object.keys(expected).some(key=>actual[key]!==expected[key]))throw new Error('Live trajectory differs from certified event '+this.verifiedEvents);
-      }
-      if(this.engine.time===CONFIG.duration&&this.engine.state.values.some((s,i)=>s!==this.certified.state.values[i]))throw new Error('Final live state differs from certified state');}
-    draw(){this.verifyLive();this.renderer.render(this.engine);this.hud.update(this.engine);}
-    logValidation(){const v=this.validation;console.info([
-        '============================================================',
-        'SIMULATION 02 — URBAN HIGH-T MODEL',
-        'MODEL: 16 nodes / 26 links / 16 signal fractions in [0.20, 0.80]',
-        'OBJECTIVE: E = Σ w_j d_j / d_ref; w_j = q_j / Σq; d_ref = 0.25',
-        'Sum weights: '+v.model.sumWeights+' / formula check: PASS / dimensionless E',
-        'Mean segment delay / d_ref: independent simple diagnostic / PASS',
-        'High-T calibration: PASS / acceptance: '+(v.trajectory.acceptance*100).toFixed(6)+' %',
-        'Accepted uphill moves: '+v.trajectory.uphillAccepted+' / finite, nonmonotonic energies: PASS',
-        'PROPOSAL: single component / reflection / exact PRNG replay: PASS',
-        'NARRATIVE: objective definition matches / next scene = LOCAL MINIMA: PASS',
-        'VALIDATION STATUS: PASS','============================================================'].join('\n'));
-      console.info('Simulation 02 — audit',JSON.stringify({validation:v,narrative:this.narrative,calibration:this.calibration}));}
-    frame(now){const elapsed=clamp((now-this.last)/1000,0,.25);this.last=now;
-      try{if(window.devicePixelRatio!==this.lastDpr){this.lastDpr=window.devicePixelRatio;this.resize();}
-      if(this.running){this.accumulator+=elapsed;while(this.accumulator>=CONFIG.dt){this.engine.step();this.renderer.update(this.engine,CONFIG.dt);this.accumulator-=CONFIG.dt;
-          if(this.engine.time>=CONFIG.duration){this.running=false;this.accumulator=0;this.controls.sync();break;}}
-        const start=performance.now();this.draw();const cost=performance.now()-start;
-        this.performance.frames++;this.performance.totalDrawMs+=cost;this.performance.maxDrawMs=Math.max(this.performance.maxDrawMs,cost);this.performance.totalFrameSeconds+=elapsed;
-        if(!this.running)console.info('Simulation 02 — completed',JSON.stringify({verifiedEvents:this.verifiedEvents,seconds:this.engine.time,frames:this.performance.frames,observedFps:this.performance.frames/this.performance.totalFrameSeconds,averageDrawMs:this.performance.totalDrawMs/this.performance.frames,maxDrawMs:this.performance.maxDrawMs}));}
-      }catch(error){this.running=false;this.controls.sync();showError(error);throw error;}
-      requestAnimationFrame(t=>this.frame(t));}
-  }
-  function showError(error){$('error').hidden=false;$('error').textContent=`Não foi possível validar a simulação. ${error.message}`;console.error(error);}
-  try{document.body.classList.toggle('recording',RECORDING_MODE);
-    $('stage').style.transform=`translate(-50%,-50%) scale(${Math.min(innerWidth/CONFIG.width,innerHeight/CONFIG.height)})`;
-    // A read-only snapshot API supports numerical audits and scene 04 reuse.
-    const app=new MainLoop(),copy=value=>JSON.parse(JSON.stringify(value));
-    const diagnostics=Object.freeze({snapshot:()=>copy({seed:CONFIG.seed,time:app.engine.time,running:app.running,
-        phase:PRESENTATION.phases[phaseIndex(app.engine.time)],state:app.engine.state.values,energy:app.engine.result.energy,
-        meanSegmentDelay:app.engine.result.meanDelay,displayedDiagnostic:segmentDiagnostic(app.engine.result),
-        temperature:app.engine.temperature,temperatureRatio:app.engine.temperatureNorm,acceptance:app.engine.metrics.acceptance,
-        uphillAccepted:app.engine.metrics.uphillAccepted,metrics:app.engine.metrics,history:app.engine.history.points,events:app.engine.events,
-        calibration:app.calibration,model:{...app.validation.model,config:NETWORK_CONFIG,initialState:INITIAL_STATE},
-        validation:{...app.validation,narrative:app.narrative,scope:'Complete certified trajectory; live event prefix checked',liveVerifiedEvents:app.verifiedEvents},performance:app.performance}),
-      history:()=>copy(app.engine.history.points),events:()=>copy(app.engine.events)});
-    for(const name of ['Simulation02Experiment','UrbanSimulation'])Object.defineProperty(window,name,{value:diagnostics,writable:false,configurable:false});
-  }catch(error){showError(error);throw error;}
+  function seek(t){time=clamp(t,0,spec.duration);lastHUD=-Infinity;last=performance.now();render(true);}
+  function frame(now){const dt=Math.max(0,(now-last)/1000);last=now;if(running){time=Math.min(spec.duration,time+dt);if(time>=spec.duration)running=false;}render();requestAnimationFrame(frame);}
+  $('play').onclick=()=>{if(time>=spec.duration)seek(0);running=!running;last=performance.now();render(true);};
+  $('restart').onclick=()=>{running=true;seek(0);};
+  // Respond while editing as well as on commit; a frame must never erase a
+  // newly typed time before the field's change event is delivered.
+  const seekInput=()=>{running=false;seek(Number($('seek').value)||0);};
+  $('seek').oninput=seekInput;$('seek').onchange=seekInput;
+  $('chapters').onchange=()=>{running=false;seek(Number($('chapters').value));};
+  $('record').onclick=()=>{setRecording(true);running=true;seek(0);};
+  $('inspect').onclick=()=>{const open=$('debug').hidden;$('debug').hidden=!open;$('inspect').setAttribute('aria-expanded',String(open));$('debug').textContent=JSON.stringify({apresentacao:spec.presentationValidation,modos:spec.modeValidations,ciencia:spec.scienceValidation},null,2);};
+  $('export').onclick=()=>{const blob=new Blob([JSON.stringify(spec.export(),null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=spec.filename+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+  document.addEventListener('keydown',e=>{if(['INPUT','SELECT','BUTTON'].includes(document.activeElement.tagName)&&e.code!=='Escape')return;if(e.code==='Space'){e.preventDefault();$('play').click();}if(e.code==='KeyR')$('restart').click();if(e.code==='Escape'){running=false;setRecording(false);render(true);}if(!recording&&e.code==='ArrowRight'){running=false;seek(time+1);}if(!recording&&e.code==='ArrowLeft'){running=false;seek(time-1);}});
+  document.addEventListener('visibilitychange',()=>{last=performance.now();});
+  addEventListener('resize',resize);resize();render(true);requestAnimationFrame(frame);
+  const api=Object.freeze({snapshot:()=>JSON.parse(JSON.stringify({...spec.export(),presentationModes:spec.modeValidations,playback:{time,running,recording,mode:spec.mode,duration:spec.duration,phase:phaseAt(spec.phases,time).name}})),presentation:()=>JSON.parse(JSON.stringify(spec.modeValidations)),events:()=>JSON.parse(JSON.stringify(spec.events||[])),history:()=>JSON.parse(JSON.stringify(spec.history||[]))});
+  window[spec.api]=api;if(spec.alias)window[spec.alias]=api;
+  return api;
+ }
+ return {C,clamp,lerp,fmt,signed,metric,concept,detail,note,eyebrow,phaseAt,map,chart,ruler,label,line,dot,delayColor,commonContract,mount};
 })();
 </script>
-</body>
-</html>
+<script id="presentation-modes">/* Editorial clocks only. All frames still refer to the original scientific data. */
+const VideoModes=(()=>{
+ 'use strict';
+ const V=VideoPresentation,{concept,detail,note,eyebrow,metric,fmt}=V;
+ const phases=rows=>rows.map(([start,name])=>({start,name}));
+ const segment=(t,a,b,c,d)=>V.lerp(c,d,V.clamp((t-a)/(b-a)));
+ function wrap(full,duration,rows,sourceTime,edit=()=>{}){
+  return {...full,duration,phases:phases(rows),at(t){const source=sourceTime(V.clamp(t,0,duration)),f=full.at(source);f.sourceTime=source;edit(f,t);f.accessible=[f.title,f.subtitle,(f.panel||f.center||'').replace(/<[^>]+>/g,' '),f.showRuler?`P = ${fmt(f.P)}.${f.showU?' Sorteio u = '+fmt(f.u):''}`:'',f.caption||''].join('. ');return f;},draw(ctx,f,t){full.draw(ctx,f,f.sourceTime);}};
+ }
+ function video02(full){
+  const time=t=>t<3?1:t<9?6:t<15?16:t<17?22:t<20?25:t<22?29:t<24.5?33:t<27?37:t<32?42:t<36?45+(t-32)*4:62;
+  return wrap(full,40,[[0,'O que melhorar?'],[3,'Como ler a rede'],[9,'Um semáforo'],[15,'Estado x'],[20,'Custo E(x)'],[27,'Pesos das vias'],[32,'Exploração com T alta'],[36,'Por que só melhorias?']],time,(f,t)=>{
+   if(t>=3&&t<9){f.title='REDE URBANA SIMPLIFICADA';f.focus=-1;f.phase=6;f.panel=eyebrow('COMO LER A REDE')+`<div class="network-key"><span class="purple">●</span> Interseção / semáforo<br><span class="cyan">━</span> Via<br>Cor → atraso no modelo<br>Pontos → fluxo ilustrativo</div>`+note('Os pontos não são veículos simulados.');}
+   if(t>=22&&t<24.5)f.panel+=note('E é chamada de energia por analogia.<br>Aqui, é uma função objetivo adimensional.');
+   if(t>=36){f.title='';f.center='<div class="hero">POR QUE NÃO ACEITAR<br>APENAS AS MELHORIAS?</div>';f.caption='';}
+  });
+ }
+ function video03(full){
+  const time=t=>t<1.5?1:t<3?4:t<4.5?8:t<6?12:t<8.5?16:t<12?20:t<13?24:t<15?28:t<17?32:t<18?36:t<20?39:t<23?42:t<25?47:t<28?51:t<31?56:t<34?61:t<39?66:t<44?70:t<52?75+(t-44):t<54?86:t<56?88:t<58?92:108;
+  return wrap(full,60,[[0,'Uma proposta e seu custo'],[6,'Melhora: aceitar'],[12,'Novo teste: custo maior'],[18,'Uma piora pode ser aceita'],[25,'Limite P e sorteio u'],[34,'T alta: aceita'],[39,'Só T muda'],[44,'Reduzindo T'],[52,'T baixa: rejeita'],[56,'Exploração e seleção'],[58,'Resfriar aos poucos']],time,(f,t)=>{
+   if(t>=56&&t<58)f.center=f.center.replace('P MAIOR','MAIS EXPLORAÇÃO').replace('P MENOR','MAIS SELEÇÃO');
+  });
+ }
+ function video04(full){
+  const time=t=>t<4?t:t<7?segment(t,4,7,4,8):t<10?segment(t,7,10,8,13):t<18?segment(t,10,18,13,21):t<27?segment(t,18,27,21,32):t<31?segment(t,27,31,32,40):t<32?segment(t,31,32,40,45):t<35?47:55;
+  return wrap(full,38,[[0,'O que acontece ao resfriar?'],[4,'Custo atual e melhor custo'],[10,'T alta: exploração'],[18,'Resfriamento'],[27,'T baixa: seleção'],[32,'Melhor resultado'],[35,'Redução do custo']],time,(f,t)=>{
+   if(t>=4&&t<10){f.panel=`<div class="two">${metric('CUSTO ATUAL',fmt(f.sample.result.energy),'cyan')}${metric('MELHOR CUSTO',fmt(f.sample.best),'green')}</div>`;f.importantNumbers=2;f.opacity=.40;}
+   if(t>=32&&t<35){const d=full.export();f.subtitle='Guardamos a melhor configuração visitada.';f.center=concept('CUSTO E(x)')+`<div class="summary"><div>${metric('ESTADO INICIAL',fmt(d.initialEnergy),'cyan')}</div><div>${metric('MELHOR ESTADO<br>ENCONTRADO',fmt(d.bestEnergy),'green')}</div></div>`+note('EXECUÇÃO FINITA · DADOS SINTÉTICOS');f.importantNumbers=2;}
+   if(t>=35){f.subtitle='A seguir: antes e depois na mesma rede.';f.center=f.center.replace('Resultado de uma execução finita com dados sintéticos.','EXECUÇÃO FINITA · DADOS SINTÉTICOS');}
+  });
+ }
+ function validateVideo(id,video,full){
+  const samples=Array.from({length:Math.round(video.duration*10)+1},(_,i)=>video.at(i/10)),checks=V.commonContract(video,samples),check=(ok,label)=>checks.push({label,pass:!!ok});
+  const text=f=>[f.title,f.subtitle,f.panel,f.center,f.caption].join(' '),ranges={2:[35,42],3:[50,62],4:[30,40],5:[12,18]};
+  check(video.duration>=ranges[id][0]&&video.duration<=ranges[id][1],'Duração dentro do intervalo solicitado');
+  if(id===2){
+   check(samples.every(f=>!/(MÍNIMOS LOCAIS|BUSCA GULOSA|exp\(|P_acc|SORTEIO|METRÓPOLIS)/i.test(text(f))),'02: nenhuma explicação de mínimos locais ou Metrópolis');
+   check(video.at(40).center.includes('POR QUE NÃO ACEITAR<br>APENAS AS MELHORIAS?'),'02: termina na pergunta, sem respondê-la');
+   check(video.at(40).scientificTime===14&&video.at(40).sample.result.energy===full.at(73).sample.result.energy,'02: trajetória inteira preservada, sem substituir o estado');
+  }
+  if(id===3){
+   check(samples.filter((f,i)=>i/10>=6&&i/10<12).every(f=>f.T===null&&f.P===null&&f.u===null&&!f.showRuler),'03: melhora sem T, P, u ou régua');
+   check(video.at(26).showRuler&&!video.at(26).showU&&video.at(29).showU,'03: P aparece antes de u');
+   const transition=Array.from({length:121},(_,i)=>video.at(44+i*8/120)),first=transition[0],p=first.event;
+   check(transition.every(f=>f.event===p&&f.event.currentState===p.currentState&&f.state===p.candidateState&&f.event.delta===p.delta&&f.u===p.u&&f.mapTime===0),'03: mesmos x, x′, ΔE e u durante a transição');
+   check(transition.every((f,i)=>f.P===Math.exp(-p.delta/f.T)&&(!i||f.P<=transition[i-1].P)),'03: somente T altera P');
+   check(transition.every(f=>1230+594*f.u===1230+594*p.u),'03: posição de u fixa na régua');
+   check(video.at(35).decision===true&&video.at(53).decision===false,'03: T alta aceita e T baixa rejeita');
+   check(video.at(41).center.includes('novo sorteio'),'03: reutilização de u explicitamente pedagógica');
+   check(video.at(51.9).decision===undefined&&video.at(55).state===p.currentState,'03: rejeição só após a transição; x preservado');
+  }
+  if(id===4){
+   const d=full.export(),f=video.at(38);let best=Infinity;
+   check(full.history.every(p=>{best=Math.min(best,p.e);return p.best===best;}),'04: melhor custo é o mínimo acumulado');
+   check(full.history.some((p,i)=>i&&p.e>full.history[i-1].e),'04: custo atual pode subir');
+   check(d.N===1920&&full.events.length===1920&&d.coolingSchedule==='geometric','04: 1920 propostas e schedule geométrico preservados');
+   check(JSON.stringify(Array.from(f.mapState))===JSON.stringify(d.bestState)&&f.mapResult.energy===d.bestEnergy,'04: fechamento usa bestState, não finalState');
+   check('finalState' in d&&'bestState' in d&&'finalEnergy' in d&&'bestEnergy' in d,'04: estado final e melhor permanecem separados');
+   check(video.at(32).scientificTime===16,'04: toda a trajetória termina antes do fechamento');
+  }
+  if(id===5){
+   const d=full.export();check(d.compatibility.status==='PASS','05: contrato 04 → 05 aprovado');
+   check(samples.every(f=>(f.importantNumbers||0)<=3),'05: até três métricas relevantes');
+   check(video.at(4).showBefore&&!video.at(4).showAfter&&video.at(8).showBefore&&video.at(8).showAfter,'05: antes, depois e resultado em ordem');
+   check(video.at(8).beforeScale===video.at(8).afterScale,'05: uma única escala fixa para os dois mapas');
+   check(!/(INITIAL CONFIGURATION|MICROSTATE|CRITICAL SEGMENTS|CONGESTION PROXY)/.test(samples.map(text).join(' ')),'05: sem inglês ou telemetria avançada na tela');
+   check(d.validation.checks.energyReduction&&d.validation.checks.meanReduction,'05: reduções calculadas e validadas');
+  }
+  return {status:checks.every(x=>x.pass)?'PASS':'FAIL',duration:video.duration,checks,sampledFrames:samples.length};
+ }
+ function mount(id,full){
+  const video=id===2?video02(full):id===3?video03(full):id===4?video04(full):full.video;
+  const validations={full:full.presentationValidation,video:validateVideo(id,video,full)};
+  if(Object.values(validations).some(v=>v.status!=='PASS'))throw Error('Contrato de apresentação inválido: '+JSON.stringify(validations));
+  const mode=new URLSearchParams(location.search).get('mode')==='full'?'full':'video',selected=mode==='full'?full:video;
+  const originalExport=full.export;
+  const spec={...selected,mode,modeValidations:validations,presentationValidation:validations[mode],context:id===3?'EXPERIMENTO DIDÁTICO CONTROLADO NO MESMO MODELO URBANO':id===4?'EXECUÇÃO COMPLETA DO RECOZIMENTO':id===5?'RESULTADO DA MESMA EXECUÇÃO DA SIMULAÇÃO 04':'',export:()=>({...originalExport(),presentationModes:validations})};
+  window.validatePresentationContract=()=>JSON.parse(JSON.stringify(validations));
+  console.info(`SIMULAÇÃO 0${id}\nVALIDAÇÃO CIENTÍFICA: PASS\nAPRESENTAÇÃO COMPLETA: ${validations.full.status}\nAPRESENTAÇÃO PARA VÍDEO: ${validations.video.status}`);
+  return V.mount(spec);
+ }
+ return {mount,validateVideo,video02,video03,video04};
+})();
+</script>
+<script id="presentation">(() => {
+ 'use strict';
+ const S=Simulation02,V=VideoPresentation,{C,fmt,metric,concept,detail,note,eyebrow}=V;
+ const network=new S.UrbanNetwork(),calibration=S.calibrate(network),engine=new S.AnnealingEngine(network,calibration.temperature0,calibration.amplitude),frames=[];
+ const capture=()=>frames.push({state:engine.state,result:engine.result,t:engine.time,historyLength:engine.history.points.length});
+ capture();while(engine.time<S.CONFIG.duration-1e-9){engine.step();capture();}
+ const scienceValidation=S.validateExperiment(engine,calibration),summary=S.summarize(engine,calibration.reference);
+ const phases=[
+  [0,'A pergunta'],[3,'A rede'],[5.8,'As vias'],[8.6,'As cores'],[11.4,'O fluxo ilustrativo'],
+  [14.2,'Um semáforo'],[20,'A configuração'],[24,'O estado x'],[28,'Como comparar'],
+  [32,'O custo'],[36,'Menor custo'],[40,'A função de custo'],[45,'Exploração com T alta'],
+  [61,'Aceitar apenas melhorias?'],[65,'Busca gulosa'],[69,'Mínimos locais']
+ ].map(([start,name])=>({start,name}));
+ const duration=73,title='O QUE O COMPUTADOR ESTÁ TENTANDO MELHORAR?';
+ function at(t){
+  const p=V.phaseAt(phases,t),i=phases.indexOf(p),f={title,phase:i,importantNumbers:0,graphs:0,scientificTime:0,focus:-1,opacity:1};
+  f.scientificTime=t<45?0:Math.min(14,(t-45)*14/16);f.sample=frames[Math.min(frames.length-1,Math.floor(f.scientificTime/S.CONFIG.dt+1e-9))];
+  f.caption='';
+  if(i===0){f.opacity=.17;f.center=concept('Cada semáforo pode mudar.<br>O que torna uma configuração melhor?');}
+  if(i>=1&&i<=4){f.title='REDE URBANA SIMPLIFICADA';
+   const texts=[['INTERSEÇÃO / SEMÁFORO','Cada ponto conecta as vias.'],['VIA','Cada ligação representa<br>um trecho da rede.'],['COR DA VIA','Indica o atraso no modelo.'],['FLUXO ILUSTRATIVO','Os pontos ajudam a visualizar o fluxo.<br>Não são veículos simulados.']];
+   f.panel=eyebrow('COMO LER A REDE')+concept(texts[i-1][0])+detail(texts[i-1][1]);if(i===1)f.focus=6;
+   if(i===3)f.panel+=`<div class="detail"><span class="cyan">MENOR ATRASO</span><br>↓<br><span class="red">MAIOR ATRASO</span></div>`;
+  }
+  if(i===5){const g=S.INITIAL_STATE[6];f.title='UMA ESCOLHA EM CADA SEMÁFORO';f.focus=6;f.importantNumbers=2;
+   f.panel=eyebrow('INTERSEÇÃO 07')+concept('TEMPO DE VERDE')+metric('DIREÇÃO PRINCIPAL',fmt(g*100,0)+'%','green')+metric('DIREÇÃO TRANSVERSAL',fmt((1-g)*100,0)+'%','purple')+note('Frações complementares do mesmo ciclo.');}
+  if(i===6){f.title='JUNTAMOS TODAS AS ESCOLHAS';f.panel=concept('UMA CONFIGURAÇÃO<br>COMPLETA DA REDE')+detail('Chamamos essa combinação<br>de <span class="cyan">estado x</span>.');}
+  if(i===7){f.title='CADA CONFIGURAÇÃO É UM ESTADO';f.panel=eyebrow('ESTADO x')+`<div class="formula mono cyan">x = (g₁, g₂, …, g₁₆)</div>`+detail('Cada g representa a fração de verde<br>de um semáforo.');}
+  if(i===8){f.opacity=.17;f.title='COMO SABER SE UMA CONFIGURAÇÃO É BOA?';f.center=concept('Precisamos comparar<br>as configurações.');}
+  if(i===9){f.title='ASSOCIAMOS UM CUSTO A CADA ESTADO';f.panel=concept('UM ESTADO x<br>UM CUSTO E(x)')+metric('CUSTO DESTA CONFIGURAÇÃO',fmt(f.sample.result.energy))+note('Custo adimensional do modelo.');f.importantNumbers=1;}
+  if(i===10){f.title='O COMPUTADOR TENTA REDUZIR ESSE CUSTO';f.panel=concept('MENOR E', 'cyan')+detail('↓')+concept('MENOR CUSTO AGREGADO<br>NO MODELO');}
+  if(i===11){f.title='CADA VIA CONTRIBUI PARA O CUSTO';f.panel=concept('VIAS COM MAIOR DEMANDA<br>TÊM MAIOR PESO')+`<p class="formula mono">E(x) = Σⱼ wⱼ dⱼ(x) / d<sub>ref</sub></p>`+note('wⱼ = qⱼ / Σₖ qₖ · pesos normalizados<br>dⱼ(x): atraso na via · d_ref: escala fixa');}
+  if(i===12){f.title='TEMPERATURA COMPUTACIONAL ALTA';f.subtitle='Muitas configurações são exploradas.';f.importantNumbers=1;f.graphs=1;
+   f.panel=eyebrow('EXPLORAÇÃO')+concept('O CUSTO PODE SUBIR<br>E DESCER')+metric('CUSTO ATUAL E(x)',fmt(f.sample.result.energy))+note('T é um parâmetro do algoritmo.<br>Não é a temperatura das ruas.');f.caption='<b>Cada mudança aceita produz uma nova configuração.</b>';
+  }
+  if(i>=13){f.opacity=.13;f.title='';f.center= i===13?`<div class="hero">POR QUE NÃO ACEITAR<br>APENAS AS MELHORIAS?</div>`:i===14?`<div class="hero">UMA BUSCA GULOSA<br>PODE FICAR PRESA</div>`:`<div class="hero purple">MÍNIMOS LOCAIS</div>${detail('Melhorias pequenas podem não levar a uma saída.')}<p class="note">A próxima animação mostra como o algoritmo decide.</p>`;}
+  f.accessible=[f.title,(f.panel||f.center||'').replace(/<[^>]+>/g,' ')].join('. ');return f;
+ }
+ function draw(ctx,f,t){
+  const points=V.map(ctx,network,f.sample.state,f.sample.result,f.scientificTime||t,{focus:f.focus,opacity:f.opacity});
+  if(f.phase>=1&&f.phase<=4){const target=f.phase===1?points[6]:{x:(points[5].x+points[6].x)/2,y:(points[5].y+points[6].y)/2};V.line(ctx,1190,406,target.x+40,target.y,C.purple,2);V.dot(ctx,target.x+40,target.y,4,C.purple);}
+  if(f.phase===12)V.chart(ctx,engine.history.points.slice(0,f.sample.historyLength),{duration:14,best:false,max:summary.max*1.1,y:684});
+ }
+ function validatePresentationContract(){
+  const samples=phases.map(p=>at(p.start+1)),checks=V.commonContract({duration},samples),check=(ok,label)=>checks.push({label,pass:!!ok});
+  check(samples.every(f=>!/(exp\(|P_acc|ACEITAÇÃO|SORTEIO|REJEIÇÕES)/.test(f.panel||'')),'Sem fórmula de Metrópolis ou telemetria prematura');
+  check(at(6).phase<at(22).phase&&at(22).phase<at(34).phase,'Ordem: rede, configuração e custo');
+  check(at(71).center.includes('MÍNIMOS LOCAIS'),'Fechamento aponta para mínimos locais');
+  check(frames.at(-1).t===14&&frames.at(-1).result.energy===summary.final,'Apresentação percorre toda a trajetória original');
+  check(frames.every(s=>s.state.values.every(g=>g>=.2&&g<=.8)),'Todos os estados exibidos são estados do motor');
+  return {status:checks.every(c=>c.pass)?'PASS':'FAIL',checks,duration,scientificDuration:14};
+ }
+ const presentationValidation=validatePresentationContract();
+ if(presentationValidation.status!=='PASS')throw Error('Falha no contrato da apresentação 02');
+ const exportData=()=>({seed:S.CONFIG.seed,network:S.NETWORK_CONFIG,initialState:S.INITIAL_STATE,calibration,summary,finalState:engine.state.values,events:engine.events,history:engine.history.points,validation:scienceValidation,presentationValidation});
+ window.validatePresentationContract=validatePresentationContract;
+ VideoModes.mount(2,{duration,title,phases,at,draw,presentationValidation,scienceValidation,export:exportData,filename:'simulacao-02',api:'Simulation02Experiment',alias:'UrbanSimulation',events:engine.events,history:engine.history.points});
+})();
+</script>
+</body></html>

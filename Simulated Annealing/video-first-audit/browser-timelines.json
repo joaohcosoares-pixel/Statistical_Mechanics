@@ -1,0 +1,23 @@
+[
+  {
+    "file": "Simulation2_UrbanLattice.html",
+    "expected": 73,
+    "reached": 73,
+    "completed": true,
+    "errors": []
+  },
+  {
+    "file": "Simulation3_Metropolis.html",
+    "expected": 111,
+    "reached": 111,
+    "completed": true,
+    "errors": []
+  },
+  {
+    "file": "Simulation4_Convergence.html",
+    "expected": 58,
+    "reached": 58,
+    "completed": true,
+    "errors": []
+  }
+]

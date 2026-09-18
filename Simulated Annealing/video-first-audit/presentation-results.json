@@ -1,0 +1,401 @@
+{
+  "status": "PASS",
+  "note": "Testes de lógica em Node; inspeção de DOM, estilos e screenshots feita separadamente no navegador.",
+  "files": [
+    {
+      "file": "Simulation2_UrbanLattice.html",
+      "framesAt60fps": 4381,
+      "contract": {
+        "status": "PASS",
+        "checks": [
+          {
+            "label": "Sem fórmula de Metrópolis ou telemetria prematura",
+            "pass": true
+          },
+          {
+            "label": "Ordem: rede, configuração e custo",
+            "pass": true
+          },
+          {
+            "label": "Fechamento aponta para mínimos locais",
+            "pass": true
+          },
+          {
+            "label": "Apresentação percorre toda a trajetória original",
+            "pass": true
+          },
+          {
+            "label": "Todos os estados exibidos são estados do motor",
+            "pass": true
+          }
+        ],
+        "duration": 73,
+        "scientificDuration": 14
+      },
+      "seekDoesNotChangeScience": true,
+      "scenes": [
+        {
+          "phase": "A pergunta",
+          "start": 0,
+          "text": "O QUE O COMPUTADOR ESTÁ TENTANDO MELHORAR?\n Cada semáforo pode mudar. O que torna uma configuração melhor? "
+        },
+        {
+          "phase": "A rede",
+          "start": 3,
+          "text": "REDE URBANA SIMPLIFICADA\n COMO LER A REDE  INTERSEÇÃO / SEMÁFORO  Cada ponto conecta as vias. "
+        },
+        {
+          "phase": "As vias",
+          "start": 5.8,
+          "text": "REDE URBANA SIMPLIFICADA\n COMO LER A REDE  VIA  Cada ligação representa um trecho da rede. "
+        },
+        {
+          "phase": "As cores",
+          "start": 8.6,
+          "text": "REDE URBANA SIMPLIFICADA\n COMO LER A REDE  COR DA VIA  Indica o atraso no modelo.   MENOR ATRASO  ↓  MAIOR ATRASO  "
+        },
+        {
+          "phase": "O fluxo ilustrativo",
+          "start": 11.4,
+          "text": "REDE URBANA SIMPLIFICADA\n COMO LER A REDE  FLUXO ILUSTRATIVO  Os pontos ajudam a visualizar o fluxo. Não são veículos simulados. "
+        },
+        {
+          "phase": "Um semáforo",
+          "start": 14.2,
+          "text": "UMA ESCOLHA EM CADA SEMÁFORO\n INTERSEÇÃO 07  TEMPO DE VERDE   DIREÇÃO PRINCIPAL  43%    DIREÇÃO TRANSVERSAL  57%   Frações complementares do mesmo ciclo. "
+        },
+        {
+          "phase": "A configuração",
+          "start": 20,
+          "text": "JUNTAMOS TODAS AS ESCOLHAS\n UMA CONFIGURAÇÃO COMPLETA DA REDE  Chamamos essa combinação de  estado x . "
+        },
+        {
+          "phase": "O estado x",
+          "start": 24,
+          "text": "CADA CONFIGURAÇÃO É UM ESTADO\n ESTADO x  x = (g₁, g₂, …, g₁₆)  Cada g representa a fração de verde de um semáforo. "
+        },
+        {
+          "phase": "Como comparar",
+          "start": 28,
+          "text": "COMO SABER SE UMA CONFIGURAÇÃO É BOA?\n Precisamos comparar as configurações. "
+        },
+        {
+          "phase": "O custo",
+          "start": 32,
+          "text": "ASSOCIAMOS UM CUSTO A CADA ESTADO\n UM ESTADO x UM CUSTO E(x)   CUSTO DESTA CONFIGURAÇÃO  0,867   Custo adimensional do modelo. "
+        },
+        {
+          "phase": "Menor custo",
+          "start": 36,
+          "text": "O COMPUTADOR TENTA REDUZIR ESSE CUSTO\n MENOR E  ↓  MENOR CUSTO AGREGADO NO MODELO "
+        },
+        {
+          "phase": "A função de custo",
+          "start": 40,
+          "text": "CADA VIA CONTRIBUI PARA O CUSTO\n VIAS COM MAIOR DEMANDA TÊM MAIOR PESO  E(x) = Σⱼ wⱼ dⱼ(x) / d ref   wⱼ = qⱼ / Σₖ qₖ · pesos normalizados dⱼ(x): atraso na via · d_ref: escala fixa "
+        },
+        {
+          "phase": "Exploração com T alta",
+          "start": 45,
+          "text": "TEMPERATURA COMPUTACIONAL ALTA\nMuitas configurações são exploradas.\n EXPLORAÇÃO  O CUSTO PODE SUBIR E DESCER   CUSTO ATUAL E(x)  0,867   T é um parâmetro do algoritmo. Não é a temperatura das ruas. \n Cada mudança aceita produz uma nova configuração. "
+        },
+        {
+          "phase": "Aceitar apenas melhorias?",
+          "start": 61,
+          "text": " POR QUE NÃO ACEITAR APENAS AS MELHORIAS? "
+        },
+        {
+          "phase": "Busca gulosa",
+          "start": 65,
+          "text": " UMA BUSCA GULOSA PODE FICAR PRESA "
+        },
+        {
+          "phase": "Mínimos locais",
+          "start": 69,
+          "text": " MÍNIMOS LOCAIS  Melhorias pequenas podem não levar a uma saída.  A próxima animação mostra como o algoritmo decide. "
+        }
+      ]
+    },
+    {
+      "file": "Simulation3_Metropolis.html",
+      "framesAt60fps": 6661,
+      "contract": {
+        "status": "PASS",
+        "checks": [
+          {
+            "label": "Melhora sem temperatura, sorteio ou régua",
+            "pass": true
+          },
+          {
+            "label": "Nenhuma probabilidade antes da explicação de ΔE",
+            "pass": true
+          },
+          {
+            "label": "Primeiro o limite P, depois o sorteio u",
+            "pass": true
+          },
+          {
+            "label": "Decisões reveladas somente nos momentos previstos",
+            "pass": true
+          },
+          {
+            "label": "Mesmos x, x′, ΔE, u e enquadramento na transição",
+            "pass": true
+          },
+          {
+            "label": "Somente T muda P; faixa verde diminui",
+            "pass": true
+          },
+          {
+            "label": "Extremos da transição iguais aos valores científicos, sem arredondamento",
+            "pass": true
+          },
+          {
+            "label": "Posição visual de u permanece fixa",
+            "pass": true
+          },
+          {
+            "label": "Mapas resultantes divergem somente depois da decisão",
+            "pass": true
+          },
+          {
+            "label": "Após rejeitar, o mapa volta ao estado atual",
+            "pass": true
+          },
+          {
+            "label": "Reutilização de u explicitamente restrita à comparação",
+            "pass": true
+          }
+        ],
+        "duration": 111,
+        "transitionSamples": 121
+      },
+      "seekDoesNotChangeScience": true,
+      "scenes": [
+        {
+          "phase": "O estado atual",
+          "start": 0,
+          "text": "COMO O ALGORITMO DECIDE?\n UMA PROPOSTA DE MUDANÇA    x  ESTADO ATUAL   "
+        },
+        {
+          "phase": "Uma pequena alteração",
+          "start": 3.5,
+          "text": "COMO O ALGORITMO DECIDE?\n UMA PROPOSTA DE MUDANÇA    x  ESTADO ATUAL   →   x′  PEQUENA ALTERAÇÃO   "
+        },
+        {
+          "phase": "A diferença de custo",
+          "start": 7,
+          "text": "COMO O ALGORITMO DECIDE?\n UMA PROPOSTA DE MUDANÇA    x  ESTADO ATUAL   →   x′  PEQUENA ALTERAÇÃO    ΔE = E(x′) − E(x) "
+        },
+        {
+          "phase": "O que ΔE significa",
+          "start": 11,
+          "text": "COMO O ALGORITMO DECIDE?\n UMA PROPOSTA DE MUDANÇA    x  ESTADO ATUAL   →   x′  PEQUENA ALTERAÇÃO    ΔE = E(x′) − E(x)  ΔE mede como o custo mudou. "
+        },
+        {
+          "phase": "O custo diminuiu",
+          "start": 15,
+          "text": "COMO O ALGORITMO DECIDE?\n INTERSEÇÃO 03  TEMPO DE VERDE  34% → 44%  Apenas este semáforo muda. As vias conectadas são destacadas.    O CUSTO DIMINUIU  ΔE = -0,030 "
+        },
+        {
+          "phase": "Aceitar a melhora",
+          "start": 19,
+          "text": "COMO O ALGORITMO DECIDE?\n ΔE   O CUSTO DIMINUIU  ✓  ACEITAR  O novo estado passa a ser x. "
+        },
+        {
+          "phase": "Novo teste",
+          "start": 23,
+          "text": "COMO O ALGORITMO DECIDE?\n NOVO TESTE  VOLTAMOS AO MESMO ESTADO DE REFERÊNCIA "
+        },
+        {
+          "phase": "Outra alteração",
+          "start": 27,
+          "text": "COMO O ALGORITMO DECIDE?\n FAZEMOS OUTRA ALTERAÇÃO  INTERSEÇÃO 10  TEMPO DE VERDE  49% → 38%  Apenas este semáforo muda. As vias conectadas são destacadas. "
+        },
+        {
+          "phase": "O custo aumentou",
+          "start": 31,
+          "text": "COMO O ALGORITMO DECIDE?\n ΔE > 0  A NOVA CONFIGURAÇÃO TEM CUSTO MAIOR   VARIAÇÃO DO CUSTO  +0,070  "
+        },
+        {
+          "phase": "Rejeitar sempre?",
+          "start": 35,
+          "text": "COMO O ALGORITMO DECIDE?\n REJEITAR SEMPRE? "
+        },
+        {
+          "phase": "Uma piora pode ser aceita",
+          "start": 38,
+          "text": "COMO O ALGORITMO DECIDE?\n NÃO.  Uma piora ainda pode ser aceita. "
+        },
+        {
+          "phase": "Critério de Metrópolis",
+          "start": 41,
+          "text": "CRITÉRIO DE METRÓPOLIS\n UMA PIORA AINDA PODE SER ACEITA  P = exp(−ΔE/T)  P é a probabilidade de aceitar. Esta expressão vale quando ΔE > 0. "
+        },
+        {
+          "phase": "A temperatura",
+          "start": 46,
+          "text": "A TEMPERATURA CONTROLA ESSA CHANCE\n T ALTA → MAIOR CHANCE DE ACEITAR   TEMPERATURA COMPUTACIONAL  0,096   Um parâmetro do algoritmo, na mesma escala do custo. "
+        },
+        {
+          "phase": "O limite de aceitação",
+          "start": 50,
+          "text": "COMO O ALGORITMO DECIDE?\n TEMPERATURA ALTA  P É O LIMITE DE ACEITAÇÃO  A faixa verde aceita a proposta. O restante rejeita. \nConfiguração proposta x′ · a decisão ainda não foi tomada."
+        },
+        {
+          "phase": "O sorteio",
+          "start": 55,
+          "text": "COMO O ALGORITMO DECIDE?\n UM SORTEIO ALEATÓRIO  SORTEAMOS u ENTRE 0 E 1  Agora comparamos u com P. \nConfiguração proposta x′ · a decisão ainda não foi tomada."
+        },
+        {
+          "phase": "Comparar u e P",
+          "start": 60,
+          "text": "COMO O ALGORITMO DECIDE?\n A REGRA DE DECISÃO  SE u   Caso contrário, rejeitar. \nConfiguração proposta x′ · a decisão ainda não foi tomada."
+        },
+        {
+          "phase": "Decisão com T alta",
+          "start": 64,
+          "text": "COMO O ALGORITMO DECIDE?\n TEMPERATURA ALTA  O SORTEIO CAIU NA FAIXA VERDE  A piora foi aceita. \nA configuração proposta x′ foi aceita."
+        },
+        {
+          "phase": "Só a temperatura muda",
+          "start": 68,
+          "text": "COMO O ALGORITMO DECIDE?\n UMA COMPARAÇÃO CONTROLADA  MESMA CONFIGURAÇÃO INICIAL MESMA ALTERAÇÃO MESMO ΔE · MESMO SORTEIO u  ↓  SÓ UMA COISA MUDA: TEMPERATURA  Mesmo u usado apenas para comparar as duas temperaturas. Em uma execução normal, cada proposta recebe um novo sorteio. "
+        },
+        {
+          "phase": "Reduzindo a temperatura",
+          "start": 75,
+          "text": "MESMA ALTERAÇÃO. SÓ T MUDA.\n T ↓ → P ↓   TEMPERATURA T  0,087   A FAIXA VERDE ENCOLHE \nMesmo estado atual, mesma proposta e mesmo sorteio; apenas a temperatura muda."
+        },
+        {
+          "phase": "Decisão com T baixa",
+          "start": 85,
+          "text": "MESMA ALTERAÇÃO. SÓ T MUDA.\n T ↓ → P ↓   TEMPERATURA T  0,024   A REGIÃO DE ACEITAÇÃO FICOU MENOR QUE O SORTEIO \nMesmo estado atual, mesma proposta e mesmo sorteio; apenas a temperatura muda."
+        },
+        {
+          "phase": "Comparação das decisões",
+          "start": 89,
+          "text": "MESMA ALTERAÇÃO. SÓ T MUDOU.\n   TEMPERATURA ALTA  P MAIOR  u   ✓ ACEITA    TEMPERATURA BAIXA  P MENOR  u > P  × REJEITA   \nMesmo u usado apenas para comparar as duas temperaturas."
+        },
+        {
+          "phase": "Configurações resultantes",
+          "start": 95,
+          "text": "MESMA ALTERAÇÃO. SÓ T MUDOU.\n   TEMPERATURA ALTA  P MAIOR  ✓ ACEITA    TEMPERATURA BAIXA  P MENOR  × REJEITA   \nApós a decisão: a temperatura alta aceita x′; a baixa mantém x."
+        },
+        {
+          "phase": "Exploração e seleção",
+          "start": 100,
+          "text": "COMO O ALGORITMO DECIDE?\n   T ALTA  MAIS EXPLORAÇÃO    T BAIXA  MAIS SELEÇÃO   "
+        },
+        {
+          "phase": "Resfriar aos poucos",
+          "start": 105,
+          "text": "COMO O ALGORITMO DECIDE?\n E SE REDUZIRMOS T AOS POUCOS?  ↓  SIMULAÇÃO 04 · RESFRIAMENTO "
+        }
+      ]
+    },
+    {
+      "file": "Simulation4_Convergence.html",
+      "framesAt60fps": 3481,
+      "contract": {
+        "status": "PASS",
+        "checks": [
+          {
+            "label": "Mesma trajetória, decisões, estados e melhor resultado",
+            "pass": true
+          },
+          {
+            "label": "Schedule científico original preservado",
+            "pass": true
+          },
+          {
+            "label": "Curva verde é o mínimo acumulado exato",
+            "pass": true
+          },
+          {
+            "label": "Custo atual e melhor custo são distintos durante a execução",
+            "pass": true
+          },
+          {
+            "label": "Três grandezas principais visíveis",
+            "pass": true
+          },
+          {
+            "label": "Telemetria secundária fora da apresentação",
+            "pass": true
+          },
+          {
+            "label": "Fechamento usa bestState e bestResult",
+            "pass": true
+          },
+          {
+            "label": "Final e melhor identificados separadamente",
+            "pass": true
+          },
+          {
+            "label": "Todos os 1920 passos científicos são reproduzidos",
+            "pass": true
+          }
+        ],
+        "duration": 58,
+        "scientificDuration": 16
+      },
+      "seekDoesNotChangeScience": true,
+      "scenes": [
+        {
+          "phase": "A pergunta",
+          "start": 0,
+          "text": "O QUE ACONTECE QUANDO RESFRIAMOS?\nRECOZIMENTO SIMULADO EM UMA EXECUÇÃO COMPLETA\n A TEMPERATURA DIMINUI. A BUSCA FICA MAIS SELETIVA.  Guardamos a melhor configuração encontrada. "
+        },
+        {
+          "phase": "O custo atual",
+          "start": 4,
+          "text": "O CUSTO ATUAL PODE SUBIR E DESCER\nCada ponto da curva vem de uma decisão real do algoritmo.\n  TEMPERATURA T  0,08725         CUSTO ATUAL  0,924    MELHOR CUSTO  0,762    Tₙ = T₀ αⁿ · barra em escala logarítmica \n Curva ciano → custo da configuração atual. "
+        },
+        {
+          "phase": "Guardamos o melhor",
+          "start": 8,
+          "text": "GUARDAMOS O MELHOR RESULTADO\nO melhor custo só muda quando encontramos uma configuração ainda melhor.\n  TEMPERATURA T  0,06457         CUSTO ATUAL  0,591    MELHOR CUSTO  0,578    Tₙ = T₀ αⁿ · barra em escala logarítmica \n Curva verde → menor custo visitado até agora. "
+        },
+        {
+          "phase": "T alta: exploração",
+          "start": 13,
+          "text": "T ALTA → EXPLORAÇÃO\nMuitas pioras ainda podem ser aceitas.\n  TEMPERATURA T  0,05489         CUSTO ATUAL  0,609    MELHOR CUSTO  0,547    Tₙ = T₀ αⁿ · barra em escala logarítmica \nCores das vias: atraso no modelo · pontos: fluxo ilustrativo."
+        },
+        {
+          "phase": "T diminui",
+          "start": 21,
+          "text": "T DIMINUI → PIORAS FICAM MENOS PROVÁVEIS\nA temperatura cai a cada nova proposta.\n  TEMPERATURA T  0,01201         CUSTO ATUAL  0,485    MELHOR CUSTO  0,459    Tₙ = T₀ αⁿ · barra em escala logarítmica \nCores das vias: atraso no modelo · pontos: fluxo ilustrativo."
+        },
+        {
+          "phase": "T baixa: seleção",
+          "start": 32,
+          "text": "T BAIXA → BUSCA MAIS SELETIVA\nAs flutuações ficam menores nesta execução.\n  TEMPERATURA T  0,00023         CUSTO ATUAL  0,434    MELHOR CUSTO  0,433    Tₙ = T₀ αⁿ · barra em escala logarítmica \nCores das vias: atraso no modelo · pontos: fluxo ilustrativo."
+        },
+        {
+          "phase": "Estabilização",
+          "start": 40,
+          "text": "ESTABILIZAÇÃO EM BAIXA T\nExecução finita · melhor estado encontrado nesta execução.\n  TEMPERATURA T  0,00003         CUSTO ATUAL  0,431    MELHOR CUSTO  0,431    Tₙ = T₀ αⁿ · barra em escala logarítmica \nExecução finita: a busca conserva a melhor configuração encontrada."
+        },
+        {
+          "phase": "Resultado da execução",
+          "start": 45,
+          "text": "O QUE ESTA EXECUÇÃO ENCONTROU?\nO estado final e o melhor estado são registrados separadamente.\n CUSTO E(x)     ESTADO INICIAL  0,867      ESTADO FINAL  0,431      MELHOR ESTADO ENCONTRADO  0,431     Nesta execução, o estado final também é o melhor encontrado. "
+        },
+        {
+          "phase": "Redução do custo",
+          "start": 51,
+          "text": "MELHOR ESTADO ENCONTRADO NESTA EXECUÇÃO\nA configuração guardada permanece na rede ao fundo.\n REDUÇÃO DO CUSTO EM RELAÇÃO AO INÍCIO  50,3%  A temperatura caiu. A busca ficou mais seletiva. O melhor estado ficou guardado.  Resultado de uma execução finita com dados sintéticos. "
+        }
+      ]
+    }
+  ],
+  "bestVersusFinalWitness": {
+    "seed": 31415926,
+    "finalEnergy": 0.4312512893505296,
+    "bestEnergy": 0.4312451645517304,
+    "closingMapUsesBest": true,
+    "productionSeedUnchanged": true
+  },
+  "legacyIdentificationOnly": true
+}

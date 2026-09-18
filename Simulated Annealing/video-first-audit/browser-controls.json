@@ -1,0 +1,255 @@
+[
+  {
+    "file": "Simulation2_UrbanLattice.html",
+    "advanced": true,
+    "seekCorrect": true,
+    "restartedAt": 0.271,
+    "presentationValidation": {
+      "status": "PASS",
+      "checks": [
+        {
+          "label": "Idioma da apresentação: português",
+          "pass": true
+        },
+        {
+          "label": "Um único Canvas de apresentação",
+          "pass": true
+        },
+        {
+          "label": "Sem bibliotecas ou folhas externas",
+          "pass": true
+        },
+        {
+          "label": "Conceitos visíveis em português",
+          "pass": true
+        },
+        {
+          "label": "Até um gráfico e três números principais; exceção explícita para a comparação pareada",
+          "pass": true
+        },
+        {
+          "label": "Controles ocultos no modo de gravação",
+          "pass": true
+        },
+        {
+          "label": "Cursor oculto em toda a gravação",
+          "pass": true
+        },
+        {
+          "label": "Sem promessa de ótimo global",
+          "pass": true
+        },
+        {
+          "label": "Sem fórmula de Metrópolis ou telemetria prematura",
+          "pass": true
+        },
+        {
+          "label": "Ordem: rede, configuração e custo",
+          "pass": true
+        },
+        {
+          "label": "Fechamento aponta para mínimos locais",
+          "pass": true
+        },
+        {
+          "label": "Apresentação percorre toda a trajetória original",
+          "pass": true
+        },
+        {
+          "label": "Todos os estados exibidos são estados do motor",
+          "pass": true
+        }
+      ],
+      "duration": 73,
+      "scientificDuration": 14
+    },
+    "recording": {
+      "controls": "none",
+      "cursor": "none",
+      "debug": "none"
+    },
+    "escapeRestoresControls": true
+  },
+  {
+    "file": "Simulation3_Metropolis.html",
+    "advanced": true,
+    "seekCorrect": true,
+    "restartedAt": 0.286,
+    "presentationValidation": {
+      "status": "PASS",
+      "checks": [
+        {
+          "label": "Idioma da apresentação: português",
+          "pass": true
+        },
+        {
+          "label": "Um único Canvas de apresentação",
+          "pass": true
+        },
+        {
+          "label": "Sem bibliotecas ou folhas externas",
+          "pass": true
+        },
+        {
+          "label": "Conceitos visíveis em português",
+          "pass": true
+        },
+        {
+          "label": "Até um gráfico e três números principais; exceção explícita para a comparação pareada",
+          "pass": true
+        },
+        {
+          "label": "Controles ocultos no modo de gravação",
+          "pass": true
+        },
+        {
+          "label": "Cursor oculto em toda a gravação",
+          "pass": true
+        },
+        {
+          "label": "Sem promessa de ótimo global",
+          "pass": true
+        },
+        {
+          "label": "Melhora sem temperatura, sorteio ou régua",
+          "pass": true
+        },
+        {
+          "label": "Nenhuma probabilidade antes da explicação de ΔE",
+          "pass": true
+        },
+        {
+          "label": "Primeiro o limite P, depois o sorteio u",
+          "pass": true
+        },
+        {
+          "label": "Decisões reveladas somente nos momentos previstos",
+          "pass": true
+        },
+        {
+          "label": "Mesmos x, x′, ΔE, u e enquadramento na transição",
+          "pass": true
+        },
+        {
+          "label": "Somente T muda P; faixa verde diminui",
+          "pass": true
+        },
+        {
+          "label": "Extremos da transição iguais aos valores científicos, sem arredondamento",
+          "pass": true
+        },
+        {
+          "label": "Posição visual de u permanece fixa",
+          "pass": true
+        },
+        {
+          "label": "Mapas resultantes divergem somente depois da decisão",
+          "pass": true
+        },
+        {
+          "label": "Após rejeitar, o mapa volta ao estado atual",
+          "pass": true
+        },
+        {
+          "label": "Reutilização de u explicitamente restrita à comparação",
+          "pass": true
+        }
+      ],
+      "duration": 111,
+      "transitionSamples": 121
+    },
+    "recording": {
+      "controls": "none",
+      "cursor": "none",
+      "debug": "none"
+    },
+    "escapeRestoresControls": true
+  },
+  {
+    "file": "Simulation4_Convergence.html",
+    "advanced": true,
+    "seekCorrect": true,
+    "restartedAt": 0.194,
+    "presentationValidation": {
+      "status": "PASS",
+      "checks": [
+        {
+          "label": "Idioma da apresentação: português",
+          "pass": true
+        },
+        {
+          "label": "Um único Canvas de apresentação",
+          "pass": true
+        },
+        {
+          "label": "Sem bibliotecas ou folhas externas",
+          "pass": true
+        },
+        {
+          "label": "Conceitos visíveis em português",
+          "pass": true
+        },
+        {
+          "label": "Até um gráfico e três números principais; exceção explícita para a comparação pareada",
+          "pass": true
+        },
+        {
+          "label": "Controles ocultos no modo de gravação",
+          "pass": true
+        },
+        {
+          "label": "Cursor oculto em toda a gravação",
+          "pass": true
+        },
+        {
+          "label": "Sem promessa de ótimo global",
+          "pass": true
+        },
+        {
+          "label": "Mesma trajetória, decisões, estados e melhor resultado",
+          "pass": true
+        },
+        {
+          "label": "Schedule científico original preservado",
+          "pass": true
+        },
+        {
+          "label": "Curva verde é o mínimo acumulado exato",
+          "pass": true
+        },
+        {
+          "label": "Custo atual e melhor custo são distintos durante a execução",
+          "pass": true
+        },
+        {
+          "label": "Três grandezas principais visíveis",
+          "pass": true
+        },
+        {
+          "label": "Telemetria secundária fora da apresentação",
+          "pass": true
+        },
+        {
+          "label": "Fechamento usa bestState e bestResult",
+          "pass": true
+        },
+        {
+          "label": "Final e melhor identificados separadamente",
+          "pass": true
+        },
+        {
+          "label": "Todos os 1920 passos científicos são reproduzidos",
+          "pass": true
+        }
+      ],
+      "duration": 58,
+      "scientificDuration": 16
+    },
+    "recording": {
+      "controls": "none",
+      "cursor": "none",
+      "debug": "none"
+    },
+    "escapeRestoresControls": true
+  }
+]

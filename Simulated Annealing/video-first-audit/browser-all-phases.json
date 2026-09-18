@@ -1,0 +1,492 @@
+[
+  {
+    "file": "Simulation2_UrbanLattice.html",
+    "expected": "A pergunta",
+    "height": 1080,
+    "overflow": [],
+    "phase": "A pergunta",
+    "time": "0.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation2_UrbanLattice.html",
+    "expected": "A rede",
+    "height": 1080,
+    "overflow": [],
+    "phase": "A rede",
+    "time": "3.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation2_UrbanLattice.html",
+    "expected": "As vias",
+    "height": 1080,
+    "overflow": [],
+    "phase": "As vias",
+    "time": "5.800",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation2_UrbanLattice.html",
+    "expected": "As cores",
+    "height": 1080,
+    "overflow": [],
+    "phase": "As cores",
+    "time": "8.600",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation2_UrbanLattice.html",
+    "expected": "O fluxo ilustrativo",
+    "height": 1080,
+    "overflow": [],
+    "phase": "O fluxo ilustrativo",
+    "time": "11.400",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation2_UrbanLattice.html",
+    "expected": "Um semáforo",
+    "height": 1080,
+    "overflow": [],
+    "phase": "Um semáforo",
+    "time": "14.200",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation2_UrbanLattice.html",
+    "expected": "A configuração",
+    "height": 1080,
+    "overflow": [],
+    "phase": "A configuração",
+    "time": "20.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation2_UrbanLattice.html",
+    "expected": "O estado x",
+    "height": 1080,
+    "overflow": [],
+    "phase": "O estado x",
+    "time": "24.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation2_UrbanLattice.html",
+    "expected": "Como comparar",
+    "height": 1080,
+    "overflow": [],
+    "phase": "Como comparar",
+    "time": "28.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation2_UrbanLattice.html",
+    "expected": "O custo",
+    "height": 1080,
+    "overflow": [],
+    "phase": "O custo",
+    "time": "32.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation2_UrbanLattice.html",
+    "expected": "Menor custo",
+    "height": 1080,
+    "overflow": [],
+    "phase": "Menor custo",
+    "time": "36.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation2_UrbanLattice.html",
+    "expected": "A função de custo",
+    "height": 1080,
+    "overflow": [],
+    "phase": "A função de custo",
+    "time": "40.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation2_UrbanLattice.html",
+    "expected": "Exploração com T alta",
+    "height": 1080,
+    "overflow": [],
+    "phase": "Exploração com T alta",
+    "time": "45.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation2_UrbanLattice.html",
+    "expected": "Aceitar apenas melhorias?",
+    "height": 1080,
+    "overflow": [],
+    "phase": "Aceitar apenas melhorias?",
+    "time": "61.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation2_UrbanLattice.html",
+    "expected": "Busca gulosa",
+    "height": 1080,
+    "overflow": [],
+    "phase": "Busca gulosa",
+    "time": "65.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation2_UrbanLattice.html",
+    "expected": "Mínimos locais",
+    "height": 1080,
+    "overflow": [],
+    "phase": "Mínimos locais",
+    "time": "69.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation3_Metropolis.html",
+    "expected": "O estado atual",
+    "height": 1080,
+    "overflow": [],
+    "phase": "O estado atual",
+    "time": "0.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation3_Metropolis.html",
+    "expected": "Uma pequena alteração",
+    "height": 1080,
+    "overflow": [],
+    "phase": "Uma pequena alteração",
+    "time": "3.500",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation3_Metropolis.html",
+    "expected": "A diferença de custo",
+    "height": 1080,
+    "overflow": [],
+    "phase": "A diferença de custo",
+    "time": "7.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation3_Metropolis.html",
+    "expected": "O que ΔE significa",
+    "height": 1080,
+    "overflow": [],
+    "phase": "O que ΔE significa",
+    "time": "11.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation3_Metropolis.html",
+    "expected": "O custo diminuiu",
+    "height": 1080,
+    "overflow": [],
+    "phase": "O custo diminuiu",
+    "time": "15.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation3_Metropolis.html",
+    "expected": "Aceitar a melhora",
+    "height": 1080,
+    "overflow": [],
+    "phase": "Aceitar a melhora",
+    "time": "19.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation3_Metropolis.html",
+    "expected": "Novo teste",
+    "height": 1080,
+    "overflow": [],
+    "phase": "Novo teste",
+    "time": "23.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation3_Metropolis.html",
+    "expected": "Outra alteração",
+    "height": 1080,
+    "overflow": [],
+    "phase": "Outra alteração",
+    "time": "27.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation3_Metropolis.html",
+    "expected": "O custo aumentou",
+    "height": 1080,
+    "overflow": [],
+    "phase": "O custo aumentou",
+    "time": "31.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation3_Metropolis.html",
+    "expected": "Rejeitar sempre?",
+    "height": 1080,
+    "overflow": [],
+    "phase": "Rejeitar sempre?",
+    "time": "35.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation3_Metropolis.html",
+    "expected": "Uma piora pode ser aceita",
+    "height": 1080,
+    "overflow": [],
+    "phase": "Uma piora pode ser aceita",
+    "time": "38.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation3_Metropolis.html",
+    "expected": "Critério de Metrópolis",
+    "height": 1080,
+    "overflow": [],
+    "phase": "Critério de Metrópolis",
+    "time": "41.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation3_Metropolis.html",
+    "expected": "A temperatura",
+    "height": 1080,
+    "overflow": [],
+    "phase": "A temperatura",
+    "time": "46.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation3_Metropolis.html",
+    "expected": "O limite de aceitação",
+    "height": 1080,
+    "overflow": [],
+    "phase": "O limite de aceitação",
+    "time": "50.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation3_Metropolis.html",
+    "expected": "O sorteio",
+    "height": 1080,
+    "overflow": [],
+    "phase": "O sorteio",
+    "time": "55.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation3_Metropolis.html",
+    "expected": "Comparar u e P",
+    "height": 1080,
+    "overflow": [],
+    "phase": "Comparar u e P",
+    "time": "60.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation3_Metropolis.html",
+    "expected": "Decisão com T alta",
+    "height": 1080,
+    "overflow": [],
+    "phase": "Decisão com T alta",
+    "time": "64.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation3_Metropolis.html",
+    "expected": "Só a temperatura muda",
+    "height": 1080,
+    "overflow": [],
+    "phase": "Só a temperatura muda",
+    "time": "68.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation3_Metropolis.html",
+    "expected": "Reduzindo a temperatura",
+    "height": 1080,
+    "overflow": [],
+    "phase": "Reduzindo a temperatura",
+    "time": "75.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation3_Metropolis.html",
+    "expected": "Decisão com T baixa",
+    "height": 1080,
+    "overflow": [],
+    "phase": "Decisão com T baixa",
+    "time": "85.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation3_Metropolis.html",
+    "expected": "Comparação das decisões",
+    "height": 1080,
+    "overflow": [],
+    "phase": "Comparação das decisões",
+    "time": "89.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation3_Metropolis.html",
+    "expected": "Configurações resultantes",
+    "height": 1080,
+    "overflow": [],
+    "phase": "Configurações resultantes",
+    "time": "95.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation3_Metropolis.html",
+    "expected": "Exploração e seleção",
+    "height": 1080,
+    "overflow": [],
+    "phase": "Exploração e seleção",
+    "time": "100.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation3_Metropolis.html",
+    "expected": "Resfriar aos poucos",
+    "height": 1080,
+    "overflow": [],
+    "phase": "Resfriar aos poucos",
+    "time": "105.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation4_Convergence.html",
+    "expected": "A pergunta",
+    "height": 1080,
+    "overflow": [],
+    "phase": "A pergunta",
+    "time": "0.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation4_Convergence.html",
+    "expected": "O custo atual",
+    "height": 1080,
+    "overflow": [],
+    "phase": "O custo atual",
+    "time": "4.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation4_Convergence.html",
+    "expected": "Guardamos o melhor",
+    "height": 1080,
+    "overflow": [],
+    "phase": "Guardamos o melhor",
+    "time": "8.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation4_Convergence.html",
+    "expected": "T alta: exploração",
+    "height": 1080,
+    "overflow": [],
+    "phase": "T alta: exploração",
+    "time": "13.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation4_Convergence.html",
+    "expected": "T diminui",
+    "height": 1080,
+    "overflow": [],
+    "phase": "T diminui",
+    "time": "21.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation4_Convergence.html",
+    "expected": "T baixa: seleção",
+    "height": 1080,
+    "overflow": [],
+    "phase": "T baixa: seleção",
+    "time": "32.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation4_Convergence.html",
+    "expected": "Estabilização",
+    "height": 1080,
+    "overflow": [],
+    "phase": "Estabilização",
+    "time": "40.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation4_Convergence.html",
+    "expected": "Resultado da execução",
+    "height": 1080,
+    "overflow": [],
+    "phase": "Resultado da execução",
+    "time": "45.000",
+    "validation": "PASS",
+    "width": 1920
+  },
+  {
+    "file": "Simulation4_Convergence.html",
+    "expected": "Redução do custo",
+    "height": 1080,
+    "overflow": [],
+    "phase": "Redução do custo",
+    "time": "51.000",
+    "validation": "PASS",
+    "width": 1920
+  }
+]

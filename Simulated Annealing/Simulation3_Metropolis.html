@@ -1,48 +1,25 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="dark">
-<meta name="description" content="Decisão de Metrópolis: uma proposta, um sorteio e duas temperaturas. Experimento controlado, determinístico e offline.">
-<title>SIMULAÇÃO 03 — METROPOLIS DECISION</title>
-<style>
-:root{color-scheme:dark;--bg:#0f111a;--panel:#151823;--text:#f8f8f2;--muted:#8b93a7;--cyan:#8be9fd;--purple:#bd93f9;--green:#50fa7b;--orange:#ffb86c;--red:#ff5555;--line:#2a303f;--mono:ui-monospace,Consolas,"Liberation Mono",monospace;font-family:system-ui,"Segoe UI",Arial,sans-serif}
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#090b11;color:var(--text)}[hidden]{display:none!important}.recording{user-select:none}.recording canvas{cursor:none}
-#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;background:var(--bg);transform-origin:center;overflow:hidden}header{position:absolute;left:48px;right:48px;top:39px}.eyebrow{font:12px var(--mono);letter-spacing:.14em;color:var(--muted)}.eyebrow::before{content:"";display:inline-block;width:26px;height:1px;background:var(--cyan);vertical-align:middle;margin-right:14px}h1{font-size:43px;font-weight:500;letter-spacing:-.035em;margin:20px 0 12px}.subtitle{font:15px var(--mono);color:#b0b9cb;margin:0}.origin{font:12px var(--mono);color:var(--muted);margin-top:13px}.identity{position:absolute;right:0;top:0;text-align:right}.badge{display:inline-block;border:1px solid #354151;padding:10px 14px;border-radius:3px;font:11px var(--mono);letter-spacing:.09em;color:#c5d3df}.identity p{font:11px var(--mono);color:var(--muted);margin-top:16px}.mono,output{font-family:var(--mono);font-variant-numeric:tabular-nums}.cyan{color:var(--cyan)}.green{color:var(--green)}.orange{color:var(--orange)}.purple{color:var(--purple)}.red{color:var(--red)}
-#network-panel{position:absolute;left:48px;top:224px;width:900px;height:664px;border:1px solid #303847;border-radius:5px;background:radial-gradient(ellipse at 50% 45%,#171d2a,#121620 78%);overflow:hidden}.panel-head{position:absolute;left:26px;right:26px;top:23px;display:flex;justify-content:space-between;font:12px var(--mono);color:#aeb9cc}#network{position:absolute;top:73px;left:0;width:900px;height:405.8544px}.map-foot{position:absolute;left:26px;right:26px;bottom:20px;font:11px var(--mono);color:var(--muted)}.swatch{display:inline-block;width:17px;height:3px;margin:0 6px 2px 15px}#proposal-note{position:absolute;left:26px;bottom:153px;font:13px var(--mono);color:var(--purple)}.energy-context{position:absolute;left:26px;right:26px;bottom:69px;display:flex;gap:45px;border-top:1px solid var(--line);padding-top:21px;color:#adb8ca;font:13px var(--mono)}.energy-context output{display:inline-block;font-size:22px;color:var(--text);margin-left:9px}
-#hud{position:absolute;left:996px;right:48px;top:224px;height:664px}.hud-head{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:15px;font:13px var(--mono);color:var(--muted)}#case-title{font:26px var(--mono);margin:25px 0 14px;line-height:1.35;min-height:35px}#case-note{font:15px var(--mono);color:var(--muted);height:24px;margin:0 0 23px}.metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:25px;height:132px}.label{font:13px var(--mono);letter-spacing:.04em;color:#b6bfd0}.metric output{display:block;font-size:49px;margin-top:17px}.metric{border-bottom:1px solid var(--line)}.muted-metric{visibility:hidden}#rule-equation{height:44px;margin:20px 0 0;font:26px var(--mono);color:var(--cyan)}#decision-area{margin-top:6px;min-height:90px}#decision{font:46px var(--mono)}#test{font:21px var(--mono);margin-bottom:10px;color:#c2cddd}
-.ruler{position:relative;height:136px;margin:12px 40px 0;font:18px var(--mono);color:var(--muted)}.rail{position:absolute;left:0;right:0;top:43px;height:7px;background:#303648}.region{position:absolute;left:0;top:43px;height:7px;background:#50fa7b66}.marker{position:absolute;top:33px;width:3px;height:27px;background:var(--cyan);transform:translateX(-1.5px)}.marker b{position:absolute;left:0;bottom:35px;transform:translateX(-50%);font-weight:400;color:var(--cyan);white-space:nowrap}.marker.draw{background:var(--orange);top:40px;height:26px}.marker.draw b{bottom:auto;top:34px;color:var(--orange);font-size:21px}.zero,.one{position:absolute;top:76px;font-size:14px}.zero{left:0}.one{right:0}
-#intro,#bridge{position:absolute;left:48px;right:48px;top:224px;height:664px;display:flex;flex-direction:column;justify-content:center;align-items:center;background:var(--bg);text-align:center}.kicker{font:14px var(--mono);letter-spacing:.12em;color:var(--cyan)}#intro h2,#bridge h2{font-size:36px;font-weight:400;margin:28px 0}.proposal-arrow{font:78px var(--mono);color:var(--purple);margin:12px 0}.equation{font:40px var(--mono);margin:22px 0}.detail{font:20px/1.8 var(--mono);color:#adb8ca}.next{border-top:1px solid var(--line);margin-top:25px;padding-top:22px;font:26px/1.7 var(--mono)}
-#paired{position:absolute;left:48px;right:48px;top:224px;height:664px}#pair-heading{height:100px;text-align:center}#pair-heading h2{font:23px var(--mono);margin:0 0 13px;letter-spacing:.04em}#pair-contract{font:13px var(--mono);color:#b4c3d8}#shared-values{font:16px var(--mono);color:var(--orange);margin-top:15px}#pair-sides{display:grid;grid-template-columns:1fr 1fr;gap:28px}.pair-card{height:564px;border:1px solid #303847;border-radius:5px;background:var(--panel);padding:20px 26px}.pair-title{font:18px var(--mono)}.pair-card canvas{display:block;width:840px;height:250px;margin-top:7px}.pair-state{font:14px var(--mono);color:#adb8ca;margin-top:3px;min-height:19px}.pair-readings{display:flex;justify-content:space-between;font:25px var(--mono);margin-top:16px;min-height:30px}.pair-card .ruler{height:98px;margin-top:12px;font-size:15px}.pair-card .marker.draw b{font-size:17px}.pair-card .zero,.pair-card .one{top:70px}.pair-decision{display:flex;justify-content:space-between;align-items:center;font:29px var(--mono);margin-top:8px}.pair-decision small{font-size:17px;color:#bdc7d8}
-#timeline{position:absolute;left:48px;right:48px;top:917px}.time-track{height:3px;background:#292f3d}#progress{height:3px;background:#b9cbd6;transform:scaleX(0);transform-origin:left}#ticks{display:grid;grid-template-columns:4fr 7fr 3fr 11fr 12fr 12fr 6fr;margin-top:12px}#ticks button{border:0;background:transparent;text-align:left;padding:0;font-size:11px;color:var(--muted);height:24px;white-space:nowrap}#ticks button.active{color:var(--cyan)}#clock{position:absolute;right:0;top:-26px;font:12px var(--mono);color:#bcc7d6}#narrative{position:absolute;left:48px;right:48px;top:974px;display:flex;justify-content:space-between;align-items:center}#concept{font-size:20px;color:#bec9d9}.units{font:12px/1.8 var(--mono);text-align:right;color:var(--muted)}footer{position:absolute;left:48px;right:48px;bottom:16px;border-top:1px solid #242a38;padding-top:11px;display:flex;justify-content:space-between;align-items:center;font:10px var(--mono);color:var(--muted)}#controls{display:flex;align-items:center;gap:8px}button{height:28px;padding:0 11px;border:1px solid #344052;border-radius:3px;background:#181e2a;color:#c3d4e0;font:10px var(--mono);cursor:pointer}button:hover{color:var(--cyan);border-color:var(--cyan)}button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}.hide-hud #hud,.hide-hud #controls,.hide-hud #timeline,.hide-hud .pair-readings,.hide-hud .pair-card .ruler,.hide-hud .pair-decision{visibility:hidden}.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}#error{position:absolute;inset:0;z-index:20;background:var(--bg);color:var(--red);padding:140px;font:24px/1.8 var(--mono)}
-</style>
-</head>
-<body>
-<main id="stage" aria-label="Simulação 03: decisão de Metrópolis em um experimento controlado">
- <header><div class="eyebrow">SEMANA DA FÍSICA / UFG · COMPUTATIONAL PHYSICS · SIMULAÇÃO 03</div><h1>METROPOLIS DECISION</h1><p class="subtitle">Simulated Annealing // Acceptance Rule</p><p class="origin">Inspirado qualitativamente na malha de Goiânia · continuidade do modelo da Simulação 02</p><div class="identity"><span class="badge">ANIMAÇÃO COMPUTACIONAL</span><p>03 / 05 &nbsp; ACCEPTANCE RULE</p></div></header>
- <section id="network-panel" aria-label="Rede canônica com 16 nós e 26 segmentos" hidden>
-  <div class="panel-head"><span id="map-state"></span><span>16 NÓS / 26 SEGMENTOS</span></div>
-  <canvas id="network" role="img" aria-label="Rede urbana sintética. Arcos: fração de verde; cores: atraso calculado; tracejado: proposta em teste.">Rede conceitual; uma única fração de verde muda.</canvas>
-  <div id="proposal-note"></div><div class="energy-context"><span>E(x) <output id="current-e"></output></span><span id="trial-context">E(x′) <output id="trial-e"></output></span></div>
-  <div class="map-foot">ATRASO dⱼ <i class="swatch" style="background:var(--cyan)"></i>BAIXO <i class="swatch" style="background:var(--orange)"></i>MODERADO <i class="swatch" style="background:var(--red)"></i>ALTO ≥ 0.28 · FLUXO ILUSTRATIVO</div>
- </section>
- <aside id="hud" aria-label="Proposta e regra de aceitação" hidden><div class="hud-head"><span id="case-id"></span><span id="temperature-tag"></span></div><h2 id="case-title"></h2><p id="case-note"></p>
-  <div class="metrics"><div class="metric" id="delta-metric"><div class="label">ENERGY CHANGE ΔE</div><output id="delta"></output></div><div class="metric" id="temperature-metric"><div class="label">TEMPERATURE T</div><output id="temperature" class="purple"></output></div><div class="metric" id="probability-metric"><div class="label">ACCEPTANCE P</div><output id="probability" class="cyan"></output></div></div>
-  <div id="rule-equation"></div><div class="ruler" id="case-ruler" role="img"></div><div id="decision-area"><div id="test"></div><div id="decision"></div></div>
- </aside>
- <section id="intro"><div class="kicker">SIMULATION 03 / ACCEPTANCE RULE</div><h2>WHEN SHOULD A NEW CONFIGURATION BE ACCEPTED?</h2><div class="proposal-arrow">x → x′</div><div class="detail" id="intro-delta">ΔE = E(x′) − E(x)</div><div class="equation" id="intro-equation">P_acc = min[1, exp(−ΔE/T)]</div></section>
- <section id="paired" aria-label="Mesma proposta, duas temperaturas" hidden><div id="pair-heading"><h2 id="pair-title">ONE PROPOSAL · TWO TEMPERATURES</h2><div id="pair-contract"></div><div id="shared-values"></div></div><div id="pair-sides">
-  <article class="pair-card"><div class="pair-title orange">HIGH TEMPERATURE</div><canvas id="high-network" role="img" aria-label="Alta temperatura: proposta aguardando decisão."></canvas><div id="high-state" class="pair-state"></div><div class="pair-readings"><span id="high-t" class="orange"></span><span id="high-p" class="cyan"></span></div><div class="ruler" id="high-ruler" role="img"></div><div class="pair-decision"><span id="high-decision" class="green"></span><small id="high-test"></small></div></article>
-  <article class="pair-card"><div class="pair-title purple">LOW TEMPERATURE</div><canvas id="low-network" role="img" aria-label="Baixa temperatura: mesma proposta aguardando decisão."></canvas><div id="low-state" class="pair-state"></div><div class="pair-readings"><span id="low-t" class="purple"></span><span id="low-p" class="cyan"></span></div><div class="ruler" id="low-ruler" role="img"></div><div class="pair-decision"><span id="low-decision" class="red"></span><small id="low-test"></small></div></article>
- </div></section>
- <section id="bridge" hidden><div class="kicker">HIGH T → EXPLORATION &nbsp; / &nbsp; LOW T → SELECTIVITY</div><h2>WHAT IF T DECREASES GRADUALLY?</h2><div class="detail">↓<br>COOLING SCHEDULE<br>↓</div><div class="next"><span class="cyan">SIMULATION 04</span><br>COOLING AND CONVERGENCE</div></section>
- <nav id="timeline" aria-label="Ir para uma fase da apresentação"><span id="clock"></span><div class="time-track"><div id="progress"></div></div><div id="ticks"></div></nav>
- <div id="narrative"><div id="concept"></div><div class="units">E = CUSTO ADIMENSIONAL · k_B = 1<br>T = CONTROLE COMPUTACIONAL</div></div>
- <footer><span>MODELO CONCEITUAL · DADOS SINTÉTICOS · REDE NÃO GEOREFERENCIADA</span><div id="controls"><button id="play" aria-label="Play / Pause" aria-pressed="false">▶ PLAY</button><button id="restart" aria-label="Restart">↺ RESTART</button><span>SPACE play/pause · R restart · H HUD</span></div><span id="seed-label"></span></footer>
- <p class="sr-only" id="accessible-summary"></p><p class="sr-only" id="phase-live" aria-live="polite" aria-atomic="true"></p><div id="error" role="alert" hidden></div>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Animação didática de recozimento simulado, com modelo conceitual e dados sintéticos. Funciona sem conexão."><link rel="icon" href="data:,">
+<title>Simulação 03 · Como o algoritmo decide? — UFG</title><style>
+:root{color-scheme:dark;--bg:#0f111a;--text:#f8f8f2;--muted:#9da8bd;--cyan:#8be9fd;--purple:#bd93f9;--green:#50fa7b;--orange:#ffb86c;--red:#ff6868}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#090b11;color:var(--text);font-family:Arial,Helvetica,sans-serif}
+#stage{position:absolute;width:1920px;height:1080px;overflow:hidden;transform-origin:top left;background:var(--bg)}canvas{position:absolute;inset:0;width:1920px;height:1080px}
+header{position:absolute;left:76px;right:76px;top:50px;display:flex;justify-content:space-between;align-items:flex-start}header .series{color:var(--purple);font-size:16px;letter-spacing:2px;margin-bottom:20px}h1{font-size:46px;line-height:1.13;letter-spacing:-1.3px;font-weight:500;margin:0;max-width:1550px}#subtitle{font-size:25px;line-height:1.4;margin-top:18px;color:var(--muted)}.event{text-align:right;color:var(--muted);font-size:14px;line-height:1.7;letter-spacing:1px}.event b{color:var(--cyan);font-size:28px;letter-spacing:4px;font-weight:400}
+.mono,.value{font-family:Consolas,'Liberation Mono',monospace;font-variant-numeric:tabular-nums}.cyan{color:var(--cyan)}.purple{color:var(--purple)}.green{color:var(--green)}.orange{color:var(--orange)}.red{color:var(--red)}.muted{color:var(--muted)}
+#panel{position:absolute;left:1230px;top:302px;width:604px}#center{position:absolute;left:160px;right:160px;top:330px;text-align:center}#center.flow{top:294px}#center .concept{font-size:44px;line-height:1.3}#center .hero{font-size:64px;line-height:1.25;font-weight:500;letter-spacing:-1px}#center .detail{font-size:27px}.eyebrow{font-size:20px;letter-spacing:1.4px;margin:0 0 22px;color:var(--purple)}.concept{font-size:38px;line-height:1.28;font-weight:500;margin:0 0 25px;letter-spacing:-.4px}.detail{font-size:25px;line-height:1.5;color:var(--muted);margin:22px 0}.formula{font-size:30px;line-height:1.5;margin:28px 0}.note{font-size:16px;color:var(--muted);line-height:1.5}.value{font-size:58px;font-weight:400;line-height:1.15}.metric-label{font-size:20px;letter-spacing:.7px;margin-bottom:12px}.metric{margin-bottom:28px}.two{display:flex;gap:50px}.two>.metric{flex:1}.two .value{font-size:50px}.separator{height:1px;background:#2a3040;margin:30px 0}.big-symbol{font-size:94px;margin:12px 0 26px}.arrow{color:var(--muted);padding:0 32px;font-size:44px}.flow-row{display:flex;align-items:center;justify-content:center;gap:60px;margin:40px 0 54px}.flow-row small{display:block;font:22px Arial,sans-serif;color:var(--muted);margin-top:18px}.flow-row .symbol{font-size:100px}.pill{border-left:4px solid var(--purple);padding-left:24px;margin:32px 0}.comparison{display:flex;gap:140px;justify-content:center;text-align:left;margin:30px auto 0}.comparison>div{width:600px}.comparison .concept{font-size:38px}.comparison .value{font-size:52px}.summary{display:flex;justify-content:center;gap:100px;margin-top:55px}.summary>div{width:380px;text-align:left}.summary .metric-label{height:54px}.summary .value{font-size:54px}.bar{height:12px;border-radius:6px;background:#2a3040;overflow:hidden;margin:18px 0 34px}.bar>span{display:block;height:100%;background:var(--orange)}
+#mapCaption{position:absolute;left:92px;top:897px;color:var(--muted);font-size:18px;line-height:1.5;max-width:1050px}#mapCaption b{font-weight:400;color:var(--cyan)}footer{position:absolute;left:76px;right:76px;bottom:38px;display:flex;justify-content:space-between;font-size:15px;line-height:1.5;color:#8c98ae;border-top:1px solid #252b3b;padding-top:22px}#progress{position:absolute;bottom:0;height:3px;background:var(--purple);opacity:.7}#controls{position:absolute;bottom:100px;left:76px;right:76px;display:flex;align-items:center;gap:12px;padding:14px 18px;background:#151a28f5;border:1px solid #384058;border-radius:8px;font-size:17px;z-index:5}button,input,select{font:inherit;color:var(--text);border:1px solid #455069;background:#202737;border-radius:5px;padding:9px 12px}button{cursor:pointer}button:hover{border-color:var(--cyan)}:focus-visible{outline:3px solid var(--cyan);outline-offset:4px}#seek{width:106px}#chapters{max-width:360px}#clock{margin-left:auto;white-space:nowrap}.recording,.recording *{cursor:none!important;user-select:none!important}.recording #controls,.recording #debug{display:none!important;visibility:hidden!important;pointer-events:none!important}#debug{position:absolute;z-index:9;inset:220px 120px 170px;background:#111725f7;border:1px solid var(--purple);padding:32px;overflow:auto;font:16px/1.6 Consolas,monospace;white-space:pre-wrap}#debug[hidden],[hidden]{display:none!important}.sr-only{position:absolute!important;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}#error{position:absolute;z-index:20;left:200px;right:200px;top:400px;background:#30202b;padding:40px;border:2px solid var(--red);font-size:24px}
+
+#contextNote{font-size:16px;color:#929fb5;margin-top:14px;letter-spacing:.3px}.metric-label{font-size:23px}.eyebrow{font-size:23px}.series{font-size:16px!important}#mode{width:125px}#controls{gap:10px;padding:12px;font-size:16px}#chapters{max-width:310px}#clock{font-size:15px}.network-key{font-size:27px;line-height:1.9;color:var(--muted)}#center.comparison05{left:92px;right:92px;top:257px;text-align:left}.compare-05{display:grid;grid-template-columns:1fr 1fr;gap:150px}.compare-05 h2{font-size:30px;line-height:1.3;min-height:78px;margin:12px 0}.compare-05 .eyebrow{margin-bottom:12px}.compare-05 .metric{margin-top:465px}.compare-05 .value{font-size:56px}.compare-05 .metric-label{font-size:24px}.comparison-note{position:absolute;top:928px;left:94px;right:94px;font-size:16px;color:var(--muted)}
+
+</style></head>
+<body><main id="stage" aria-label="Simulação 03: Como o algoritmo decide?">
+<canvas id="scene" width="1920" height="1080" role="img" aria-label="Rede urbana conceitual, com cores que indicam o atraso do modelo e pontos de fluxo ilustrativo">Os estados e resultados desta animação são descritos no texto da cena.</canvas>
+<header><div><div class="series">SIMULAÇÃO 03 · RECOZIMENTO SIMULADO</div><h1 id="title">Como o algoritmo decide?</h1><div id="subtitle"></div><div id="contextNote"></div></div><div class="event"><b>UFG</b><br>XLIII SEMANA<br>DA FÍSICA</div></header>
+<section id="panel" aria-label="Explicação da cena"></section><section id="center" aria-label="Ideia principal"></section><div id="mapCaption"></div>
+<footer><span>MODELO CONCEITUAL · DADOS SINTÉTICOS · REDE NÃO GEORREFERENCIADA</span><span id="chapterLabel"></span></footer><div id="progress"></div>
+<nav id="controls" aria-label="Controles da animação"><label>Versão <select id="mode" aria-label="Versão da apresentação"><option value="video">Vídeo</option><option value="full">Completa</option></select></label><button id="play">Reproduzir</button><button id="restart">Reiniciar</button><label>Tempo <input id="seek" type="number" min="0" step="0.1" value="0" aria-label="Tempo da apresentação em segundos"></label><label>Cena <select id="chapters" aria-label="Escolher cena"></select></label><button id="record">Gravar do início</button><button id="export">Exportar JSON</button><button id="inspect" aria-expanded="false">Validações</button><span id="clock" class="mono"></span></nav>
+<pre id="debug" hidden aria-label="Relatório de validação"></pre><p id="status" class="sr-only" role="status" aria-live="polite"></p><div id="error" role="alert" hidden></div>
 </main>
-<noscript>Ative JavaScript para executar a apresentação offline.</noscript>
 <script id="model">
 const Simulation03Core = (() => {
  'use strict';
@@ -217,240 +194,287 @@ const Simulation03Core = (() => {
  return Object.freeze({AUTO_PLAY,RECORDING_MODE,CONFIG,TIMELINE,NETWORK_CONFIG,INITIAL_STATE,PRNG,UrbanNetwork,SignalConfiguration,TrafficModel,EnergyFunction,buildTeachingExperiment,validateTeachingEvents,caseViews,probability,decide,clamp,mix});
 })();
 </script>
-<script id="presentation-model">
-// Presentation policy is pure and seekable. It never proposes a move or evaluates E.
-const PresentationModel = (() => {
- const {TIMELINE,clamp,mix}=Simulation03Core;
- const TIMES=Object.freeze({aTrial:5,aDecision:8,aResult:9,setupTrial:12.2,
-  highP:16,highU:18,highTest:20,highDecision:21,highResult:22,
-  lowerStart:25,lowerEnd:31,lowTest:32,lowDecision:33,lowResult:34,
-  pairT:39,pairP:40,pairU:41,pairTest:42,pairDecision:44,pairResult:45.5,mapTime:14});
- const buildCurrentView=e=>Object.freeze({kind:'current',event:e,state:e.currentState,result:e.currentResult,index:e.index});
- const buildTrialView=e=>Object.freeze({kind:'trial',event:e,state:e.candidateState,result:e.candidateResult,index:e.index});
- const buildAcceptedView=e=>Object.freeze({kind:'accepted',event:e,state:e.candidateState,result:e.candidateResult,index:e.index});
- const buildRejectedView=e=>Object.freeze({kind:'rejected',event:e,state:e.currentState,result:e.currentResult,index:e.index});
- const phaseAt=t=>TIMELINE.find(p=>t>=p.start&&t<p.end)||TIMELINE[TIMELINE.length-1];
- function build(data){
-  const a=data.caseA,p=data.pairedUphill,views=e=>Object.freeze({current:buildCurrentView(e),trial:buildTrialView(e),accepted:buildAcceptedView(e),rejected:buildRejectedView(e)});
-  const av=views(a),pv=views(p);
-  return Object.freeze({at(t){
-   const phase=phaseAt(t),id=phase.id;
-   const f={phase,event:null,view:null,highView:null,lowView:null,temperature:null,probability:null,u:null,
-    showDelta:false,showT:false,showP:false,showU:false,showRuler:false,showFormula:false,showTest:false,
-    showDecision:false,decision:null,outcome:false,transition:false,mapTime:TIMES.mapTime,note:'',mode:'hold'};
-   if(id==='rule'){f.showDelta=t>=1.3;f.showFormula=t>=2.8;return f;}
-   if(id==='A'){
-    Object.assign(f,{event:a,view:t<TIMES.aTrial?av.current:t<TIMES.aResult?av.trial:av.accepted,
-     showDelta:t>=TIMES.aTrial,showP:t>=6,probability:1,showTest:t>=7,
-     showDecision:t>=TIMES.aDecision,decision:a,outcome:t>=TIMES.aResult,mapTime:t});
-   }else if(id==='setup'){
-    Object.assign(f,{event:p,view:t<TIMES.setupTrial?pv.current:pv.trial,showDelta:t>=TIMES.setupTrial,
-     note:'NEW CONTROLLED TEST / SAME BASELINE x₀'});
-   }else if(id==='high'||id==='low'){
-    const high=id==='high',s=clamp((t-TIMES.lowerStart)/(TIMES.lowerEnd-TIMES.lowerStart),0,1);
-    const T=high||s===0?p.high.temperature:s===1?p.low.temperature:mix(p.high.temperature,p.low.temperature,s);
-    const outcome=t>=(high?TIMES.highResult:TIMES.lowResult),transition=!high&&t<TIMES.lowerEnd;
-    Object.assign(f,{event:p,view:outcome?(high?pv.accepted:pv.rejected):pv.trial,
-     temperature:T,probability:high?p.high.probability:s===1?p.low.probability:Math.exp(-p.delta/T),u:p.u,
-     showDelta:true,showT:true,showP:!high||t>=TIMES.highP,showU:!high||t>=TIMES.highU,
-     showRuler:!high||t>=TIMES.highP,showFormula:!high||t>=TIMES.highP,
-     showTest:t>=(high?TIMES.highTest:TIMES.lowTest),showDecision:t>=(high?TIMES.highDecision:TIMES.lowDecision),
-     decision:transition?null:high?p.high:p.low,outcome,transition,
-     note:high?'SAME x · SAME x′ · FIXED ΔE · FIXED u':transition?'MESMO CANDIDATO EM TESTE · T ↓ → P ↓':'MESMO TESTE · TEMPERATURA MENOR'});
-   }else if(id==='pair'){
-    const outcome=t>=TIMES.pairResult;
-    Object.assign(f,{event:p,highView:outcome?pv.accepted:pv.trial,lowView:outcome?pv.rejected:pv.trial,
-     u:p.u,showDelta:true,showT:t>=TIMES.pairT,showP:t>=TIMES.pairP,showU:t>=TIMES.pairU,
-     showRuler:t>=TIMES.pairP,showTest:t>=TIMES.pairTest,showDecision:t>=TIMES.pairDecision,outcome});
-   }
-   f.mode=f.transition?'temperature-transition':f.outcome?'result':f.showDecision?'decision':f.view?f.view.kind:'hold';return f;
-  }});
- }
- function assertSamePairedVisualInputs(high,low){
-  const a=high.event,b=low.event,fail=label=>{throw new Error('VISUAL INPUT MISMATCH: '+label);};
-  if(a!==b)fail('paired event identity');
-  for(const key of ['currentState','candidateState','currentEnergy','candidateEnergy','delta','u','index','beforeValue','afterValue','currentResult','candidateResult'])if(a[key]!==b[key])fail(key);
-  return true;
- }
- function validatePresentationContract(data,model){
-  const checks=[],p=data.pairedUphill,c=(ok,label)=>{if(!ok)throw new Error('PRESENTATION FAILED: '+label);checks.push(label);};
-  const high=model.at(19),low=model.at(31.5),start=model.at(37),decision=model.at(44.5),end=model.at(46);
-  c(assertSamePairedVisualInputs(high.view,low.view),'Same paired event and all scientific visual inputs');
-  c(high.view===low.view&&high.view.kind==='trial','High and low reuse one candidate view before decision');
-  c(high.mapTime===low.mapTime,'Fixed visual flow time');
-  c(high.temperature===p.high.temperature&&low.temperature===p.low.temperature,'Certified temperature endpoints');
-  c(high.probability===p.high.probability&&low.probability===p.low.probability,'Certified probability endpoints');
-  c(high.u===low.u&&high.u===p.u,'Same stationary ruler draw');
-  c(model.at(11).view.state===p.currentState&&model.at(11).note.includes('SAME BASELINE'),'Explicit baseline reset after downhill');
-  c(model.at(22).view.state===p.candidateState&&model.at(22).view.kind==='accepted','High acceptance promotes candidate');
-  c(model.at(34).view.state===p.currentState&&model.at(34).view.kind==='rejected','Low rejection restores original state');
-  c(start.highView===start.lowView&&start.highView.kind==='trial','Comparison starts with identical trial views');
-  c(assertSamePairedVisualInputs(start.highView,start.lowView),'Comparison has identical scientific inputs');
-  c(!start.showT&&!start.showP&&!start.showU&&!start.showDecision,'Comparison reveals inputs before probabilities and decisions');
-  c(decision.showDecision&&!decision.outcome&&decision.highView===decision.lowView,'Decision precedes visible state divergence');
-  c(end.highView.state===p.candidateState&&end.lowView.state===p.currentState,'Comparison result uses accepted and rejected states');
-  c(end.highView.result===p.candidateResult&&end.lowView.result===p.currentResult,'Result road colors match result states');
-  c(!high.note.includes('LOW')&&!high.note.includes(String(p.low.probability)),'No low-temperature spoiler in high panel');
-  c(!low.note.includes('HIGH')&&!low.note.includes(String(p.high.probability)),'No high-temperature table in low panel');
-  const samples=[];
-  for(let i=0;i<=120;i++){
-   const f=model.at(TIMES.lowerStart+(TIMES.lowerEnd-TIMES.lowerStart)*i/120);samples.push(f);
-   if(f.view!==high.view||f.mapTime!==high.mapTime||f.u!==p.u||f.showDecision||f.showTest)throw new Error('Temperature transition changed fixed inputs or revealed decision');
-   if(Math.abs(f.probability-Math.exp(-p.delta/f.temperature))>1e-12)throw new Error('Incorrect displayed probability');
-  }
-  c(samples.length===121,'121 transition samples preserve candidate, delta, u and map time');
-  c(samples.every((f,i)=>i===0||f.temperature<samples[i-1].temperature&&f.probability<samples[i-1].probability),'Only T and its computed P decrease monotonically');
-  c(samples.every(f=>f.showU&&f.showRuler&&!f.outcome),'Ruler remains visible and outcome is deferred during transition');
-  const downhill=[4,5,6,7,8,9,10.99].map(t=>model.at(t));
-  c(downhill.every(f=>!f.showU&&!f.showT&&!f.showRuler&&f.temperature===null&&f.u===null),'Downhill hides temperature, random draw and ruler');
-  c(downhill.every(f=>f.probability===1&&f.decision===data.caseA),'Downhill decision independent of temperature');
-  c(TIMELINE.every((f,i)=>!i||TIMELINE[i-1].end===f.start)&&TIMELINE.at(-1).end===55,'Continuous 55-second presentation');
-  return Object.freeze({status:'PASS',checks:Object.freeze(checks),transitionSamples:samples.length});
- }
- return Object.freeze({TIMES,build,phaseAt,buildCurrentView,buildTrialView,buildAcceptedView,buildRejectedView,assertSamePairedVisualInputs,validatePresentationContract});
-})();
-</script>
-<script id="presentation">
-(() => {
+<script id="presentation-common">/* Presentation only: no proposal, random draw, energy or acceptance is computed here. */
+const VideoPresentation = (() => {
  'use strict';
- const {CONFIG,TIMELINE,PRNG,buildTeachingExperiment,caseViews,clamp,mix}=Simulation03Core;
- const $=id=>document.getElementById(id),fmt=(n,d=4)=>n===null?'—':n.toFixed(d),signed=n=>(n>0?'+':'')+fmt(n);
- const copy=o=>JSON.parse(JSON.stringify(o)),TAU=Math.PI*2;
- const line=(c,x,y,X,Y,color,w)=>{c.beginPath();c.moveTo(x,y);c.lineTo(X,Y);c.strokeStyle=color;c.lineWidth=w;c.stroke();};
- const circle=(c,x,y,r,color)=>{c.beginPath();c.arc(x,y,r,0,TAU);c.fillStyle=color;c.fill();};
- function text(c,s,x,y,size,color){c.font=size+'px Consolas, monospace';c.fillStyle=color;c.fillText(s,x,y);}
- function delayColor(d){const stops=[[.04,[139,233,253]],[.13,[255,184,108]],[.28,[255,85,85]]];
-  const i=d<=.13?0:1,a=stops[i],b=stops[i+1],u=clamp((d-a[0])/(b[0]-a[0]),0,1);
-  return 'rgb('+a[1].map((v,k)=>Math.round(mix(v,b[1][k],u))).join(',')+')';}
- class Renderer {
-  constructor(data){this.data=data;this.nodes=data.network.nodes.map(n=>({...n,x:n.x+47,y:n.y*.77+14}));
-   const rng=new PRNG(Simulation03Core.NETWORK_CONFIG.geometrySeed^0x59D3);
-   this.edges=data.network.edges.map(e=>{const a=this.nodes[e.a],b=this.nodes[e.b],dx=b.x-a.x,dy=b.y-a.y,L=Math.hypot(dx,dy);return {...e,a,b,dx,dy,nx:-dy/L,ny:dx/L,phase:rng.next(),count:Math.round(e.q*36)};});
-   this.canvases=[$('network'),$('high-network'),$('low-network')];this.layers=new Map();this.resize();
-  }
-  resize(){this.contexts=this.canvases.map((canvas,i)=>{const w=i?840:1264,h=i?250:570,r=canvas.getBoundingClientRect(),dpr=devicePixelRatio||1;
-    // Hidden comparison canvases use the same stage scale as the visible map.
-    const scale=Math.min(innerWidth/1920,innerHeight/1080);canvas.width=Math.max(1,Math.round((r.width||w*scale)*dpr));canvas.height=Math.max(1,Math.round((r.height||h*scale)*dpr));
-    const c=canvas.getContext('2d');if(!c)throw new Error('Canvas 2D indisponível.');c.setTransform(canvas.width/w,0,0,canvas.height/h,0,0);return c;});
-   this.layers.clear();for(const result of [this.data.caseA.currentResult,this.data.caseA.candidateResult,this.data.pairedUphill.candidateResult])this.cache(result);
-  }
-  cache(result){if(this.layers.has(result))return;const canvas=document.createElement('canvas');canvas.width=this.canvases[0].width;canvas.height=this.canvases[0].height;
-   const c=canvas.getContext('2d');c.setTransform(canvas.width/1264,0,0,canvas.height/570,0,0);
-   c.fillStyle='#334051';c.globalAlpha=.30;for(let x=42;x<1230;x+=38)for(let y=22;y<540;y+=38)c.fillRect(x,y,1,1);c.globalAlpha=1;
-   const blocks=[[0,1,5,4],[1,2,6,5],[2,3,7,6],[4,5,9,8],[5,6,10,9],[6,7,11,10],[8,9,13,12],[9,10,14,13],[10,11,15,14]];
-   blocks.forEach((ids,i)=>{const p=ids.map(id=>this.nodes[id]),cx=p.reduce((s,n)=>s+n.x,0)/4,cy=p.reduce((s,n)=>s+n.y,0)/4;
-    c.beginPath();p.forEach((n,k)=>{const x=mix(cx,n.x,.75),y=mix(cy,n.y,.68);if(k)c.lineTo(x,y);else c.moveTo(x,y);});c.closePath();c.fillStyle=i%3?'#171c28':'#19202b';c.fill();c.strokeStyle='#27313e';c.lineWidth=1;c.stroke();text(c,'B'+String(i+1).padStart(2,'0'),cx-12,cy+4,10,'#414d61');});
-   c.lineCap='round';this.edges.forEach((e,j)=>{line(c,e.a.x,e.a.y,e.b.x,e.b.y,'#28303d',e.main?26:20);line(c,e.a.x,e.a.y,e.b.x,e.b.y,'#10151f',e.main?23:17);line(c,e.a.x,e.a.y,e.b.x,e.b.y,delayColor(result.roads[j].delay),e.main?5.5:3.3);});
-   this.layers.set(result,canvas);
-  }
-  draw(view,time,side=0){this.canvases[side].dataset.view=view.kind;const c=this.contexts[side],w=side?840:1264,h=side?250:570;c.clearRect(0,0,w,h);c.save();
-   // One uniform scale preserves the original schematic geometry on both sides.
-   if(side){c.translate(142,-1);c.scale(.44,.44);}this.cache(view.result);c.drawImage(this.layers.get(view.result),0,0,1264,570);
-   this.edges.forEach((e,j)=>{const delay=view.result.roads[j].delay,load=delay/(delay+.16),power=1+3.2*load;
-    // Fixed particle count from synthetic demand; these are illustrative flow
-    // marks, not simulated vehicles. Positions depend only on presentation time.
-    c.beginPath();for(let lane=0;lane<2;lane++)for(let k=0;k<e.count;k++){
-     const u=(k/e.count+e.phase+time*.17/(1+5*delay)+lane*.19)%1,packed=.065+.87*(1-Math.pow(1-u,power)),f=lane?1-packed:packed,off=(lane?1:-1)*(e.main?7:5);
-     const x=e.a.x+e.dx*f+e.nx*off,y=e.a.y+e.dy*f+e.ny*off;c.moveTo(x+1.7,y);c.arc(x,y,1.7,0,TAU);
-    }c.fillStyle=delayColor(delay);c.globalAlpha=.65;c.fill();c.globalAlpha=1;
-   });
-   for(let i=0;i<this.nodes.length;i++){const n=this.nodes[i],g=view.state[i],on=(time/CONFIG.cycle+n.offset)%1<g;
-    if(i===view.index){circle(c,n.x,n.y,27,'#bd93f922');c.beginPath();c.arc(n.x,n.y,24,0,TAU);c.strokeStyle='#bd93f9';c.lineWidth=1.5;c.setLineDash(view.kind==='trial'?[4,4]:[]);c.stroke();c.setLineDash([]);}
-    circle(c,n.x,n.y,15,'#10151f');c.beginPath();c.arc(n.x,n.y,12,0,TAU);c.strokeStyle='#354054';c.lineWidth=2;c.stroke();c.beginPath();c.arc(n.x,n.y,12,-Math.PI/2,TAU*g-Math.PI/2);c.strokeStyle='#bd93f9';c.setLineDash(view.kind==='trial'&&i===view.index?[3,3]:[]);c.stroke();c.setLineDash([]);
-    line(c,n.x-5,n.y,n.x+5,n.y,on?'#8be9fd':'#414c5d',2);line(c,n.x,n.y-5,n.x,n.y+5,on?'#414c5d':'#8be9fd',2);text(c,String(i+1).padStart(2,'0'),n.x-24,n.y-19,11,'#a0adc1');
+ const C={bg:'#0f111a',text:'#f8f8f2',muted:'#9da8bd',cyan:'#8be9fd',purple:'#bd93f9',green:'#50fa7b',orange:'#ffb86c',red:'#ff6868'};
+ const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v)),lerp=(a,b,t)=>a+(b-a)*t;
+ const fmt=(v,n=3)=>Number(v).toLocaleString('pt-BR',{minimumFractionDigits:n,maximumFractionDigits:n});
+ const signed=(v,n=3)=>(v>0?'+':'')+fmt(v,n);
+ const metric=(label,value,color='cyan')=>`<div class="metric"><div class="metric-label">${label}</div><div class="value ${color}">${value}</div></div>`;
+ const concept=(text,color='')=>`<h2 class="concept ${color}">${text}</h2>`;
+ const detail=text=>`<p class="detail">${text}</p>`;
+ const note=text=>`<p class="note">${text}</p>`;
+ const eyebrow=text=>`<div class="eyebrow">${text}</div>`;
+ const phaseAt=(phases,t)=>phases.findLast(p=>t>=p.start)||phases[0];
+ const rgb=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+ function delayColor(d){const stops=[[.04,C.cyan],[.09,C.green],[.13,C.orange],[.28,'#ff5555']];let k=1;while(k<3&&d>stops[k][0])k++;const [a,ca]=stops[k-1],[b,cb]=stops[k],f=clamp((d-a)/(b-a)),aa=rgb(ca),bb=rgb(cb);return `rgb(${aa.map((v,i)=>Math.round(lerp(v,bb[i],f))).join(',')})`;}
+ function label(ctx,text,x,y,size=22,color=C.muted,align='left'){ctx.fillStyle=color;ctx.font=`${size}px Arial`;ctx.textAlign=align;ctx.fillText(text,x,y);ctx.textAlign='left';}
+ function line(ctx,x1,y1,x2,y2,color,width=2){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.strokeStyle=color;ctx.lineWidth=width;ctx.stroke();}
+ function dot(ctx,x,y,r,color){ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();}
+ function map(ctx,network,state,result,time,{rect={x:85,y:293,w:1065,h:562},focus=-1,opacity=1,particles=true,colorScale=delayColor}={}){
+  // Uniform affine transform preserves the canonical coordinates and all angles.
+  const scale=Math.min(rect.w/1100,rect.h/650),ox=rect.x+(rect.w-1100*scale)/2,oy=rect.y+(rect.h-650*scale)/2;
+  const points=network.nodes.map(n=>({x:ox+n.x*scale,y:oy+n.y*scale}));
+  ctx.save();ctx.globalAlpha=opacity;ctx.lineCap='round';
+  network.edges.forEach((e,j)=>{
+   const a=points[e.a],b=points[e.b],near=focus<0||e.a===focus||e.b===focus,d=result.roads?result.roads[j].delay:result.delays[j];
+   ctx.globalAlpha=opacity*(near?1:.14);line(ctx,a.x,a.y,b.x,b.y,'#242b3b',17);line(ctx,a.x,a.y,b.x,b.y,colorScale(d),5);
+   if(particles){const count=Math.max(3,Math.round(e.q*17));for(let k=0;k<count;k++){
+    const u=(k/count+time*(.035/(1+2*d))+(j*.137)%1)%1;
+    dot(ctx,lerp(a.x,b.x,u),lerp(a.y,b.y,u),2.7,'#f4f7ff');}}
+  });
+  points.forEach((p,i)=>{
+   const near=focus<0||i===focus;ctx.globalAlpha=opacity*(near?1:.16);
+   if(i===focus){const r=38;const grad=ctx.createRadialGradient(p.x,p.y,5,p.x,p.y,65);grad.addColorStop(0,'#bd93f94a');grad.addColorStop(1,'#bd93f900');ctx.fillStyle=grad;ctx.fillRect(p.x-65,p.y-65,130,130);ctx.strokeStyle=C.purple;ctx.lineWidth=2;ctx.beginPath();ctx.arc(p.x,p.y,r,0,Math.PI*2);ctx.stroke();}
+   dot(ctx,p.x,p.y,14,C.bg);ctx.strokeStyle=near?'#7f8ba4':'#394258';ctx.lineWidth=2;ctx.beginPath();ctx.arc(p.x,p.y,14,0,Math.PI*2);ctx.stroke();
+   const g=state.values?state.values[i]:state[i],green=((time/4.8+network.nodes[i].offset)%1)<g;
+   dot(ctx,p.x-5,p.y,3.7,green?C.green:C.red);dot(ctx,p.x+5,p.y,3.7,green?C.red:C.green);
+   if(i===focus)label(ctx,String(i+1).padStart(2,'0'),p.x,p.y+66,26,C.purple,'center');
+  });ctx.restore();return points;
+ }
+ function chart(ctx,points,{x=1230,y=685,w=594,h=180,duration=16,best=true,highlight='',max=1.1}={}){
+  const px=t=>x+clamp(t/duration)*w,py=e=>y+h-clamp(e/max)*h;
+  ctx.save();ctx.lineCap='round';
+  for(let k=0;k<=2;k++){const yy=y+k*h/2;line(ctx,x,yy,x+w,yy,'#293044',1);}
+  const draw=(key,color,width)=>{ctx.beginPath();points.forEach((p,i)=>{if(i)ctx.lineTo(px(p.t),py(p[key]));else ctx.moveTo(px(p.t),py(p[key]));});ctx.lineWidth=width;ctx.strokeStyle=color;ctx.stroke();};
+  draw('e',C.cyan,3);if(best)draw('best',C.green,4);
+  const last=points.at(-1);if(last){dot(ctx,px(last.t),py(last.e),5,C.cyan);if(best)dot(ctx,px(last.t),py(last.best),5,C.green);
+   if(highlight){const key=highlight==='best'?'best':'e',color=key==='best'?C.green:C.cyan;ctx.strokeStyle=color;ctx.lineWidth=2;ctx.beginPath();ctx.arc(px(last.t),py(last[key]),13,0,Math.PI*2);ctx.stroke();}}
+  label(ctx,'início',x,y+h+28,17);label(ctx,'fim da execução',x+w,y+h+28,17,C.muted,'right');label(ctx,'E',x-18,y+6,18);
+  ctx.restore();
+ }
+ function ruler(ctx,P,u,{x=1230,y=688,w=594,showU=false,showTest=false,decision=null,stationary=false}={}){
+  ctx.save();ctx.fillStyle='#33303e';ctx.fillRect(x,y,w,30);ctx.fillStyle='#50fa7b99';ctx.fillRect(x,y,w*P,30);
+  label(ctx,'0',x,y+61,20);label(ctx,'1',x+w,y+61,20,C.muted,'right');
+  label(ctx,'ACEITA',x,y+99,20,C.green);label(ctx,'REJEITA',x+w,y+99,20,C.red,'right');
+  line(ctx,x+w*P,y-28,x+w*P,y+34,C.green,3);
+  label(ctx,`P = ${fmt(P)}`,x+w*P,y-44,22,C.green,'center');
+  if(showU){const ux=x+w*u;line(ctx,ux,y+32,ux,y+123,C.purple,3);dot(ctx,ux,y+15,7,C.purple);label(ctx,`u = ${fmt(u)}${stationary?' · não muda':''}`,ux,y+154,22,C.purple,'center');}
+  if(showTest)label(ctx,decision===null?(u<P?'u < P':'u ≥ P'):(decision?'✓ ACEITAR':'× REJEITAR'),x+w/2,y+215,36,decision===null?C.text:decision?C.green:C.red,'center');
+  ctx.restore();
+ }
+ function commonContract(spec,frames){
+  const checks=[];const check=(ok,label)=>{checks.push({label,pass:!!ok});};
+  check(document.documentElement.lang==='pt-BR','Idioma da apresentação: português');
+  check(document.querySelectorAll('#scene').length===1,'Um único Canvas de apresentação');
+  check(!document.querySelector('script[src],link[rel="stylesheet"]'),'Sem bibliotecas ou folhas externas');
+  check(frames.every(f=>!/(URBAN NETWORK|INITIAL STATE|HIGH.T EXPLORATION|ACCEPTANCE RATE|CURRENT ENERGY|BEST ENERGY FOUND|RUNNING MINIMUM)/.test([f.title,f.subtitle,f.panel,f.center,f.caption].join(' '))),'Conceitos visíveis em português');
+  check(frames.every(f=>(f.graphs||0)<=1&&(f.pair||(f.importantNumbers||0)<=3)),'Até um gráfico e três números principais; exceção explícita para a comparação pareada');
+  const styles=[...document.styleSheets].flatMap(s=>[...s.cssRules].map(r=>r.cssText)).join('\n');
+  check(styles.includes('.recording #controls')&&styles.includes('display: none !important'),'Controles ocultos no modo de gravação');
+  check(styles.includes('cursor: none !important'),'Cursor oculto em toda a gravação');
+  check(frames.every(f=>!/(ÓTIMO GLOBAL|SOLUÇÃO ÓTIMA|MELHOR CONFIGURAÇÃO POSSÍVEL)/.test([f.title,f.panel,f.center].join(' ').replaceAll('SEM GARANTIA DE ÓTIMO GLOBAL',''))),'Sem promessa de ótimo global');
+  return checks;
+ }
+ function mount(spec){
+  const $=id=>document.getElementById(id),params=new URLSearchParams(location.search),canvas=$('scene'),ctx=canvas.getContext('2d');
+  let recording=params.has('recording')?params.get('recording')!=='0':spec.mode==='video',time=clamp(Number(params.get('t'))||0,0,spec.duration),running=params.has('autoplay')?params.get('autoplay')==='1':recording,last=performance.now(),lastPhase='',lastHUD=-Infinity;
+  const setRecording=v=>{recording=v;document.body.classList.toggle('recording',v);$('controls').inert=v;$('debug').hidden=true;$('inspect').setAttribute('aria-expanded','false');};
+  setRecording(recording);$('seek').max=spec.duration;
+  $('mode').value=spec.mode;
+  $('mode').onchange=()=>{const url=new URL(location.href);url.searchParams.set('mode',$('mode').value);url.searchParams.set('recording','0');url.searchParams.set('autoplay','0');url.searchParams.delete('t');location.href=url.href;};
+  spec.phases.forEach(p=>{const o=document.createElement('option');o.value=p.start;o.textContent=p.name;$('chapters').append(o);});
+  function resize(){const s=Math.min(innerWidth/1920,innerHeight/1080),stage=$('stage');stage.style.transform=`scale(${s})`;stage.style.left=(innerWidth-1920*s)/2+'px';stage.style.top=(innerHeight-1080*s)/2+'px';}
+  function setHTML(el,html){if(el.innerHTML!==html)el.innerHTML=html;}
+  function render(force=false){
+   const f=spec.at(time),phase=phaseAt(spec.phases,time);ctx.clearRect(0,0,1920,1080);spec.draw(ctx,f,time);
+   if(force||time-lastHUD>=.1||lastPhase!==phase.name||!running){
+    $('title').textContent=f.title??spec.title;$('subtitle').textContent=f.subtitle||'';
+    $('contextNote').textContent=spec.context||'';
+    setHTML($('panel'),f.panel||'');setHTML($('center'),f.center||'');$('center').className=f.centerClass||'';
+    $('panel').hidden=!f.panel;$('center').hidden=!f.center;setHTML($('mapCaption'),f.caption||'');
+    $('chapterLabel').textContent=phase.name;$('clock').textContent=fmt(time,1)+' / '+fmt(spec.duration,1)+' s';
+    if(document.activeElement!==$('seek'))$('seek').value=time.toFixed(1);
+    $('chapters').value=phase.start;$('play').textContent=running?'Pausar':'Reproduzir';$('play').setAttribute('aria-label',running?'Pausar animação':'Reproduzir animação');lastHUD=time;
    }
-   if(view.index!==null){const n=this.nodes[view.index],label='g'+(view.index+1)+': '+fmt(view.event.beforeValue,3)+' → '+fmt(view.event.afterValue,3),x=clamp(n.x-110,10,1010),y=n.y+40;
-    c.fillStyle='#191c2a';c.fillRect(x-7,y-16,226,25);text(c,label,x,y,14,'#bd93f9');}
-   c.restore();
+   // Gentle entry belongs to presentation time, never to the scientific clock.
+   const enter=clamp((time-phase.start)/.45);$('panel').style.opacity=.35+.65*enter;$('center').style.opacity=.35+.65*enter;
+   $('progress').style.width=1920*time/spec.duration+'px';
+   canvas.setAttribute('aria-label',f.accessible||'Rede conceitual: cores indicam atraso do modelo; pontos são fluxo ilustrativo.');
+   $('stage').dataset.phase=phase.name;$('stage').dataset.time=time.toFixed(3);$('stage').dataset.scientificTime=String(f.scientificTime??'');
+   $('stage').dataset.decision=f.decision===undefined?'':String(f.decision);$('stage').dataset.validation=spec.presentationValidation.status;
+   $('stage').dataset.mode=spec.mode;$('stage').dataset.duration=String(spec.duration);$('stage').dataset.probability=f.showRuler?String(f.P):'';$('stage').dataset.draw=f.showU?String(f.u):'';$('stage').dataset.drawPosition=f.showU?String(1230+594*f.u):'';
+   if(lastPhase!==phase.name){$('status').textContent=phase.name+'. '+(f.accessible||'');lastPhase=phase.name;}
   }
+  function seek(t){time=clamp(t,0,spec.duration);lastHUD=-Infinity;last=performance.now();render(true);}
+  function frame(now){const dt=Math.max(0,(now-last)/1000);last=now;if(running){time=Math.min(spec.duration,time+dt);if(time>=spec.duration)running=false;}render();requestAnimationFrame(frame);}
+  $('play').onclick=()=>{if(time>=spec.duration)seek(0);running=!running;last=performance.now();render(true);};
+  $('restart').onclick=()=>{running=true;seek(0);};
+  // Respond while editing as well as on commit; a frame must never erase a
+  // newly typed time before the field's change event is delivered.
+  const seekInput=()=>{running=false;seek(Number($('seek').value)||0);};
+  $('seek').oninput=seekInput;$('seek').onchange=seekInput;
+  $('chapters').onchange=()=>{running=false;seek(Number($('chapters').value));};
+  $('record').onclick=()=>{setRecording(true);running=true;seek(0);};
+  $('inspect').onclick=()=>{const open=$('debug').hidden;$('debug').hidden=!open;$('inspect').setAttribute('aria-expanded',String(open));$('debug').textContent=JSON.stringify({apresentacao:spec.presentationValidation,modos:spec.modeValidations,ciencia:spec.scienceValidation},null,2);};
+  $('export').onclick=()=>{const blob=new Blob([JSON.stringify(spec.export(),null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=spec.filename+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+  document.addEventListener('keydown',e=>{if(['INPUT','SELECT','BUTTON'].includes(document.activeElement.tagName)&&e.code!=='Escape')return;if(e.code==='Space'){e.preventDefault();$('play').click();}if(e.code==='KeyR')$('restart').click();if(e.code==='Escape'){running=false;setRecording(false);render(true);}if(!recording&&e.code==='ArrowRight'){running=false;seek(time+1);}if(!recording&&e.code==='ArrowLeft'){running=false;seek(time-1);}});
+  document.addEventListener('visibilitychange',()=>{last=performance.now();});
+  addEventListener('resize',resize);resize();render(true);requestAnimationFrame(frame);
+  const api=Object.freeze({snapshot:()=>JSON.parse(JSON.stringify({...spec.export(),presentationModes:spec.modeValidations,playback:{time,running,recording,mode:spec.mode,duration:spec.duration,phase:phaseAt(spec.phases,time).name}})),presentation:()=>JSON.parse(JSON.stringify(spec.modeValidations)),events:()=>JSON.parse(JSON.stringify(spec.events||[])),history:()=>JSON.parse(JSON.stringify(spec.history||[]))});
+  window[spec.api]=api;if(spec.alias)window[spec.alias]=api;
+  return api;
  }
-
- const put=(id,value)=>{const el=$(id);if(el.textContent!==value)el.textContent=value;};
- const visible=(id,show)=>{$(id).style.visibility=show?'visible':'hidden';$(id).setAttribute('aria-hidden',String(!show));};
- const stateLabel=v=>({current:'CURRENT STATE x',trial:'TRIAL STATE x′ / EM TESTE',accepted:'ACCEPTED / x ← x′',rejected:'REJECTED / x MANTIDO'})[v.kind];
- function makeRuler(id){$(id).innerHTML='<div class="rail"></div><div class="region"></div><div class="marker probability"><b>P</b></div><div class="marker draw"><b></b></div><span class="zero">0</span><span class="one">1</span>';}
- function setRuler(id,p,u,showU){const el=$(id);el.querySelector('.region').style.width=p*100+'%';el.querySelector('.probability').style.left=p*100+'%';
-  const draw=el.querySelector('.draw');draw.hidden=!showU;if(u!==null){draw.style.left=u*100+'%';draw.querySelector('b').textContent='u = '+fmt(u);}
-  el.setAttribute('aria-label','Escala 0 a 1: P = '+fmt(p,6)+(showU?'; u fixo = '+fmt(u,6):''));
- }
- class HUD {
-  constructor(data,validation){this.data=data;this.lastPhase='';['case-ruler','high-ruler','low-ruler'].forEach(makeRuler);
-   put('seed-label','SEED '+data.seed+' · SCIENCE '+data.validation.status+' · VISUAL '+validation.status);
-   put('accessible-summary','Experimentos pedagógicos selecionados, não uma amostra estatística. Downhill: aceitação direta. Um único teste uphill usa o mesmo x, x′, delta e sorteio u em duas temperaturas. Os estados só divergem depois da decisão. A variação de T é uma demonstração entre extremos certificados, não uma cadeia de annealing. '+caseViews(data).map(v=>v.id+': delta '+v.event.delta+', T '+v.decision.temperature+', P '+v.decision.probability+', u '+v.event.u+', accepted '+v.decision.accepted).join('; '));
-  }
-  update(t,running,f){const id=f.phase.id;
-   put('clock',(running?'RUN':t===CONFIG.duration?'HOLD':t?'PAUSE':'READY')+' · '+fmt(t,2)+' / '+CONFIG.duration+' s');$('progress').style.transform='scaleX('+t/CONFIG.duration+')';
-   if(id!==this.lastPhase){this.lastPhase=id;put('phase-live','Fase: '+f.phase.label);document.querySelectorAll('#ticks button').forEach(b=>{b.classList.toggle('active',b.dataset.phase===id);b.setAttribute('aria-current',b.dataset.phase===id?'step':'false');});}
-   for(const [section,on] of [['intro',id==='rule'],['bridge',id==='bridge'],['paired',id==='pair'],['network-panel',!!f.view],['hud',!!f.view]])$(section).hidden=!on;
-   const concepts={rule:'Uma proposta → uma diferença de energia → uma regra.',A:'LOWER COST → ALWAYS ACCEPT',setup:'Novo teste independente: retorno explícito ao mesmo x₀.',high:'HIGH T → UPHILL MOVES CAN BE ACCEPTED',low:'Demonstração entre duas temperaturas certificadas · sem cadeia de annealing.',pair:f.outcome?'Mesma proposta avaliada; os estados resultantes agora diferem.':'Mesmos dados de entrada. Somente T muda; P responde.',bridge:'HIGH T → EXPLORATION · LOW T → SELECTIVITY'};
-   put('concept',concepts[id]);
-   if(id==='rule'){visible('intro-delta',f.showDelta);visible('intro-equation',f.showFormula);return;}
-   if(id==='pair'){this.pair(f);return;}if(!f.view)return;
-   const e=f.event,a=id==='A',setup=id==='setup';
-   put('case-id',a?'DOWNHILL':setup?'RESET → UPHILL TEST':'ONE CONTROLLED UPHILL TEST');
-   put('temperature-tag',a?'DIRECT ACCEPT':setup?'BASELINE x₀':id==='high'?'STEP 1 / HIGH T':'STEP 2 / LOWER T');
-   put('case-title',a?'LOWER-ENERGY PROPOSAL':setup?'NEW TEST · SAME BASELINE':id==='high'?'UPHILL TEST / HIGH T':f.transition?'SAME TRIAL · LOWERING T':'SAME UPHILL TEST / LOW T');
-   put('case-note',f.note);put('current-e',fmt(e.currentEnergy));put('trial-e',fmt(e.candidateEnergy));visible('trial-context',f.showDelta);
-   put('delta',signed(e.delta));$('delta').className=a?'green':'orange';put('temperature',fmt(f.temperature));put('probability',fmt(f.probability));
-   visible('delta-metric',f.showDelta);visible('temperature-metric',f.showT);visible('probability-metric',f.showP);
-   put('rule-equation',a?'ΔE < 0 → P_acc = 1':'P_acc = exp(−ΔE/T)');visible('rule-equation',a?f.showP:f.showFormula);
-   visible('case-ruler',f.showRuler);if(f.showRuler)setRuler('case-ruler',f.probability,f.u,f.showU);
-   const accepted=f.decision&&f.decision.accepted;
-   put('test',a?'ΔE < 0':f.showTest?fmt(f.u)+(accepted?' < ':' > ')+fmt(f.probability)+'  /  u '+(accepted?'<':'>')+' P_acc':'');visible('test',f.showTest);
-   put('decision',f.showDecision?(accepted?'ACCEPT':'REJECT'):'');$('decision').className=accepted?'green':'red';
-   put('map-state',stateLabel(f.view));put('proposal-note','INTERSEÇÃO '+e.intersection+' · gᵢ: '+fmt(e.beforeValue)+' → '+fmt(e.afterValue)+' · DEMAIS FIXOS');
-  }
-  pair(f){const p=this.data.pairedUphill;
-   put('pair-title',f.outcome?'RESULTS OF THE SAME PROPOSAL':'ONE PROPOSAL · TWO TEMPERATURES');
-   put('pair-contract',f.outcome?'HIGH T → CANDIDATO ACEITO · LOW T → ESTADO ORIGINAL MANTIDO':'SAME CURRENT STATE · SAME PROPOSAL · SAME ΔE · SAME RANDOM DRAW · ONLY T CHANGES');
-   put('shared-values','E(x) = '+fmt(p.currentEnergy)+' → E(x′) = '+fmt(p.candidateEnergy)+' · ΔE = '+signed(p.delta)+(f.showU?' · u = '+fmt(p.u):''));
-   for(const key of ['high','low']){const d=p[key],v=f[key+'View'];
-    put(key+'-state',stateLabel(v)+' · E = '+fmt(v.result.energy));$(key+'-network').setAttribute('aria-label',key+' T: '+stateLabel(v));
-    put(key+'-t','T = '+fmt(d.temperature));put(key+'-p','P = '+fmt(d.probability));visible(key+'-t',f.showT);visible(key+'-p',f.showP);
-    visible(key+'-ruler',f.showRuler);setRuler(key+'-ruler',d.probability,p.u,f.showU);
-    put(key+'-test',f.showTest?fmt(p.u)+(d.accepted?' < ':' > ')+fmt(d.probability):'');put(key+'-decision',f.showDecision?(d.accepted?'ACCEPT':'REJECT'):'');
-   }
-  }
- }
- class Controls {
-  constructor(app){this.app=app;$('play').addEventListener('click',()=>this.toggle());$('restart').addEventListener('click',()=>app.restart());
-   TIMELINE.forEach(p=>{const b=document.createElement('button');b.type='button';b.dataset.phase=p.id;b.textContent=p.label;b.setAttribute('aria-label','Ir para '+p.label);b.addEventListener('click',()=>app.seek(p.start));$('ticks').append(b);});
-   document.addEventListener('keydown',e=>{if(e.repeat||e.ctrlKey||e.metaKey||e.altKey||/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)||e.target.isContentEditable)return;
-    if(e.code==='Space'){e.preventDefault();this.toggle();}if(e.code==='KeyR'){e.preventDefault();app.restart();}if(e.code==='KeyH'){e.preventDefault();$('stage').classList.toggle('hide-hud');if($('stage').classList.contains('hide-hud')&&document.activeElement instanceof HTMLElement)document.activeElement.blur();}
-   });
-  }
-  toggle(){if(this.app.time>=CONFIG.duration)this.app.seek(0);this.app.running=!this.app.running;this.app.last=performance.now();this.sync();this.app.draw();}
-  sync(){put('play',this.app.running?'Ⅱ PAUSE':'▶ PLAY');$('play').setAttribute('aria-pressed',String(this.app.running));}
- }
- class MainLoop {
-  constructor(data,model,validation){this.data=data;this.model=model;this.time=0;this.accumulator=0;this.running=Simulation03Core.AUTO_PLAY;this.last=performance.now();this.stats={frames:0,totalWorkMs:0,maxWorkMs:0};
-   this.renderer=new Renderer(data);this.hud=new HUD(data,validation);this.controls=new Controls(this);this.controls.sync();this.draw();
-   window.addEventListener('resize',()=>{fitStage();this.renderer.resize();this.draw();});document.addEventListener('visibilitychange',()=>{if(document.hidden){this.running=false;this.controls.sync();this.draw();}this.last=performance.now();});this.frame=this.frame.bind(this);requestAnimationFrame(this.frame);
-  }
-  seek(t){this.time=clamp(t,0,CONFIG.duration);this.running=false;this.accumulator=0;this.last=performance.now();this.controls.sync();this.draw();}
-  restart(){this.seek(0);}
-  draw(){const f=this.model.at(this.time);this.hud.update(this.time,this.running,f);
-   if(f.view)this.renderer.draw(f.view,f.mapTime);
-   if(f.highView){this.renderer.draw(f.highView,f.mapTime,1);this.renderer.draw(f.lowView,f.mapTime,2);}
-  }
-  frame(now){const elapsed=clamp((now-this.last)/1000,0,.25);this.last=now;
-   try{if(this.running){const start=performance.now();this.accumulator+=elapsed;const steps=Math.floor(this.accumulator/CONFIG.dt);this.accumulator-=steps*CONFIG.dt;this.time=Math.min(CONFIG.duration,this.time+steps*CONFIG.dt);
-    if(this.time>=CONFIG.duration){this.running=false;this.controls.sync();}this.draw();const work=performance.now()-start;this.stats.frames++;this.stats.totalWorkMs+=work;this.stats.maxWorkMs=Math.max(this.stats.maxWorkMs,work);}
-   }catch(error){this.running=false;showError(error);throw error;}requestAnimationFrame(this.frame);
-  }
- }
- function fitStage(){$('stage').style.transform='translate(-50%,-50%) scale('+Math.min(innerWidth/CONFIG.width,innerHeight/CONFIG.height)+')';}
- function showError(error){$('error').hidden=false;put('error','VALIDATION ERROR — apresentação interrompida. '+error.message);console.error(error);}
- try{document.body.classList.toggle('recording',Simulation03Core.RECORDING_MODE);fitStage();const data=buildTeachingExperiment(),model=PresentationModel.build(data),validation=PresentationModel.validatePresentationContract(data,model);
-  console.info('SIMULATION 03 — CONTROLLED METROPOLIS EXPERIMENT',data.seed,data.trials);
-  console.table(caseViews(data).map(v=>({case:v.id,E_current:v.event.currentEnergy,E_trial:v.event.candidateEnergy,delta:v.event.delta,T:v.decision.temperature,P:v.decision.probability,u:v.event.u,decision:v.decision.accepted?'ACCEPT':'REJECT'})));
-  console.info('VALIDATION STATUS',data.validation,validation);const app=new MainLoop(data,model,validation);
-  const events=()=>caseViews(data).map(v=>copy({id:v.id,...v.event,...v.decision}));
-  Object.defineProperty(window,'MetropolisExperiment',{writable:false,configurable:false,value:Object.freeze({
-   snapshot:()=>({time:app.time,running:app.running,phase:PresentationModel.phaseAt(app.time).id,mode:model.at(app.time).mode,seed:data.seed,cases:events(),pairedUphill:copy(data.pairedUphill),validation:copy(data.validation),presentationValidation:copy(validation),presentation:copy(model.at(app.time)),selection:data.selection,trials:copy(data.trials),model:{source:'Simulation2_UrbanLattice.html',nodes:16,links:26,delayReference:CONFIG.delayReference,temperatureHigh:CONFIG.temperatureHigh,energy:'sum(q_j*d_j)/sum(q_j)/0.25',config:copy(Simulation03Core.NETWORK_CONFIG),initialState:[...Simulation03Core.INITIAL_STATE]},performance:{...app.stats}}),events
-  })});
- }catch(error){showError(error);throw error;}
+ return {C,clamp,lerp,fmt,signed,metric,concept,detail,note,eyebrow,phaseAt,map,chart,ruler,label,line,dot,delayColor,commonContract,mount};
 })();
 </script>
-</body>
-</html>
+<script id="presentation-modes">/* Editorial clocks only. All frames still refer to the original scientific data. */
+const VideoModes=(()=>{
+ 'use strict';
+ const V=VideoPresentation,{concept,detail,note,eyebrow,metric,fmt}=V;
+ const phases=rows=>rows.map(([start,name])=>({start,name}));
+ const segment=(t,a,b,c,d)=>V.lerp(c,d,V.clamp((t-a)/(b-a)));
+ function wrap(full,duration,rows,sourceTime,edit=()=>{}){
+  return {...full,duration,phases:phases(rows),at(t){const source=sourceTime(V.clamp(t,0,duration)),f=full.at(source);f.sourceTime=source;edit(f,t);f.accessible=[f.title,f.subtitle,(f.panel||f.center||'').replace(/<[^>]+>/g,' '),f.showRuler?`P = ${fmt(f.P)}.${f.showU?' Sorteio u = '+fmt(f.u):''}`:'',f.caption||''].join('. ');return f;},draw(ctx,f,t){full.draw(ctx,f,f.sourceTime);}};
+ }
+ function video02(full){
+  const time=t=>t<3?1:t<9?6:t<15?16:t<17?22:t<20?25:t<22?29:t<24.5?33:t<27?37:t<32?42:t<36?45+(t-32)*4:62;
+  return wrap(full,40,[[0,'O que melhorar?'],[3,'Como ler a rede'],[9,'Um semáforo'],[15,'Estado x'],[20,'Custo E(x)'],[27,'Pesos das vias'],[32,'Exploração com T alta'],[36,'Por que só melhorias?']],time,(f,t)=>{
+   if(t>=3&&t<9){f.title='REDE URBANA SIMPLIFICADA';f.focus=-1;f.phase=6;f.panel=eyebrow('COMO LER A REDE')+`<div class="network-key"><span class="purple">●</span> Interseção / semáforo<br><span class="cyan">━</span> Via<br>Cor → atraso no modelo<br>Pontos → fluxo ilustrativo</div>`+note('Os pontos não são veículos simulados.');}
+   if(t>=22&&t<24.5)f.panel+=note('E é chamada de energia por analogia.<br>Aqui, é uma função objetivo adimensional.');
+   if(t>=36){f.title='';f.center='<div class="hero">POR QUE NÃO ACEITAR<br>APENAS AS MELHORIAS?</div>';f.caption='';}
+  });
+ }
+ function video03(full){
+  const time=t=>t<1.5?1:t<3?4:t<4.5?8:t<6?12:t<8.5?16:t<12?20:t<13?24:t<15?28:t<17?32:t<18?36:t<20?39:t<23?42:t<25?47:t<28?51:t<31?56:t<34?61:t<39?66:t<44?70:t<52?75+(t-44):t<54?86:t<56?88:t<58?92:108;
+  return wrap(full,60,[[0,'Uma proposta e seu custo'],[6,'Melhora: aceitar'],[12,'Novo teste: custo maior'],[18,'Uma piora pode ser aceita'],[25,'Limite P e sorteio u'],[34,'T alta: aceita'],[39,'Só T muda'],[44,'Reduzindo T'],[52,'T baixa: rejeita'],[56,'Exploração e seleção'],[58,'Resfriar aos poucos']],time,(f,t)=>{
+   if(t>=56&&t<58)f.center=f.center.replace('P MAIOR','MAIS EXPLORAÇÃO').replace('P MENOR','MAIS SELEÇÃO');
+  });
+ }
+ function video04(full){
+  const time=t=>t<4?t:t<7?segment(t,4,7,4,8):t<10?segment(t,7,10,8,13):t<18?segment(t,10,18,13,21):t<27?segment(t,18,27,21,32):t<31?segment(t,27,31,32,40):t<32?segment(t,31,32,40,45):t<35?47:55;
+  return wrap(full,38,[[0,'O que acontece ao resfriar?'],[4,'Custo atual e melhor custo'],[10,'T alta: exploração'],[18,'Resfriamento'],[27,'T baixa: seleção'],[32,'Melhor resultado'],[35,'Redução do custo']],time,(f,t)=>{
+   if(t>=4&&t<10){f.panel=`<div class="two">${metric('CUSTO ATUAL',fmt(f.sample.result.energy),'cyan')}${metric('MELHOR CUSTO',fmt(f.sample.best),'green')}</div>`;f.importantNumbers=2;f.opacity=.40;}
+   if(t>=32&&t<35){const d=full.export();f.subtitle='Guardamos a melhor configuração visitada.';f.center=concept('CUSTO E(x)')+`<div class="summary"><div>${metric('ESTADO INICIAL',fmt(d.initialEnergy),'cyan')}</div><div>${metric('MELHOR ESTADO<br>ENCONTRADO',fmt(d.bestEnergy),'green')}</div></div>`+note('EXECUÇÃO FINITA · DADOS SINTÉTICOS');f.importantNumbers=2;}
+   if(t>=35){f.subtitle='A seguir: antes e depois na mesma rede.';f.center=f.center.replace('Resultado de uma execução finita com dados sintéticos.','EXECUÇÃO FINITA · DADOS SINTÉTICOS');}
+  });
+ }
+ function validateVideo(id,video,full){
+  const samples=Array.from({length:Math.round(video.duration*10)+1},(_,i)=>video.at(i/10)),checks=V.commonContract(video,samples),check=(ok,label)=>checks.push({label,pass:!!ok});
+  const text=f=>[f.title,f.subtitle,f.panel,f.center,f.caption].join(' '),ranges={2:[35,42],3:[50,62],4:[30,40],5:[12,18]};
+  check(video.duration>=ranges[id][0]&&video.duration<=ranges[id][1],'Duração dentro do intervalo solicitado');
+  if(id===2){
+   check(samples.every(f=>!/(MÍNIMOS LOCAIS|BUSCA GULOSA|exp\(|P_acc|SORTEIO|METRÓPOLIS)/i.test(text(f))),'02: nenhuma explicação de mínimos locais ou Metrópolis');
+   check(video.at(40).center.includes('POR QUE NÃO ACEITAR<br>APENAS AS MELHORIAS?'),'02: termina na pergunta, sem respondê-la');
+   check(video.at(40).scientificTime===14&&video.at(40).sample.result.energy===full.at(73).sample.result.energy,'02: trajetória inteira preservada, sem substituir o estado');
+  }
+  if(id===3){
+   check(samples.filter((f,i)=>i/10>=6&&i/10<12).every(f=>f.T===null&&f.P===null&&f.u===null&&!f.showRuler),'03: melhora sem T, P, u ou régua');
+   check(video.at(26).showRuler&&!video.at(26).showU&&video.at(29).showU,'03: P aparece antes de u');
+   const transition=Array.from({length:121},(_,i)=>video.at(44+i*8/120)),first=transition[0],p=first.event;
+   check(transition.every(f=>f.event===p&&f.event.currentState===p.currentState&&f.state===p.candidateState&&f.event.delta===p.delta&&f.u===p.u&&f.mapTime===0),'03: mesmos x, x′, ΔE e u durante a transição');
+   check(transition.every((f,i)=>f.P===Math.exp(-p.delta/f.T)&&(!i||f.P<=transition[i-1].P)),'03: somente T altera P');
+   check(transition.every(f=>1230+594*f.u===1230+594*p.u),'03: posição de u fixa na régua');
+   check(video.at(35).decision===true&&video.at(53).decision===false,'03: T alta aceita e T baixa rejeita');
+   check(video.at(41).center.includes('novo sorteio'),'03: reutilização de u explicitamente pedagógica');
+   check(video.at(51.9).decision===undefined&&video.at(55).state===p.currentState,'03: rejeição só após a transição; x preservado');
+  }
+  if(id===4){
+   const d=full.export(),f=video.at(38);let best=Infinity;
+   check(full.history.every(p=>{best=Math.min(best,p.e);return p.best===best;}),'04: melhor custo é o mínimo acumulado');
+   check(full.history.some((p,i)=>i&&p.e>full.history[i-1].e),'04: custo atual pode subir');
+   check(d.N===1920&&full.events.length===1920&&d.coolingSchedule==='geometric','04: 1920 propostas e schedule geométrico preservados');
+   check(JSON.stringify(Array.from(f.mapState))===JSON.stringify(d.bestState)&&f.mapResult.energy===d.bestEnergy,'04: fechamento usa bestState, não finalState');
+   check('finalState' in d&&'bestState' in d&&'finalEnergy' in d&&'bestEnergy' in d,'04: estado final e melhor permanecem separados');
+   check(video.at(32).scientificTime===16,'04: toda a trajetória termina antes do fechamento');
+  }
+  if(id===5){
+   const d=full.export();check(d.compatibility.status==='PASS','05: contrato 04 → 05 aprovado');
+   check(samples.every(f=>(f.importantNumbers||0)<=3),'05: até três métricas relevantes');
+   check(video.at(4).showBefore&&!video.at(4).showAfter&&video.at(8).showBefore&&video.at(8).showAfter,'05: antes, depois e resultado em ordem');
+   check(video.at(8).beforeScale===video.at(8).afterScale,'05: uma única escala fixa para os dois mapas');
+   check(!/(INITIAL CONFIGURATION|MICROSTATE|CRITICAL SEGMENTS|CONGESTION PROXY)/.test(samples.map(text).join(' ')),'05: sem inglês ou telemetria avançada na tela');
+   check(d.validation.checks.energyReduction&&d.validation.checks.meanReduction,'05: reduções calculadas e validadas');
+  }
+  return {status:checks.every(x=>x.pass)?'PASS':'FAIL',duration:video.duration,checks,sampledFrames:samples.length};
+ }
+ function mount(id,full){
+  const video=id===2?video02(full):id===3?video03(full):id===4?video04(full):full.video;
+  const validations={full:full.presentationValidation,video:validateVideo(id,video,full)};
+  if(Object.values(validations).some(v=>v.status!=='PASS'))throw Error('Contrato de apresentação inválido: '+JSON.stringify(validations));
+  const mode=new URLSearchParams(location.search).get('mode')==='full'?'full':'video',selected=mode==='full'?full:video;
+  const originalExport=full.export;
+  const spec={...selected,mode,modeValidations:validations,presentationValidation:validations[mode],context:id===3?'EXPERIMENTO DIDÁTICO CONTROLADO NO MESMO MODELO URBANO':id===4?'EXECUÇÃO COMPLETA DO RECOZIMENTO':id===5?'RESULTADO DA MESMA EXECUÇÃO DA SIMULAÇÃO 04':'',export:()=>({...originalExport(),presentationModes:validations})};
+  window.validatePresentationContract=()=>JSON.parse(JSON.stringify(validations));
+  console.info(`SIMULAÇÃO 0${id}\nVALIDAÇÃO CIENTÍFICA: PASS\nAPRESENTAÇÃO COMPLETA: ${validations.full.status}\nAPRESENTAÇÃO PARA VÍDEO: ${validations.video.status}`);
+  return V.mount(spec);
+ }
+ return {mount,validateVideo,video02,video03,video04};
+})();
+</script>
+<script id="presentation">(() => {
+ 'use strict';
+ const S=Simulation03Core,V=VideoPresentation,{C,fmt,signed,metric,concept,detail,note,eyebrow}=V,data=S.buildTeachingExperiment(),a=data.caseA,p=data.pairedUphill;
+ const phases=[
+  [0,'O estado atual'],[3.5,'Uma pequena alteração'],[7,'A diferença de custo'],[11,'O que ΔE significa'],
+  [15,'O custo diminuiu'],[19,'Aceitar a melhora'],[23,'Novo teste'],[27,'Outra alteração'],[31,'O custo aumentou'],
+  [35,'Rejeitar sempre?'],[38,'Uma piora pode ser aceita'],[41,'Critério de Metrópolis'],[46,'A temperatura'],
+  [50,'O limite de aceitação'],[55,'O sorteio'],[60,'Comparar u e P'],[64,'Decisão com T alta'],
+  [68,'Só a temperatura muda'],[75,'Reduzindo a temperatura'],[85,'Decisão com T baixa'],
+  [89,'Comparação das decisões'],[95,'Configurações resultantes'],[100,'Exploração e seleção'],[105,'Resfriar aos poucos']
+ ].map(([start,name])=>({start,name}));
+ const duration=111,title='COMO O ALGORITMO DECIDE?';
+ const change=e=>eyebrow('INTERSEÇÃO '+String(e.intersection).padStart(2,'0'))+concept('TEMPO DE VERDE')+`<div class="value purple">${fmt(e.beforeValue*100,0)}% → ${fmt(e.afterValue*100,0)}%</div>`+note('Apenas este semáforo muda.<br>As vias conectadas são destacadas.');
+ function at(t){
+  const ph=V.phaseAt(phases,t),i=phases.indexOf(ph),event=t<23?a:p;
+  const f={phase:i,title,subtitle:'',event,state:event.currentState,result:event.currentResult,focus:-1,opacity:1,map:false,mapTime:0,T:null,P:null,u:null,showRuler:false,showU:false,showTest:false,decision:undefined,importantNumbers:0,graphs:0};
+  if(i<=3){f.centerClass='flow';f.center=eyebrow('UMA PROPOSTA DE MUDANÇA')+`<div class="flow-row"><div><span class="symbol cyan">x</span><small>ESTADO ATUAL</small></div>${i>=1?'<span class="arrow">→</span><div><span class="symbol purple">x′</span><small>PEQUENA ALTERAÇÃO</small></div>':''}</div>`+(i>=2?`<div class="concept mono">ΔE = E(x′) − E(x)</div>`:'')+(i>=3?detail('ΔE mede como o custo mudou.'):'');}
+  if(i===4){f.map=true;f.focus=a.index;f.state=a.candidateState;f.result=a.candidateResult;f.panel=change(a)+`<div class="separator"></div>`+concept('O CUSTO DIMINUIU','green')+`<div class="value green">ΔE = ${signed(a.delta)}</div>`;f.importantNumbers=3;}
+  if(i===5){f.map=true;f.state=a.candidateState;f.result=a.candidateResult;f.decision=true;f.panel=concept('ΔE < 0','green')+concept('O CUSTO DIMINUIU')+`<div class="big-symbol green">✓</div><div class="value green">ACEITAR</div>`+detail('O novo estado passa a ser x.');}
+  if(i===6){f.map=true;f.opacity=.20;f.center=eyebrow('NOVO TESTE')+concept('VOLTAMOS AO MESMO<br>ESTADO DE REFERÊNCIA');}
+  if(i===7){f.map=true;f.focus=p.index;f.state=p.candidateState;f.result=p.candidateResult;f.panel=eyebrow('FAZEMOS OUTRA ALTERAÇÃO')+change(p);f.importantNumbers=2;}
+  if(i===8){f.map=true;f.state=p.candidateState;f.result=p.candidateResult;f.panel=eyebrow('ΔE > 0')+concept('A NOVA CONFIGURAÇÃO<br>TEM CUSTO MAIOR','orange')+metric('VARIAÇÃO DO CUSTO',signed(p.delta),'orange');f.importantNumbers=1;}
+  if(i===9){f.map=true;f.opacity=.13;f.center=`<div class="hero">REJEITAR SEMPRE?</div>`;}
+  if(i===10){f.center=`<div class="hero purple">NÃO.</div>`+detail('Uma piora ainda pode ser aceita.');}
+  if(i===11){f.title='CRITÉRIO DE METRÓPOLIS';f.center=concept('UMA PIORA AINDA PODE SER ACEITA')+`<div class="big-symbol mono purple" style="font-size:70px">P = exp(−ΔE/T)</div>`+detail('P é a probabilidade de aceitar.<br>Esta expressão vale quando ΔE > 0.');}
+  if(i===12){f.title='A TEMPERATURA CONTROLA ESSA CHANCE';f.center=concept('T ALTA → MAIOR CHANCE DE ACEITAR')+metric('TEMPERATURA COMPUTACIONAL',fmt(p.high.temperature),'orange')+note('Um parâmetro do algoritmo, na mesma escala do custo.');f.importantNumbers=1;f.T=p.high.temperature;}
+  if(i>=13&&i<=16){f.map=true;f.state=p.candidateState;f.result=p.candidateResult;f.opacity=.62;f.showRuler=true;f.T=p.high.temperature;f.P=p.high.probability;f.u=p.u;f.showU=i>=14;f.showTest=i>=15;
+   f.panel=i===13?eyebrow('TEMPERATURA ALTA')+concept('P É O LIMITE<br>DE ACEITAÇÃO')+detail('A faixa verde aceita a proposta.<br>O restante rejeita.'):i===14?eyebrow('UM SORTEIO ALEATÓRIO')+concept('SORTEAMOS u<br>ENTRE 0 E 1')+detail('Agora comparamos u com P.'):i===15?eyebrow('A REGRA DE DECISÃO')+concept('SE u < P, ACEITAR')+detail('Caso contrário, rejeitar.'):eyebrow('TEMPERATURA ALTA')+concept('O SORTEIO CAIU<br>NA FAIXA VERDE','green')+detail('A piora foi aceita.');
+   f.importantNumbers=i>=14?2:1;if(i===16)f.decision=true;
+   f.caption=i===16?'A configuração proposta x′ foi aceita.':'Configuração proposta x′ · a decisão ainda não foi tomada.';
+  }
+  if(i===17){f.center=eyebrow('UMA COMPARAÇÃO CONTROLADA')+concept('MESMA CONFIGURAÇÃO INICIAL<br>MESMA ALTERAÇÃO<br>MESMO ΔE · MESMO SORTEIO u')+detail('↓')+`<div class="concept purple">SÓ UMA COISA MUDA: TEMPERATURA</div>`+note('Mesmo u usado apenas para comparar as duas temperaturas.<br>Em uma execução normal, cada proposta recebe um novo sorteio.');}
+  if(i===18||i===19){
+   const progress=V.clamp((t-75)/8);f.T=progress===1?p.low.temperature:progress===0?p.high.temperature:V.lerp(p.high.temperature,p.low.temperature,progress);f.P=S.probability(p.delta,f.T);f.u=p.u;f.map=true;f.state=p.candidateState;f.result=p.candidateResult;f.opacity=.45;f.showRuler=true;f.showU=true;f.stationary=true;f.showTest=i===19;f.importantNumbers=3;
+   f.title='MESMA ALTERAÇÃO. SÓ T MUDA.';f.panel=eyebrow('T ↓ → P ↓')+metric('TEMPERATURA T',fmt(f.T),'orange')+concept(i===19?'A REGIÃO DE ACEITAÇÃO<br>FICOU MENOR QUE O SORTEIO':'A FAIXA VERDE ENCOLHE');
+   if(i===19)f.decision=false;
+   f.caption='Mesmo estado atual, mesma proposta e mesmo sorteio; apenas a temperatura muda.';
+   if(i===19&&t>=87){f.state=p.currentState;f.result=p.currentResult;f.opacity=.62;f.caption='A proposta x′ foi rejeitada. O estado atual x foi mantido.';}
+  }
+  if(i===20||i===21){f.title='MESMA ALTERAÇÃO. SÓ T MUDOU.';f.pair=true;f.outcomes=i===21;f.centerClass='flow';f.center=`<div class="comparison"><div>${eyebrow('TEMPERATURA ALTA')}${concept('P MAIOR', 'green')}${i===20?'<p class="formula mono">u < P</p>':''}<div class="value green">✓ ACEITA</div></div><div>${eyebrow('TEMPERATURA BAIXA')}${concept('P MENOR','orange')}${i===20?'<p class="formula mono">u > P</p>':''}<div class="value red">× REJEITA</div></div></div>`;f.caption=i===20?'Mesmo u usado apenas para comparar as duas temperaturas.':'Após a decisão: a temperatura alta aceita x′; a baixa mantém x.';f.importantNumbers=0;}
+  if(i===22){f.center=`<div class="comparison"><div>${eyebrow('T ALTA')}${concept('MAIS EXPLORAÇÃO','orange')}</div><div>${eyebrow('T BAIXA')}${concept('MAIS SELEÇÃO','cyan')}</div></div>`;}
+  if(i===23){f.center=`<div class="hero">E SE REDUZIRMOS T<br>AOS POUCOS?</div>`+detail('↓')+concept('SIMULAÇÃO 04 · RESFRIAMENTO','purple');}
+  if(f.pair&&!f.outcomes)f.importantNumbers=4;
+  f.accessible=[f.title,(f.panel||f.center||'').replace(/<[^>]+>/g,' '),f.showRuler?`Limite de aceitação P = ${fmt(f.P)}.${f.showU?' Sorteio u = '+fmt(f.u)+'.':''}${f.decision===undefined?'':f.decision?' Aceitar.':' Rejeitar.'}`:''].join('. ');return f;
+ }
+ function draw(ctx,f){
+  if(f.map)V.map(ctx,data.network,f.state,f.result,f.mapTime,{focus:f.focus,opacity:f.opacity,particles:false});
+  if(f.showRuler)V.ruler(ctx,f.P,f.u,{showU:f.showU,showTest:f.showTest,decision:f.decision??null,stationary:f.stationary});
+  if(f.pair){
+   if(!f.outcomes){V.ruler(ctx,p.high.probability,p.u,{x:246,y:660,w:600,showU:true});V.ruler(ctx,p.low.probability,p.u,{x:1074,y:660,w:600,showU:true});}
+   else{V.map(ctx,data.network,p.candidateState,p.candidateResult,0,{rect:{x:230,y:530,w:670,h:365},particles:false});V.map(ctx,data.network,p.currentState,p.currentResult,0,{rect:{x:1060,y:530,w:670,h:365},particles:false});}
+  }
+ }
+ function validatePresentationContract(){
+  const samples=phases.map(p=>at(p.start+1)),checks=V.commonContract({duration},samples),check=(ok,label)=>checks.push({label,pass:!!ok});
+  check([16,20].every(t=>{const f=at(t);return f.T===null&&f.u===null&&!f.showRuler;}),'Melhora sem temperatura, sorteio ou régua');
+  check(samples.filter(f=>f.phase<11).every(f=>f.P===null&&f.u===null&&!f.showRuler),'Nenhuma probabilidade antes da explicação de ΔE');
+  check(!at(52).showU&&at(56).showU,'Primeiro o limite P, depois o sorteio u');
+  check(at(63).decision===undefined&&at(65).decision===true&&at(84).decision===undefined&&at(86).decision===false,'Decisões reveladas somente nos momentos previstos');
+  const transition=Array.from({length:121},(_,k)=>at(75+k*8/120));
+  check(transition.every(f=>f.event===p&&f.state===p.candidateState&&f.result===p.candidateResult&&f.event.currentState===p.currentState&&f.event.delta===p.delta&&f.u===p.u&&f.mapTime===0),'Mesmos x, x′, ΔE, u e enquadramento na transição');
+  check(transition.every((f,k)=>f.P===Math.exp(-p.delta/f.T)&&(!k||f.P<=transition[k-1].P)),'Somente T muda P; faixa verde diminui');
+  check(transition[0].T===p.high.temperature&&transition[0].P===p.high.probability&&transition.at(-1).T===p.low.temperature&&transition.at(-1).P===p.low.probability,'Extremos da transição iguais aos valores científicos, sem arredondamento');
+  check(transition.every(f=>1230+594*f.u===1230+594*p.u),'Posição visual de u permanece fixa');
+  check(!at(92).outcomes&&at(97).outcomes,'Mapas resultantes divergem somente depois da decisão');
+  check(at(84).state===p.candidateState&&at(88).state===p.currentState,'Após rejeitar, o mapa volta ao estado atual');
+  check(at(70).center.includes('novo sorteio'),'Reutilização de u explicitamente restrita à comparação');
+  return {status:checks.every(c=>c.pass)?'PASS':'FAIL',checks,duration,transitionSamples:transition.length};
+ }
+ const presentationValidation=validatePresentationContract();if(presentationValidation.status!=='PASS')throw Error('Falha no contrato da apresentação 03');
+ window.validatePresentationContract=validatePresentationContract;
+ VideoModes.mount(3,{duration,title,phases,at,draw,presentationValidation,scienceValidation:data.validation,export:()=>({...data,presentationValidation}),filename:'simulacao-03',api:'MetropolisExperiment',events:[a,p]});
+})();
+</script>
+</body></html>

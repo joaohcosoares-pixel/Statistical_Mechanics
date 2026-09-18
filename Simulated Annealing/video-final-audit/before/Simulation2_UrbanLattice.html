@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Animação didática de recozimento simulado, com modelo conceitual e dados sintéticos. Funciona sem conexão."><link rel="icon" href="data:,">
+<title>Simulação 02 · O que o computador está tentando melhorar? — UFG</title><style>
+:root{color-scheme:dark;--bg:#0f111a;--text:#f8f8f2;--muted:#9da8bd;--cyan:#8be9fd;--purple:#bd93f9;--green:#50fa7b;--orange:#ffb86c;--red:#ff6868}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#090b11;color:var(--text);font-family:Arial,Helvetica,sans-serif}
+#stage{position:absolute;width:1920px;height:1080px;overflow:hidden;transform-origin:top left;background:var(--bg)}canvas{position:absolute;inset:0;width:1920px;height:1080px}
+header{position:absolute;left:76px;right:76px;top:50px;display:flex;justify-content:space-between;align-items:flex-start}header .series{color:var(--purple);font-size:16px;letter-spacing:2px;margin-bottom:20px}h1{font-size:46px;line-height:1.13;letter-spacing:-1.3px;font-weight:500;margin:0;max-width:1550px}#subtitle{font-size:25px;line-height:1.4;margin-top:18px;color:var(--muted)}.event{text-align:right;color:var(--muted);font-size:14px;line-height:1.7;letter-spacing:1px}.event b{color:var(--cyan);font-size:28px;letter-spacing:4px;font-weight:400}
+.mono,.value{font-family:Consolas,'Liberation Mono',monospace;font-variant-numeric:tabular-nums}.cyan{color:var(--cyan)}.purple{color:var(--purple)}.green{color:var(--green)}.orange{color:var(--orange)}.red{color:var(--red)}.muted{color:var(--muted)}
+#panel{position:absolute;left:1230px;top:302px;width:604px}#center{position:absolute;left:160px;right:160px;top:330px;text-align:center}#center.flow{top:294px}#center .concept{font-size:44px;line-height:1.3}#center .hero{font-size:64px;line-height:1.25;font-weight:500;letter-spacing:-1px}#center .detail{font-size:27px}.eyebrow{font-size:20px;letter-spacing:1.4px;margin:0 0 22px;color:var(--purple)}.concept{font-size:38px;line-height:1.28;font-weight:500;margin:0 0 25px;letter-spacing:-.4px}.detail{font-size:25px;line-height:1.5;color:var(--muted);margin:22px 0}.formula{font-size:30px;line-height:1.5;margin:28px 0}.note{font-size:16px;color:var(--muted);line-height:1.5}.value{font-size:58px;font-weight:400;line-height:1.15}.metric-label{font-size:20px;letter-spacing:.7px;margin-bottom:12px}.metric{margin-bottom:28px}.two{display:flex;gap:50px}.two>.metric{flex:1}.two .value{font-size:50px}.separator{height:1px;background:#2a3040;margin:30px 0}.big-symbol{font-size:94px;margin:12px 0 26px}.arrow{color:var(--muted);padding:0 32px;font-size:44px}.flow-row{display:flex;align-items:center;justify-content:center;gap:60px;margin:40px 0 54px}.flow-row small{display:block;font:22px Arial,sans-serif;color:var(--muted);margin-top:18px}.flow-row .symbol{font-size:100px}.pill{border-left:4px solid var(--purple);padding-left:24px;margin:32px 0}.comparison{display:flex;gap:140px;justify-content:center;text-align:left;margin:30px auto 0}.comparison>div{width:600px}.comparison .concept{font-size:38px}.comparison .value{font-size:52px}.summary{display:flex;justify-content:center;gap:100px;margin-top:55px}.summary>div{width:380px;text-align:left}.summary .metric-label{height:54px}.summary .value{font-size:54px}.bar{height:12px;border-radius:6px;background:#2a3040;overflow:hidden;margin:18px 0 34px}.bar>span{display:block;height:100%;background:var(--orange)}
+#mapCaption{position:absolute;left:92px;top:897px;color:var(--muted);font-size:18px;line-height:1.5;max-width:1050px}#mapCaption b{font-weight:400;color:var(--cyan)}footer{position:absolute;left:76px;right:76px;bottom:38px;display:flex;justify-content:space-between;font-size:15px;line-height:1.5;color:#8c98ae;border-top:1px solid #252b3b;padding-top:22px}#progress{position:absolute;bottom:0;height:3px;background:var(--purple);opacity:.7}#controls{position:absolute;bottom:100px;left:76px;right:76px;display:flex;align-items:center;gap:12px;padding:14px 18px;background:#151a28f5;border:1px solid #384058;border-radius:8px;font-size:17px;z-index:5}button,input,select{font:inherit;color:var(--text);border:1px solid #455069;background:#202737;border-radius:5px;padding:9px 12px}button{cursor:pointer}button:hover{border-color:var(--cyan)}:focus-visible{outline:3px solid var(--cyan);outline-offset:4px}#seek{width:106px}#chapters{max-width:360px}#clock{margin-left:auto;white-space:nowrap}.recording,.recording *{cursor:none!important;user-select:none!important}.recording #controls,.recording #debug{display:none!important;visibility:hidden!important;pointer-events:none!important}#debug{position:absolute;z-index:9;inset:220px 120px 170px;background:#111725f7;border:1px solid var(--purple);padding:32px;overflow:auto;font:16px/1.6 Consolas,monospace;white-space:pre-wrap}#debug[hidden],[hidden]{display:none!important}.sr-only{position:absolute!important;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}#error{position:absolute;z-index:20;left:200px;right:200px;top:400px;background:#30202b;padding:40px;border:2px solid var(--red);font-size:24px}
+</style></head>
+<body><main id="stage" aria-label="Simulação 02: O que o computador está tentando melhorar?">
+<canvas id="scene" width="1920" height="1080" role="img" aria-label="Rede urbana conceitual, com cores que indicam o atraso do modelo e pontos de fluxo ilustrativo">Os estados e resultados desta animação são descritos no texto da cena.</canvas>
+<header><div><div class="series">SIMULAÇÃO 02 · RECOZIMENTO SIMULADO</div><h1 id="title">O que o computador está tentando melhorar?</h1><div id="subtitle"></div></div><div class="event"><b>UFG</b><br>XLIII SEMANA<br>DA FÍSICA</div></header>
+<section id="panel" aria-label="Explicação da cena"></section><section id="center" aria-label="Ideia principal"></section><div id="mapCaption"></div>
+<footer><span>MODELO CONCEITUAL · DADOS SINTÉTICOS · REDE NÃO GEORREFERENCIADA</span><span id="chapterLabel"></span></footer><div id="progress"></div>
+<nav id="controls" aria-label="Controles da animação"><button id="play">Reproduzir</button><button id="restart">Reiniciar</button><label>Tempo <input id="seek" type="number" min="0" step="0.1" value="0" aria-label="Tempo da apresentação em segundos"></label><label>Cena <select id="chapters" aria-label="Escolher cena"></select></label><button id="record">Gravar do início</button><button id="export">Exportar JSON</button><button id="inspect" aria-expanded="false">Validações</button><span id="clock" class="mono"></span></nav>
+<pre id="debug" hidden aria-label="Relatório de validação"></pre><p id="status" class="sr-only" role="status" aria-live="polite"></p><div id="error" role="alert" hidden></div>
+</main>
+<script id="model">
+const Simulation02 = (() => {
+  'use strict';
+  const AUTO_PLAY = false, RECORDING_MODE = true, RANDOM_SEED = 20260912;
+  const CONFIG = Object.freeze({width:1920, height:1080, duration:14, dt:1/120,
+    proposalRate:24, proposalAmplitude:0.12, minSignal:0.20, maxSignal:0.80,
+    temperatureEnd:0.90, cycle:4.8, delayReference:.25, seed:RANDOM_SEED});
+  const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
+  const mix = (a,b,t) => a+(b-a)*t;
+  const smooth = (a,b,x) => {const u=clamp((x-a)/(b-a),0,1); return u*u*(3-2*u);};
+  const assert = (ok,message) => {if(!ok) throw new Error(message);};
+  const deepFreeze = o => {Object.values(o).forEach(v => {if(v && typeof v==='object') deepFreeze(v);}); return Object.freeze(o);};
+  // Geometry is explicit, synthetic and not georeferenced. Keep this schema for scene 04.
+  const NETWORK_CONFIG = deepFreeze({version:1, geometrySeed:20260912,
+    nodes:[[110,104],[366,72],[664,116],[977,94],[146,260],[426,245],[720,277],[1040,231],
+      [88,434],[337,409],[652,443],[993,411],[194,596],[448,574],[770,614],[1064,564]],
+    // a,b,axis (0=main / 1=cross), relative demand, base capacity, main corridor
+    edges:[[0,1,0,.49,.91,1],[1,2,0,.51,.92,1],[2,3,0,.48,.90,1],
+      [4,5,0,.57,.96,1],[5,6,0,.58,.94,1],[6,7,0,.54,.95,1],
+      [8,9,0,.53,.93,1],[9,10,0,.55,.94,1],[10,11,0,.52,.94,1],
+      [12,13,0,.47,.93,0],[13,14,0,.48,.95,0],[14,15,0,.46,.92,0],
+      [0,4,1,.38,.78,0],[4,8,1,.40,.78,0],[8,12,1,.25,.83,0],
+      [1,5,1,.42,.79,0],[5,9,1,.41,.79,0],[9,13,1,.39,.80,0],
+      [2,6,1,.41,.77,0],[6,10,1,.42,.80,0],[10,14,1,.39,.80,0],
+      [3,7,1,.26,.83,0],[7,11,1,.40,.80,0],[11,15,1,.24,.82,0],
+      [1,4,1,.38,.82,0],[10,15,0,.40,.89,0]],
+    offsets:[.07,.64,.26,.82,.41,.92,.16,.56,.77,.31,.95,.11,.52,.03,.69,.38]});
+  const INITIAL_STATE = deepFreeze([.39,.51,.34,.48,.42,.30,.43,.36,.35,.49,.38,.46,.47,.33,.50,.41]);
+  class PRNG {
+    constructor(seed){this.state=seed>>>0;}
+    next(){let t=this.state=(this.state+0x6D2B79F5)>>>0;t=Math.imul(t^(t>>>15),t|1);
+      t^=t+Math.imul(t^(t>>>7),t|61);return ((t^(t>>>14))>>>0)/4294967296;}
+  }
+  class UrbanNetwork {
+    constructor(){this.nodes=NETWORK_CONFIG.nodes.map(([x,y],id)=>({x,y,id,offset:NETWORK_CONFIG.offsets[id]}));
+      this.edges=NETWORK_CONFIG.edges.map(([a,b,axis,q,c,main],id)=>({a,b,axis,q,c,main,id,
+        length:Math.hypot(this.nodes[a].x-this.nodes[b].x,this.nodes[a].y-this.nodes[b].y)}));}
+  }
+  class SignalConfiguration {
+    constructor(values=INITIAL_STATE){this.values=values.slice();this.validate();}
+    validate(){assert(this.values.length===INITIAL_STATE.length && this.values.every(s=>Number.isFinite(s)&&s>=CONFIG.minSignal&&s<=CONFIG.maxSignal),'Invalid signal configuration');}
+    propose(rng,amplitude){const i=Math.floor(rng.next()*this.values.length),values=this.values.slice();
+      // Reflect the symmetric uniform step at bounds. Clipping would add boundary mass.
+      let s=values[i]+(2*rng.next()-1)*amplitude;
+      while(s<CONFIG.minSignal || s>CONFIG.maxSignal){if(s<CONFIG.minSignal)s=2*CONFIG.minSignal-s;if(s>CONFIG.maxSignal)s=2*CONFIG.maxSignal-s;}
+      values[i]=s;return {i,state:new SignalConfiguration(values)};}
+  }
+  class TrafficModel {
+    // Cycle-averaged conceptual capacity. Fixed visual phase offsets do not enter E.
+    static evaluate(network,state){return network.edges.map(e=>{
+      const ga=e.axis===0?state.values[e.a]:1-state.values[e.a];
+      const gb=e.axis===0?state.values[e.b]:1-state.values[e.b];
+      const signalFactor=.16+.84*Math.sqrt(ga*gb),capacity=e.c*signalFactor,rho=e.q/capacity;
+      // Stable softplus: smooth overload growth, no singularity at rho=1.
+      const z=10*(rho-1),overload=(Math.max(z,0)+Math.log1p(Math.exp(-Math.abs(z))))/10;
+      const delay=.10*rho*rho+.80*overload+3.2*overload*overload;
+      assert(Number.isFinite(delay)&&capacity>0,'Non-finite conceptual delay');
+      return {capacity,rho,delay};});}
+  }
+  class EnergyFunction {
+    static evaluate(network,state){const roads=TrafficModel.evaluate(network,state);
+      // w_j = q_j / sum(q); d_ref is a fixed scale, not the diagnostic search result.
+      const demand=network.edges.reduce((sum,e)=>sum+e.q,0);
+      const energy=roads.reduce((sum,r,j)=>sum+network.edges[j].q*r.delay,0)/demand/CONFIG.delayReference;
+      assert(Number.isFinite(energy)&&energy>=0,'Invalid objective energy');
+      return {roads,energy,meanDelay:roads.reduce((sum,r)=>sum+r.delay,0)/roads.length};}
+  }
+  class HistoryBuffer {
+    constructor(capacity=1600){this.capacity=capacity;this.points=[];}
+    push(point){if(this.points.length===this.capacity)this.points.shift();this.points.push(point);}
+  }
+  class Metrics {
+    constructor(){this.accepted=0;this.rejected=0;this.uphillAccepted=0;this.uphillProposed=0;}
+    get iteration(){return this.accepted+this.rejected;}
+    get acceptance(){return this.iteration?this.accepted/this.iteration:null;}
+    record(event){if(event.delta>0)this.uphillProposed++;if(event.accepted){this.accepted++;if(event.delta>0)this.uphillAccepted++;}else this.rejected++;}
+  }
+  class AnnealingEngine {
+    constructor(network,temperature0,amplitude=CONFIG.proposalAmplitude){
+      assert(temperature0>0&&Number.isFinite(temperature0),'T must be positive');
+      this.network=network;this.temperature0=temperature0;this.amplitude=amplitude;this.rng=new PRNG(CONFIG.seed);
+      this.state=new SignalConfiguration();this.result=EnergyFunction.evaluate(network,this.state);
+      this.metrics=new Metrics();this.history=new HistoryBuffer();this.history.push({t:0,e:this.result.energy});
+      this.events=[];this.ticks=0;this.budget=0;this.flashes=Array(network.nodes.length).fill(-10);}
+    get time(){return this.ticks*CONFIG.dt;}
+    get temperatureNorm(){return mix(1,CONFIG.temperatureEnd,this.time/CONFIG.duration);}
+    get temperature(){return this.temperature0*this.temperatureNorm;}
+    step(){if(this.ticks>=Math.round(CONFIG.duration/CONFIG.dt))return;
+      this.ticks++;const t=this.time;
+      if(t>2){this.budget+=CONFIG.proposalRate*CONFIG.dt*(1-.65*smooth(12.5,14,t));
+        while(this.budget>=1-1e-10){this.budget-=1;this.propose();}}
+    }
+    propose(){const previous=this.result.energy,proposal=this.state.propose(this.rng,this.amplitude);
+      const candidate=EnergyFunction.evaluate(this.network,proposal.state),delta=candidate.energy-previous;
+      const probability=delta<=0?1:Math.exp(-delta/this.temperature),u=this.rng.next(),accepted=u<probability;
+      assert(Number.isFinite(probability)&&probability>=0&&probability<=1,'Invalid Metropolis probability');
+      if(accepted){this.state=proposal.state;this.result=candidate;this.flashes[proposal.i]=this.time;}
+      const event={t:this.time,i:proposal.i,delta,probability,u,accepted,before:previous,after:this.result.energy,temperature:this.temperature};
+      this.metrics.record(event);this.events.push(event);this.history.push({t:this.time,e:this.result.energy});}
+    run(){while(this.time<CONFIG.duration-1e-9)this.step();return this;}
+  }
+  // Reference search is diagnostic only; it never replaces a state in the displayed chain.
+  function findReference(network){let state=new SignalConfiguration(),best=EnergyFunction.evaluate(network,state).energy;
+    for(let pass=0;pass<4;pass++)for(let i=0;i<state.values.length;i++){
+      let next=state;for(let k=0;k<=30;k++){const values=state.values.slice();values[i]=mix(CONFIG.minSignal,CONFIG.maxSignal,k/30);
+        const candidate=new SignalConfiguration(values),energy=EnergyFunction.evaluate(network,candidate).energy;
+        if(energy<best){best=energy;next=candidate;}}state=next;}
+    return best;}
+  function summarize(engine,reference){const energies=engine.history.points.map(p=>p.e),initial=energies[0];
+    return {temperature0:engine.temperature0,amplitude:engine.amplitude,acceptance:engine.metrics.acceptance,
+      uphill:engine.metrics.uphillAccepted,initial,final:engine.result.energy,min:Math.min(...energies),max:Math.max(...energies),reference,
+      oscillation:(Math.max(...energies)-Math.min(...energies))/initial,
+      initialHigh:initial/reference,finalHigh:engine.result.energy/reference,iterations:engine.metrics.iteration};}
+  function calibrate(network){const reference=findReference(network),trials=[];
+    for(const amplitude of [.10,.12,.15])for(const temperature of [.006,.010,.016,.024,.036,.055,.080]){
+      const engine=new AnnealingEngine(network,temperature/CONFIG.delayReference,amplitude).run(),r=summarize(engine,reference);
+      r.valid=r.acceptance>=.65&&r.acceptance<=.89&&r.uphill>=25&&r.initialHigh>1.18&&r.min/reference>1.12&&r.final/r.initial>.85&&r.oscillation>.12;
+      r.score=Math.abs(r.acceptance-.81)+Math.abs(r.final/r.initial-1)*.18;
+      trials.push(r);}
+    const chosen=trials.filter(r=>r.valid).sort((a,b)=>a.score-b.score)[0];
+    assert(chosen,'Calibration failed: no valid high-T trajectory');
+    return Object.freeze(chosen);}
+  // Independent audit layer: never consumes the displayed engine's RNG, changes
+  // a state, or changes the original calibration, proposal and acceptance rules.
+  const segmentDiagnostic=result=>result.meanDelay/CONFIG.delayReference;
+  function validateExperiment(engine,calibration){
+    const tol=1e-12,checks=new Set(),n=engine.network;
+    const check=(ok,label)=>{assert(ok,'VALIDATION FAILED: '+label);checks.add(label);};
+    const close=(a,b)=>Number.isFinite(a)&&Number.isFinite(b)&&Math.abs(a-b)<tol;
+    check(n.nodes.length===16&&n.edges.length===26&&INITIAL_STATE.length===16,'Canonical dimensions');
+    check(CONFIG.minSignal===.20&&CONFIG.maxSignal===.80&&CONFIG.delayReference===.25,'Canonical bounds and normalization');
+    check(n.nodes.every((r,i)=>r.x===NETWORK_CONFIG.nodes[i][0]&&r.y===NETWORK_CONFIG.nodes[i][1]&&r.offset===NETWORK_CONFIG.offsets[i]),'Canonical coordinates and offsets');
+    check(n.edges.every((r,i)=>['a','b','axis','q','c','main'].every((key,k)=>r[key]===NETWORK_CONFIG.edges[i][k])&&r.q>0&&r.c>0),'Canonical links, demands and capacities');
+    const demand=n.edges.reduce((sum,r)=>sum+r.q,0),weights=n.edges.map(r=>r.q/demand),sumWeights=weights.reduce((sum,w)=>sum+w,0);
+    check(close(sumWeights,1),'Sum of demand weights equals one');
+    let maxObjectiveError=0,maxDiagnosticError=0,evaluatedStates=0;
+    function auditState(state,result){
+      check(state.values.length===16&&state.values.every(s=>Number.isFinite(s)&&s>=.20&&s<=.80),'Finite bounded signal state');
+      check(result.roads.length===26&&result.roads.every(r=>r.capacity>0&&Number.isFinite(r.capacity)&&Number.isFinite(r.rho)&&r.delay>=0&&Number.isFinite(r.delay)),'Positive capacities and finite nonnegative delays');
+      // Sum normalized weights independently instead of repeating E's numerator.
+      let weighted=0,plain=0;
+      for(let j=0;j<n.edges.length;j++){weighted+=weights[j]*result.roads[j].delay;plain+=result.roads[j].delay;}
+      const energyCheck=weighted/CONFIG.delayReference,meanCheck=plain/n.edges.length;
+      const diagnosticCheck=meanCheck/CONFIG.delayReference;
+      maxObjectiveError=Math.max(maxObjectiveError,Math.abs(energyCheck-result.energy));
+      maxDiagnosticError=Math.max(maxDiagnosticError,Math.abs(diagnosticCheck-segmentDiagnostic(result)));
+      check(result.energy>=0&&close(energyCheck,result.energy),'Independent weighted objective matches E');
+      check(close(meanCheck,result.meanDelay)&&close(diagnosticCheck,segmentDiagnostic(result)),'Simple segment diagnostic matches meanDelay / d_ref');
+      evaluatedStates++;
+    }
+    check(engine.time===CONFIG.duration&&engine.amplitude===calibration.amplitude&&engine.temperature0===calibration.temperature0,'Completed calibrated high-T trajectory');
+    let state=new SignalConfiguration(),result=EnergyFunction.evaluate(n,state),lastTime=0,accepted=0,rejected=0,uphill=0,uphillProposed=0;
+    const rng=new PRNG(CONFIG.seed);auditState(state,result);
+    check(engine.history.points.length===engine.events.length+1,'Complete energy history');
+    check(engine.history.points[0].t===0&&close(engine.history.points[0].e,result.energy),'Initial history entry');
+    for(let k=0;k<engine.events.length;k++){
+      const event=engine.events[k],proposal=state.propose(rng,engine.amplitude);
+      const candidate=EnergyFunction.evaluate(n,proposal.state),u=rng.next();auditState(proposal.state,candidate);
+      const changed=state.values.map((s,i)=>s===proposal.state.values[i]?-1:i).filter(i=>i>=0);
+      check(changed.length===1&&changed[0]===proposal.i&&event.i===proposal.i,'Single component proposal');
+      check(event.t>lastTime&&event.t>2&&event.t<=CONFIG.duration,'Ordered proposal times');lastTime=event.t;
+      const temperature=engine.temperature0*(1+(CONFIG.temperatureEnd-1)*event.t/CONFIG.duration);
+      const delta=candidate.energy-result.energy,probability=delta<=0?1:Math.exp(-delta/temperature),take=u<probability;
+      check(close(event.before,result.energy)&&close(event.delta,delta),'Delta equals candidate energy minus previous energy');
+      check(temperature>0&&close(event.temperature,temperature)&&close(event.probability,probability),'Actual temperature and Metropolis probability');
+      check(event.u===u&&u>=0&&u<1&&event.accepted===take,'Exact PRNG replay and unrounded acceptance decision');
+      if(delta>0)uphillProposed++;
+      if(take){accepted++;if(delta>0)uphill++;state=proposal.state;result=candidate;}else rejected++;
+      check(close(event.after,result.energy),'Accepted candidate or preserved previous state');
+      const point=engine.history.points[k+1];check(point.t===event.t&&close(point.e,result.energy),'Recorded history matches actual decisions');
+    }
+    auditState(engine.state,engine.result);
+    check(state.values.every((s,i)=>s===engine.state.values[i])&&close(result.energy,engine.result.energy),'Final state equals replay');
+    check(result.roads.every((r,j)=>Object.keys(r).every(key=>close(r[key],engine.result.roads[j][key]))),'Final road metrics equal replay');
+    // These probes distinguish reflection from clipping without changing the RNG.
+    for(const [bound,draw,expected] of [[.20,0,.32],[.80,1,.68]]){
+      const values=INITIAL_STATE.slice();values[0]=bound;let calls=0;
+      const p=new SignalConfiguration(values).propose({next:()=>calls++===0?0:draw},.12);
+      check(p.i===0&&close(p.state.values[0],expected)&&p.state.values.slice(1).every((s,i)=>s===values[i+1]),'Reflected boundary probe '+bound);
+    }
+    const m=engine.metrics,acceptance=accepted/(accepted+rejected),summary=summarize(engine,calibration.reference);
+    check(m.accepted===accepted&&m.rejected===rejected&&m.uphillAccepted===uphill&&m.uphillProposed===uphillProposed&&close(m.acceptance,acceptance),'Measured acceptance counters');
+    check(acceptance>=.65&&acceptance<=.89&&uphill>=25&&summary.initialHigh>1.18&&summary.min/calibration.reference>1.12&&summary.final/summary.initial>.85&&summary.oscillation>.12,'Original high-T calibration criteria');
+    check(engine.events.some(e=>e.after>e.before)&&engine.events.some(e=>e.after<e.before),'Nonmonotonic energy; genuine uphill and downhill visits');
+    check(['temperature0','amplitude','acceptance','uphill','initial','final','min','max','iterations'].every(key=>close(summary[key],calibration[key])),'Calibration statistics match displayed trajectory');
+    return deepFreeze({status:'PASS',seed:CONFIG.seed,tolerance:tol,checks:[...checks],
+      model:{nodes:16,links:26,stateDimension:16,bounds:[.20,.80],delayReference:.25,energyFormula:'E = sum(w_j*d_j) / d_ref; w_j = q_j / sum(q)',sumWeights},
+      objective:{status:'PASS',evaluatedStates,maxObjectiveError,maxDiagnosticError},
+      trajectory:{status:'PASS',iterations:engine.events.length,accepted,rejected,acceptance,uphillAccepted:uphill,uphillProposed,nonmonotonic:true,temperature0:engine.temperature0,temperatureFinal:engine.temperature},
+      proposal:{singleComponent:'PASS',reflection:'PASS',replay:'PASS'}});
+  }
+  return {AUTO_PLAY,RECORDING_MODE,RANDOM_SEED,CONFIG,NETWORK_CONFIG,INITIAL_STATE,PRNG,UrbanNetwork,
+    SignalConfiguration,TrafficModel,EnergyFunction,HistoryBuffer,Metrics,AnnealingEngine,calibrate,findReference,summarize,segmentDiagnostic,validateExperiment,clamp,mix,smooth};
+})();
+</script>
+<script id="presentation-common">/* Presentation only: no proposal, random draw, energy or acceptance is computed here. */
+const VideoPresentation = (() => {
+ 'use strict';
+ const C={bg:'#0f111a',text:'#f8f8f2',muted:'#9da8bd',cyan:'#8be9fd',purple:'#bd93f9',green:'#50fa7b',orange:'#ffb86c',red:'#ff6868'};
+ const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v)),lerp=(a,b,t)=>a+(b-a)*t;
+ const fmt=(v,n=3)=>Number(v).toLocaleString('pt-BR',{minimumFractionDigits:n,maximumFractionDigits:n});
+ const signed=(v,n=3)=>(v>0?'+':'')+fmt(v,n);
+ const metric=(label,value,color='cyan')=>`<div class="metric"><div class="metric-label">${label}</div><div class="value ${color}">${value}</div></div>`;
+ const concept=(text,color='')=>`<h2 class="concept ${color}">${text}</h2>`;
+ const detail=text=>`<p class="detail">${text}</p>`;
+ const note=text=>`<p class="note">${text}</p>`;
+ const eyebrow=text=>`<div class="eyebrow">${text}</div>`;
+ const phaseAt=(phases,t)=>phases.findLast(p=>t>=p.start)||phases[0];
+ const rgb=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+ function delayColor(d){const stops=[[.04,C.cyan],[.09,C.green],[.13,C.orange],[.28,C.red]];let k=1;while(k<3&&d>stops[k][0])k++;const [a,ca]=stops[k-1],[b,cb]=stops[k],f=clamp((d-a)/(b-a)),aa=rgb(ca),bb=rgb(cb);return `rgb(${aa.map((v,i)=>Math.round(lerp(v,bb[i],f))).join(',')})`;}
+ function label(ctx,text,x,y,size=22,color=C.muted,align='left'){ctx.fillStyle=color;ctx.font=`${size}px Arial`;ctx.textAlign=align;ctx.fillText(text,x,y);ctx.textAlign='left';}
+ function line(ctx,x1,y1,x2,y2,color,width=2){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.strokeStyle=color;ctx.lineWidth=width;ctx.stroke();}
+ function dot(ctx,x,y,r,color){ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();}
+ function map(ctx,network,state,result,time,{rect={x:85,y:293,w:1065,h:562},focus=-1,opacity=1,particles=true}={}){
+  // Uniform affine transform preserves the canonical coordinates and all angles.
+  const scale=Math.min(rect.w/1100,rect.h/650),ox=rect.x+(rect.w-1100*scale)/2,oy=rect.y+(rect.h-650*scale)/2;
+  const points=network.nodes.map(n=>({x:ox+n.x*scale,y:oy+n.y*scale}));
+  ctx.save();ctx.globalAlpha=opacity;ctx.lineCap='round';
+  network.edges.forEach((e,j)=>{
+   const a=points[e.a],b=points[e.b],near=focus<0||e.a===focus||e.b===focus,d=result.roads?result.roads[j].delay:result.delays[j];
+   ctx.globalAlpha=opacity*(near?1:.14);line(ctx,a.x,a.y,b.x,b.y,'#242b3b',17);line(ctx,a.x,a.y,b.x,b.y,delayColor(d),5);
+   if(particles){const count=Math.max(3,Math.round(e.q*17));for(let k=0;k<count;k++){
+    const u=(k/count+time*(.035/(1+2*d))+(j*.137)%1)%1;
+    dot(ctx,lerp(a.x,b.x,u),lerp(a.y,b.y,u),2.7,'#f4f7ff');}}
+  });
+  points.forEach((p,i)=>{
+   const near=focus<0||i===focus;ctx.globalAlpha=opacity*(near?1:.16);
+   if(i===focus){const r=38;const grad=ctx.createRadialGradient(p.x,p.y,5,p.x,p.y,65);grad.addColorStop(0,'#bd93f94a');grad.addColorStop(1,'#bd93f900');ctx.fillStyle=grad;ctx.fillRect(p.x-65,p.y-65,130,130);ctx.strokeStyle=C.purple;ctx.lineWidth=2;ctx.beginPath();ctx.arc(p.x,p.y,r,0,Math.PI*2);ctx.stroke();}
+   dot(ctx,p.x,p.y,14,C.bg);ctx.strokeStyle=near?'#7f8ba4':'#394258';ctx.lineWidth=2;ctx.beginPath();ctx.arc(p.x,p.y,14,0,Math.PI*2);ctx.stroke();
+   const g=state.values?state.values[i]:state[i],green=((time/4.8+network.nodes[i].offset)%1)<g;
+   dot(ctx,p.x-5,p.y,3.7,green?C.green:C.red);dot(ctx,p.x+5,p.y,3.7,green?C.red:C.green);
+   if(i===focus)label(ctx,String(i+1).padStart(2,'0'),p.x,p.y+66,26,C.purple,'center');
+  });ctx.restore();return points;
+ }
+ function chart(ctx,points,{x=1230,y=685,w=594,h=180,duration=16,best=true,highlight='',max=1.1}={}){
+  const px=t=>x+clamp(t/duration)*w,py=e=>y+h-clamp(e/max)*h;
+  ctx.save();ctx.lineCap='round';
+  for(let k=0;k<=2;k++){const yy=y+k*h/2;line(ctx,x,yy,x+w,yy,'#293044',1);}
+  const draw=(key,color,width)=>{ctx.beginPath();points.forEach((p,i)=>{if(i)ctx.lineTo(px(p.t),py(p[key]));else ctx.moveTo(px(p.t),py(p[key]));});ctx.lineWidth=width;ctx.strokeStyle=color;ctx.stroke();};
+  draw('e',C.cyan,3);if(best)draw('best',C.green,4);
+  const last=points.at(-1);if(last){dot(ctx,px(last.t),py(last.e),5,C.cyan);if(best)dot(ctx,px(last.t),py(last.best),5,C.green);
+   if(highlight){const key=highlight==='best'?'best':'e',color=key==='best'?C.green:C.cyan;ctx.strokeStyle=color;ctx.lineWidth=2;ctx.beginPath();ctx.arc(px(last.t),py(last[key]),13,0,Math.PI*2);ctx.stroke();}}
+  label(ctx,'início',x,y+h+28,17);label(ctx,'fim da execução',x+w,y+h+28,17,C.muted,'right');label(ctx,'E',x-18,y+6,18);
+  ctx.restore();
+ }
+ function ruler(ctx,P,u,{x=1230,y=688,w=594,showU=false,showTest=false,decision=null,stationary=false}={}){
+  ctx.save();ctx.fillStyle='#33303e';ctx.fillRect(x,y,w,30);ctx.fillStyle='#50fa7b99';ctx.fillRect(x,y,w*P,30);
+  label(ctx,'0',x,y+61,20);label(ctx,'1',x+w,y+61,20,C.muted,'right');
+  label(ctx,'ACEITA',x,y+99,20,C.green);label(ctx,'REJEITA',x+w,y+99,20,C.red,'right');
+  line(ctx,x+w*P,y-28,x+w*P,y+34,C.green,3);
+  label(ctx,`P = ${fmt(P)}`,x+w*P,y-44,22,C.green,'center');
+  if(showU){const ux=x+w*u;line(ctx,ux,y+32,ux,y+123,C.purple,3);dot(ctx,ux,y+15,7,C.purple);label(ctx,`u = ${fmt(u)}${stationary?' · não muda':''}`,ux,y+154,22,C.purple,'center');}
+  if(showTest)label(ctx,decision===null?(u<P?'u < P':'u ≥ P'):(decision?'✓ ACEITAR':'× REJEITAR'),x+w/2,y+215,36,decision===null?C.text:decision?C.green:C.red,'center');
+  ctx.restore();
+ }
+ function commonContract(spec,frames){
+  const checks=[];const check=(ok,label)=>{checks.push({label,pass:!!ok});};
+  check(document.documentElement.lang==='pt-BR','Idioma da apresentação: português');
+  check(document.querySelectorAll('#scene').length===1,'Um único Canvas de apresentação');
+  check(!document.querySelector('script[src],link[rel="stylesheet"]'),'Sem bibliotecas ou folhas externas');
+  check(frames.every(f=>!/(URBAN NETWORK|INITIAL STATE|HIGH.T EXPLORATION|ACCEPTANCE RATE|CURRENT ENERGY|BEST ENERGY FOUND|RUNNING MINIMUM)/.test([f.title,f.subtitle,f.panel,f.center,f.caption].join(' '))),'Conceitos visíveis em português');
+  check(frames.every(f=>(f.graphs||0)<=1&&(f.pair||(f.importantNumbers||0)<=3)),'Até um gráfico e três números principais; exceção explícita para a comparação pareada');
+  const styles=[...document.styleSheets].flatMap(s=>[...s.cssRules].map(r=>r.cssText)).join('\n');
+  check(styles.includes('.recording #controls')&&styles.includes('display: none !important'),'Controles ocultos no modo de gravação');
+  check(styles.includes('cursor: none !important'),'Cursor oculto em toda a gravação');
+  check(frames.every(f=>!/(ÓTIMO GLOBAL|SOLUÇÃO ÓTIMA|MELHOR CONFIGURAÇÃO POSSÍVEL)/.test([f.title,f.panel,f.center].join(' '))),'Sem promessa de ótimo global');
+  return checks;
+ }
+ function mount(spec){
+  const $=id=>document.getElementById(id),params=new URLSearchParams(location.search),canvas=$('scene'),ctx=canvas.getContext('2d');
+  let recording=params.get('recording')!=='0',time=clamp(Number(params.get('t'))||0,0,spec.duration),running=params.has('autoplay')?params.get('autoplay')==='1':recording,last=performance.now(),lastPhase='',lastHUD=-Infinity;
+  const setRecording=v=>{recording=v;document.body.classList.toggle('recording',v);$('controls').inert=v;$('debug').hidden=true;$('inspect').setAttribute('aria-expanded','false');};
+  setRecording(recording);$('seek').max=spec.duration;
+  spec.phases.forEach(p=>{const o=document.createElement('option');o.value=p.start;o.textContent=p.name;$('chapters').append(o);});
+  function resize(){const s=Math.min(innerWidth/1920,innerHeight/1080),stage=$('stage');stage.style.transform=`scale(${s})`;stage.style.left=(innerWidth-1920*s)/2+'px';stage.style.top=(innerHeight-1080*s)/2+'px';}
+  function setHTML(el,html){if(el.innerHTML!==html)el.innerHTML=html;}
+  function render(force=false){
+   const f=spec.at(time),phase=phaseAt(spec.phases,time);ctx.clearRect(0,0,1920,1080);spec.draw(ctx,f,time);
+   if(force||time-lastHUD>=.1||lastPhase!==phase.name||!running){
+    $('title').textContent=f.title??spec.title;$('subtitle').textContent=f.subtitle||'';
+    setHTML($('panel'),f.panel||'');setHTML($('center'),f.center||'');$('center').className=f.centerClass||'';
+    $('panel').hidden=!f.panel;$('center').hidden=!f.center;setHTML($('mapCaption'),f.caption||'');
+    $('chapterLabel').textContent=phase.name;$('clock').textContent=fmt(time,1)+' / '+fmt(spec.duration,1)+' s';
+    if(document.activeElement!==$('seek'))$('seek').value=time.toFixed(1);
+    $('chapters').value=phase.start;$('play').textContent=running?'Pausar':'Reproduzir';$('play').setAttribute('aria-label',running?'Pausar animação':'Reproduzir animação');lastHUD=time;
+   }
+   // Gentle entry belongs to presentation time, never to the scientific clock.
+   const enter=clamp((time-phase.start)/.45);$('panel').style.opacity=.35+.65*enter;$('center').style.opacity=.35+.65*enter;
+   $('progress').style.width=1920*time/spec.duration+'px';
+   canvas.setAttribute('aria-label',f.accessible||'Rede conceitual: cores indicam atraso do modelo; pontos são fluxo ilustrativo.');
+   $('stage').dataset.phase=phase.name;$('stage').dataset.time=time.toFixed(3);$('stage').dataset.scientificTime=String(f.scientificTime??'');
+   $('stage').dataset.decision=f.decision===undefined?'':String(f.decision);$('stage').dataset.validation=spec.presentationValidation.status;
+   if(lastPhase!==phase.name){$('status').textContent=phase.name+'. '+(f.accessible||'');lastPhase=phase.name;}
+  }
+  function seek(t){time=clamp(t,0,spec.duration);lastHUD=-Infinity;last=performance.now();render(true);}
+  function frame(now){const dt=Math.max(0,(now-last)/1000);last=now;if(running){time=Math.min(spec.duration,time+dt);if(time>=spec.duration)running=false;}render();requestAnimationFrame(frame);}
+  $('play').onclick=()=>{if(time>=spec.duration)seek(0);running=!running;last=performance.now();render(true);};
+  $('restart').onclick=()=>{running=true;seek(0);};
+  // Respond while editing as well as on commit; a frame must never erase a
+  // newly typed time before the field's change event is delivered.
+  const seekInput=()=>{running=false;seek(Number($('seek').value)||0);};
+  $('seek').oninput=seekInput;$('seek').onchange=seekInput;
+  $('chapters').onchange=()=>{running=false;seek(Number($('chapters').value));};
+  $('record').onclick=()=>{setRecording(true);running=true;seek(0);};
+  $('inspect').onclick=()=>{const open=$('debug').hidden;$('debug').hidden=!open;$('inspect').setAttribute('aria-expanded',String(open));$('debug').textContent=JSON.stringify({apresentacao:spec.presentationValidation,ciencia:spec.scienceValidation},null,2);};
+  $('export').onclick=()=>{const blob=new Blob([JSON.stringify(spec.export(),null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=spec.filename+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+  document.addEventListener('keydown',e=>{if(['INPUT','SELECT','BUTTON'].includes(document.activeElement.tagName)&&e.code!=='Escape')return;if(e.code==='Space'){e.preventDefault();$('play').click();}if(e.code==='KeyR')$('restart').click();if(e.code==='Escape'){running=false;setRecording(false);render(true);}if(!recording&&e.code==='ArrowRight'){running=false;seek(time+1);}if(!recording&&e.code==='ArrowLeft'){running=false;seek(time-1);}});
+  document.addEventListener('visibilitychange',()=>{last=performance.now();});
+  addEventListener('resize',resize);resize();render(true);requestAnimationFrame(frame);
+  const api=Object.freeze({snapshot:()=>JSON.parse(JSON.stringify({...spec.export(),playback:{time,running,recording,phase:phaseAt(spec.phases,time).name}})),presentation:()=>JSON.parse(JSON.stringify(spec.presentationValidation)),events:()=>JSON.parse(JSON.stringify(spec.events||[])),history:()=>JSON.parse(JSON.stringify(spec.history||[]))});
+  window[spec.api]=api;if(spec.alias)window[spec.alias]=api;
+  return api;
+ }
+ return {C,clamp,lerp,fmt,signed,metric,concept,detail,note,eyebrow,phaseAt,map,chart,ruler,label,line,dot,commonContract,mount};
+})();
+</script>
+<script id="presentation">(() => {
+ 'use strict';
+ const S=Simulation02,V=VideoPresentation,{C,fmt,metric,concept,detail,note,eyebrow}=V;
+ const network=new S.UrbanNetwork(),calibration=S.calibrate(network),engine=new S.AnnealingEngine(network,calibration.temperature0,calibration.amplitude),frames=[];
+ const capture=()=>frames.push({state:engine.state,result:engine.result,t:engine.time,historyLength:engine.history.points.length});
+ capture();while(engine.time<S.CONFIG.duration-1e-9){engine.step();capture();}
+ const scienceValidation=S.validateExperiment(engine,calibration),summary=S.summarize(engine,calibration.reference);
+ const phases=[
+  [0,'A pergunta'],[3,'A rede'],[5.8,'As vias'],[8.6,'As cores'],[11.4,'O fluxo ilustrativo'],
+  [14.2,'Um semáforo'],[20,'A configuração'],[24,'O estado x'],[28,'Como comparar'],
+  [32,'O custo'],[36,'Menor custo'],[40,'A função de custo'],[45,'Exploração com T alta'],
+  [61,'Aceitar apenas melhorias?'],[65,'Busca gulosa'],[69,'Mínimos locais']
+ ].map(([start,name])=>({start,name}));
+ const duration=73,title='O QUE O COMPUTADOR ESTÁ TENTANDO MELHORAR?';
+ function at(t){
+  const p=V.phaseAt(phases,t),i=phases.indexOf(p),f={title,phase:i,importantNumbers:0,graphs:0,scientificTime:0,focus:-1,opacity:1};
+  f.scientificTime=t<45?0:Math.min(14,(t-45)*14/16);f.sample=frames[Math.min(frames.length-1,Math.floor(f.scientificTime/S.CONFIG.dt+1e-9))];
+  f.caption='';
+  if(i===0){f.opacity=.17;f.center=concept('Cada semáforo pode mudar.<br>O que torna uma configuração melhor?');}
+  if(i>=1&&i<=4){f.title='REDE URBANA SIMPLIFICADA';
+   const texts=[['INTERSEÇÃO / SEMÁFORO','Cada ponto conecta as vias.'],['VIA','Cada ligação representa<br>um trecho da rede.'],['COR DA VIA','Indica o atraso no modelo.'],['FLUXO ILUSTRATIVO','Os pontos ajudam a visualizar o fluxo.<br>Não são veículos simulados.']];
+   f.panel=eyebrow('COMO LER A REDE')+concept(texts[i-1][0])+detail(texts[i-1][1]);if(i===1)f.focus=6;
+   if(i===3)f.panel+=`<div class="detail"><span class="cyan">MENOR ATRASO</span><br>↓<br><span class="red">MAIOR ATRASO</span></div>`;
+  }
+  if(i===5){const g=S.INITIAL_STATE[6];f.title='UMA ESCOLHA EM CADA SEMÁFORO';f.focus=6;f.importantNumbers=2;
+   f.panel=eyebrow('INTERSEÇÃO 07')+concept('TEMPO DE VERDE')+metric('DIREÇÃO PRINCIPAL',fmt(g*100,0)+'%','green')+metric('DIREÇÃO TRANSVERSAL',fmt((1-g)*100,0)+'%','purple')+note('Frações complementares do mesmo ciclo.');}
+  if(i===6){f.title='JUNTAMOS TODAS AS ESCOLHAS';f.panel=concept('UMA CONFIGURAÇÃO<br>COMPLETA DA REDE')+detail('Chamamos essa combinação<br>de <span class="cyan">estado x</span>.');}
+  if(i===7){f.title='CADA CONFIGURAÇÃO É UM ESTADO';f.panel=eyebrow('ESTADO x')+`<div class="formula mono cyan">x = (g₁, g₂, …, g₁₆)</div>`+detail('Cada g representa a fração de verde<br>de um semáforo.');}
+  if(i===8){f.opacity=.17;f.title='COMO SABER SE UMA CONFIGURAÇÃO É BOA?';f.center=concept('Precisamos comparar<br>as configurações.');}
+  if(i===9){f.title='ASSOCIAMOS UM CUSTO A CADA ESTADO';f.panel=concept('UM ESTADO x<br>UM CUSTO E(x)')+metric('CUSTO DESTA CONFIGURAÇÃO',fmt(f.sample.result.energy))+note('Custo adimensional do modelo.');f.importantNumbers=1;}
+  if(i===10){f.title='O COMPUTADOR TENTA REDUZIR ESSE CUSTO';f.panel=concept('MENOR E', 'cyan')+detail('↓')+concept('MENOR CUSTO AGREGADO<br>NO MODELO');}
+  if(i===11){f.title='CADA VIA CONTRIBUI PARA O CUSTO';f.panel=concept('VIAS COM MAIOR DEMANDA<br>TÊM MAIOR PESO')+`<p class="formula mono">E(x) = Σⱼ wⱼ dⱼ(x) / d<sub>ref</sub></p>`+note('wⱼ = qⱼ / Σₖ qₖ · pesos normalizados<br>dⱼ(x): atraso na via · d_ref: escala fixa');}
+  if(i===12){f.title='TEMPERATURA COMPUTACIONAL ALTA';f.subtitle='Muitas configurações são exploradas.';f.importantNumbers=1;f.graphs=1;
+   f.panel=eyebrow('EXPLORAÇÃO')+concept('O CUSTO PODE SUBIR<br>E DESCER')+metric('CUSTO ATUAL E(x)',fmt(f.sample.result.energy))+note('T é um parâmetro do algoritmo.<br>Não é a temperatura das ruas.');f.caption='<b>Cada mudança aceita produz uma nova configuração.</b>';
+  }
+  if(i>=13){f.opacity=.13;f.title='';f.center= i===13?`<div class="hero">POR QUE NÃO ACEITAR<br>APENAS AS MELHORIAS?</div>`:i===14?`<div class="hero">UMA BUSCA GULOSA<br>PODE FICAR PRESA</div>`:`<div class="hero purple">MÍNIMOS LOCAIS</div>${detail('Melhorias pequenas podem não levar a uma saída.')}<p class="note">A próxima animação mostra como o algoritmo decide.</p>`;}
+  f.accessible=[f.title,(f.panel||f.center||'').replace(/<[^>]+>/g,' ')].join('. ');return f;
+ }
+ function draw(ctx,f,t){
+  const points=V.map(ctx,network,f.sample.state,f.sample.result,f.scientificTime||t,{focus:f.focus,opacity:f.opacity});
+  if(f.phase>=1&&f.phase<=4){const target=f.phase===1?points[6]:{x:(points[5].x+points[6].x)/2,y:(points[5].y+points[6].y)/2};V.line(ctx,1190,406,target.x+40,target.y,C.purple,2);V.dot(ctx,target.x+40,target.y,4,C.purple);}
+  if(f.phase===12)V.chart(ctx,engine.history.points.slice(0,f.sample.historyLength),{duration:14,best:false,max:summary.max*1.1,y:684});
+ }
+ function validatePresentationContract(){
+  const samples=phases.map(p=>at(p.start+1)),checks=V.commonContract({duration},samples),check=(ok,label)=>checks.push({label,pass:!!ok});
+  check(samples.every(f=>!/(exp\(|P_acc|ACEITAÇÃO|SORTEIO|REJEIÇÕES)/.test(f.panel||'')),'Sem fórmula de Metrópolis ou telemetria prematura');
+  check(at(6).phase<at(22).phase&&at(22).phase<at(34).phase,'Ordem: rede, configuração e custo');
+  check(at(71).center.includes('MÍNIMOS LOCAIS'),'Fechamento aponta para mínimos locais');
+  check(frames.at(-1).t===14&&frames.at(-1).result.energy===summary.final,'Apresentação percorre toda a trajetória original');
+  check(frames.every(s=>s.state.values.every(g=>g>=.2&&g<=.8)),'Todos os estados exibidos são estados do motor');
+  return {status:checks.every(c=>c.pass)?'PASS':'FAIL',checks,duration,scientificDuration:14};
+ }
+ const presentationValidation=validatePresentationContract();
+ if(presentationValidation.status!=='PASS')throw Error('Falha no contrato da apresentação 02');
+ const exportData=()=>({seed:S.CONFIG.seed,network:S.NETWORK_CONFIG,initialState:S.INITIAL_STATE,calibration,summary,finalState:engine.state.values,events:engine.events,history:engine.history.points,validation:scienceValidation,presentationValidation});
+ window.validatePresentationContract=validatePresentationContract;
+ V.mount({duration,title,phases,at,draw,presentationValidation,scienceValidation,export:exportData,filename:'simulacao-02',api:'Simulation02Experiment',alias:'UrbanSimulation',events:engine.events,history:engine.history.points});
+})();
+</script>
+</body></html>

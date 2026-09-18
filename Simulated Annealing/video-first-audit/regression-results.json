@@ -1,0 +1,41 @@
+{
+  "status": "PASS",
+  "files": [
+    {
+      "file": "Simulation2_UrbanLattice.html",
+      "scientificCoreByteIdentical": true,
+      "allScientificResultsExactlyEqual": true,
+      "beforeCoreSHA256": "0d7a54edf87a06f65dce43581f374eae5c0cfc24a767a4dbf17eec13d13f1a37",
+      "afterCoreSHA256": "0d7a54edf87a06f65dce43581f374eae5c0cfc24a767a4dbf17eec13d13f1a37",
+      "beforeResultsSHA256": "25b04f7db50997705f4a990694c3e7bd9cb7e932a47a8e855bb875a7beea9acc",
+      "afterResultsSHA256": "25b04f7db50997705f4a990694c3e7bd9cb7e932a47a8e855bb875a7beea9acc"
+    },
+    {
+      "file": "Simulation3_Metropolis.html",
+      "scientificCoreByteIdentical": true,
+      "allScientificResultsExactlyEqual": true,
+      "beforeCoreSHA256": "ea5b924cd2c7c18f9dc029caa0bfee2f5e8d10cba7833142660903f0c36aae68",
+      "afterCoreSHA256": "ea5b924cd2c7c18f9dc029caa0bfee2f5e8d10cba7833142660903f0c36aae68",
+      "beforeResultsSHA256": "a8502eb80bed042f17d372084301891d31e0a8301d24daf1a0f8ebacaa4e232d",
+      "afterResultsSHA256": "a8502eb80bed042f17d372084301891d31e0a8301d24daf1a0f8ebacaa4e232d"
+    },
+    {
+      "file": "Simulation4_Convergence.html",
+      "scientificCoreByteIdentical": true,
+      "allScientificResultsExactlyEqual": true,
+      "beforeCoreSHA256": "77c08ca132048ad924a86b2a34080b6e7d4d210b7d0e09ee2eedf7269c1d9987",
+      "afterCoreSHA256": "77c08ca132048ad924a86b2a34080b6e7d4d210b7d0e09ee2eedf7269c1d9987",
+      "beforeResultsSHA256": "a89c96d2f5943af5b1e3e063cd31342aa2a72f755c60c499ddd9fabd2fed3d5b",
+      "afterResultsSHA256": "a89c96d2f5943af5b1e3e063cd31342aa2a72f755c60c499ddd9fabd2fed3d5b"
+    },
+    {
+      "file": "transitSimulation_legacy.html",
+      "scientificCoreByteIdentical": true,
+      "allScientificResultsExactlyEqual": true,
+      "beforeCoreSHA256": "fedf4e98a00f6cece2cd8863dedb20612e7e41de5ba7d85e6b7b1438448b85fa",
+      "afterCoreSHA256": "fedf4e98a00f6cece2cd8863dedb20612e7e41de5ba7d85e6b7b1438448b85fa",
+      "beforeResultsSHA256": "1dfbb6e6f2e739c424f46b65f89dc64bc44068111bfff2f0c05f4efec09d85c4",
+      "afterResultsSHA256": "1dfbb6e6f2e739c424f46b65f89dc64bc44068111bfff2f0c05f4efec09d85c4"
+    }
+  ]
+}
