@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulated Annealing vs Quantum Annealing — Dinâmica Comparativa 1D</title>
+  <style>
+    :root {
+      --bg-dark: #0f172a;
+      --bg-panel: #1e293b;
+      --bg-card: #0b1120;
+      --border-color: #334155;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --sa-color: #f97316;
+      --sa-glow: rgba(249, 115, 22, 0.35);
+      --qa-color: #38bdf8;
+      --qa-glow: rgba(56, 189, 248, 0.35);
+      --gs-color: #10b981;
+      --fv-color: #eab308;
+      --accent: #6366f1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Header & Barra de Controles */
+    header {
+      background-color: var(--bg-panel);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .brand h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge-sa {
+      color: var(--sa-color);
+      background: rgba(249, 115, 22, 0.12);
+      border: 1px solid rgba(249, 115, 22, 0.4);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+    }
+
+    .badge-qa {
+      color: var(--qa-color);
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+    }
+
+    .brand p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /* Controles Interativos */
+    .controls-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    button {
+      background-color: #334155;
+      color: var(--text-main);
+      border: 1px solid #475569;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    button:hover {
+      background-color: #475569;
+    }
+
+    button.primary {
+      background-color: var(--accent);
+      border-color: #818cf8;
+    }
+
+    button.primary:hover {
+      background-color: #4f46e5;
+    }
+
+    .slider-group {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 145px;
+    }
+
+    .slider-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .slider-label span.val {
+      color: var(--text-main);
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 5px;
+      background: #0f172a;
+      border-radius: 4px;
+      outline: none;
+      border: 1px solid #334155;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      cursor: pointer;
+      border: 2px solid var(--accent);
+    }
+
+    /* Layout Principal em Grid 2 Colunas */
+    main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 16px;
+      padding: 16px 24px;
+      max-width: 1800px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 1100px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .column {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .panel {
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(51, 65, 85, 0.6);
+      padding-bottom: 8px;
+    }
+
+    .panel-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .dot.sa {
+      background-color: var(--sa-color);
+      box-shadow: 0 0 8px var(--sa-color);
+    }
+
+    .dot.qa {
+      background-color: var(--qa-color);
+      box-shadow: 0 0 8px var(--qa-color);
+    }
+
+    .formula-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.73rem;
+      color: var(--text-muted);
+      background: var(--bg-card);
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid #334155;
+    }
+
+    .canvas-wrapper {
+      position: relative;
+      width: 100%;
+      height: 255px;
+      background-color: var(--bg-card);
+      border-radius: 8px;
+      border: 1px solid #1e293b;
+      overflow: hidden;
+    }
+
+    .chart-wrapper {
+      position: relative;
+      width: 100%;
+      height: 195px;
+      background-color: var(--bg-card);
+      border-radius: 8px;
+      border: 1px solid #1e293b;
+      overflow: hidden;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* KPIs Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .kpi-card {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 11px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-card.sa-card {
+      border-left: 3px solid var(--sa-color);
+    }
+
+    .kpi-card.qa-card {
+      border-left: 3px solid var(--qa-color);
+    }
+
+    .kpi-label {
+      font-size: 0.73rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .kpi-value {
+      font-size: 1.35rem;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .kpi-value.sa-text {
+      color: var(--sa-color);
+    }
+
+    .kpi-value.qa-text {
+      color: var(--qa-color);
+    }
+
+    .kpi-sub {
+      font-size: 0.7rem;
+      color: #64748b;
+    }
+
+    /* Barra de Progresso do Annealing s = t/tau */
+    .status-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: var(--bg-card);
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      font-size: 0.78rem;
+    }
+
+    .progress-track {
+      flex: 1;
+      height: 7px;
+      background: #1e293b;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--sa-color), var(--qa-color));
+      transition: width 0.05s linear;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <h1>
+        <span>Física Estatística & Otimização</span>
+        <span class="badge-sa">SA Clássico (Kramers)</span>
+        <span class="badge-qa">QA Quântico (WKB)</span>
+      </h1>
+      <p>Comparação em Tempo Real em Paisagem de Energia 1D Rugosa com Barreira Estreita ($N = 60$ partículas/sistema)</p>
+    </div>
+
+    <div class="controls-bar">
+      <div class="btn-group">
+        <button id="btnToggle" class="primary">⏸ Pausar</button>
+        <button id="btnReset">↺ Reiniciar Simulação</button>
+      </div>
+
+      <div class="slider-group">
+        <div class="slider-label">
+          <span>Velocidade (1/τ)</span>
+          <span class="val" id="valSpeed">0.20x</span>
+        </div>
+        <input type="range" id="sliderSpeed" min="0.06" max="0.60" step="0.02" value="0.20">
+      </div>
+
+      <div class="slider-group">
+        <div class="slider-label">
+          <span>Altura Barreira (ΔV)</span>
+          <span class="val" id="valHeight">3.20</span>
+        </div>
+        <input type="range" id="sliderHeight" min="1.20" max="5.00" step="0.10" value="3.20">
+      </div>
+
+      <div class="slider-group">
+        <div class="slider-label">
+          <span>Largura Barreira (w)</span>
+          <span class="val" id="valWidth">0.16</span>
+        </div>
+        <input type="range" id="sliderWidth" min="0.07" max="0.42" step="0.01" value="0.16">
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- COLUNA DA ESQUERDA: VISUALIZAÇÃO FÍSICA 1D -->
+    <div class="column">
+      <!-- Painel Superior: Simulated Annealing -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <span class="dot sa"></span>
+            <span>Simulated Annealing (Clássico / Térmico) — Salto de Kramers-Arrhenius</span>
+          </div>
+          <span class="formula-tag">P_salto ∝ exp(-ΔV / T(s))</span>
+        </div>
+        <div class="canvas-wrapper">
+          <canvas id="canvasSA"></canvas>
+        </div>
+      </div>
+
+      <!-- Painel Inferior: Quantum Annealing -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <span class="dot qa"></span>
+            <span>Quantum Annealing (Campo Transverso Γ) — Tunelamento Quântico WKB</span>
+          </div>
+          <span class="formula-tag">P_túnel ∝ Γ(s)·exp(-c·w·√ΔV / Γ(s))</span>
+        </div>
+        <div class="canvas-wrapper">
+          <canvas id="canvasQA"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLUNA DA DIREITA: GRÁFICOS E KPIs EM TEMPO REAL -->
+    <div class="column">
+      <!-- Barra de Progresso do Parâmetro Normalizado s = t/tau -->
+      <div class="status-strip">
+        <span style="font-family: monospace; font-weight: 600;" id="statusText">s = t/τ = 0.000</span>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <span style="font-family: monospace; color: var(--text-muted);" id="scheduleReadout">T/T₀ = 1.00 | Γ/Γ₀ = 1.00</span>
+      </div>
+
+      <!-- Gráfico 1: Probabilidade do Estado Fundamental P_GS(s) -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <span>Gráfico 1: Probabilidade do Estado Fundamental P_GS(s) vs. Tempo (s = t/τ)</span>
+          </div>
+          <span class="formula-tag">Alvo: Poço Global x ∈ [0.15, 2.0]</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="chartPGS"></canvas>
+        </div>
+      </div>
+
+      <!-- Gráfico 2: Cronograma de Arrefecimento (Annealing Schedule) -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <span>Gráfico 2: Cronograma de Arrefecimento — Decaimento de T(s)/T₀ e Γ(s)/Γ₀</span>
+          </div>
+          <span class="formula-tag">s ∈ [0, 1]</span>
+        </div>
+        <div class="chart-wrapper" style="height: 155px;">
+          <canvas id="chartSchedule"></canvas>
+        </div>
+      </div>
+
+      <!-- Painel de Métricas (KPIs) -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <span>Painel de Métricas do Ensemble em Tempo Real (N = 60 por sistema)</span>
+          </div>
+          <span class="formula-tag" id="wellReference">V_min(Global) ≈ -0.60 | V_min(Local) ≈ +0.00</span>
+        </div>
+        <div class="kpi-grid">
+          <div class="kpi-card sa-card">
+            <span class="kpi-label">% no Estado Fundamental (SA)</span>
+            <span class="kpi-value sa-text" id="kpiPgsSA">0.0%</span>
+            <span class="kpi-sub" id="kpiCountSA">0 / 60 partículas no mínimo global</span>
+          </div>
+          <div class="kpi-card qa-card">
+            <span class="kpi-label">% no Estado Fundamental (QA)</span>
+            <span class="kpi-value qa-text" id="kpiPgsQA">0.0%</span>
+            <span class="kpi-sub" id="kpiCountQA">0 / 60 partículas no mínimo global</span>
+          </div>
+          <div class="kpi-card sa-card">
+            <span class="kpi-label">Energia Média ⟨E⟩ (SA)</span>
+            <span class="kpi-value sa-text" id="kpiEnergySA">0.000</span>
+            <span class="kpi-sub">Média ensemble ⟨V(x_i)⟩ clássico</span>
+          </div>
+          <div class="kpi-card qa-card">
+            <span class="kpi-label">Energia Média ⟨E⟩ (QA)</span>
+            <span class="kpi-value qa-text" id="kpiEnergyQA">0.000</span>
+            <span class="kpi-sub">Média ensemble ⟨V(x_i)⟩ quântico</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    /**
+     * SIMULAÇÃO INTERATIVA: SIMULATED ANNEALING (SA) VS QUANTUM ANNEALING (QA)
+     * Física Computacional 1D com Barreira Central Estreita e Rugosidade
+     */
+    const N_PARTICLES = 60;
+    const X_MIN = -2.0;
+    const X_MAX = 2.0;
+
+    // Parâmetros físicos controláveis via UI
+    const params = {
+      invTau: 0.20,        // Velocidade de arrefecimento (1/tau) em s^-1
+      barrierHeight: 3.20, // Altura da barreira central Delta V
+      barrierWidth: 0.16,  // Largura da barreira central w
+      T0: 0.95,            // Temperatura inicial clássica
+      Gamma0: 1.05         // Campo transverso inicial quântico
+    };
+
+    // Estado global da simulação
+    let simState = {
+      running: true,
+      s: 0.0,              // Tempo normalizado s = t / tau in [0, 1]
+      saParticles: [],
+      qaParticles: [],
+      tunnelEvents: [],    // Rastros visuais de tunelamento WKB atravessando a barreira
+      history: []          // Histórico temporal para os gráficos { s, pgsSA, pgsQA, normT, normGamma }
+    };
+
+    /**
+     * Paisagem de Energia 1D Rugosa V(x) em x in [-2, 2]:
+     * - Poço duplo assimétrico: mínimo local em x ≈ -1.0, mínimo global em x ≈ +1.0
+     * - Barreira estreita e alta centrada em x = 0 com altura Delta V e largura w
+     * - Pequena rugosidade senoidal para realismo de vidros de spin / paisagem frustrada
+     */
+    function potentialV(x) {
+      const doubleWell = 0.85 * Math.pow(x * x - 1.0, 2);
+      const tilt = -0.32 * x; // Assimetria garantindo V(+1) < V(-1)
+      const w = params.barrierWidth;
+      const dV = params.barrierHeight;
+      const barrier = dV * Math.exp(-(x * x) / (2 * w * w));
+      // Rugosidade suave que se anula próximo de x = +-1 e x = 0 para preservar posições claras
+      const roughness = 0.07 * Math.sin(7.5 * x) * Math.sin(2.5 * x);
+      return doubleWell + tilt + barrier + roughness + 0.32;
+    }
+
+    /**
+     * Derivada espacial dV/dx por diferenças finitas centradas
+     */
+    function gradV(x) {
+      const eps = 1e-4;
+      return (potentialV(x + eps) - potentialV(x - eps)) / (2 * eps);
+    }
+
+    /**
+     * Gerador Gaussiano padrão (Box-Muller) para ruído browniano
+     */
+    function randn() {
+      let u = 0, v = 0;
+      while (u === 0) u = Math.random();
+      while (v === 0) v = Math.random();
+      return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+    }
+
+    /**
+     * Cronograma de arrefecimento normalizado (T(s)/T0 e Gamma(s)/Gamma0)
+     * Usa perfil híbrido exponencial-linear suave de 1 até 0 em s = 1
+     */
+    function getScheduleNormalized(s) {
+      const clamped = Math.max(0, Math.min(1, s));
+      return Math.pow(1 - clamped, 1.65) * Math.exp(-1.1 * clamped);
+    }
+
+    /**
+     * Inicializa os ensembles de N = 60 partículas no poço do mínimo local (x ≈ -1.0)
+     */
+    function initSimulation() {
+      simState.s = 0.0;
+      simState.saParticles = [];
+      simState.qaParticles = [];
+      simState.tunnelEvents = [];
+      simState.history = [];
+
+      for (let i = 0; i < N_PARTICLES; i++) {
+        const x0_sa = -1.0 + (Math.random() - 0.5) * 0.36;
+        const x0_qa = -1.0 + (Math.random() - 0.5) * 0.36;
+        simState.saParticles.push({
+          x: x0_sa,
+          vx: 0,
+          jitterY: (Math.random() - 0.5) * 10
+        });
+        simState.qaParticles.push({
+          x: x0_qa,
+          vx: 0,
+          phase: Math.random() * Math.PI * 2,
+          jitterY: (Math.random() - 0.5) * 10,
+          justTunneled: 0
+        });
+      }
+
+      recordHistoryPoint();
+      updateKPIs();
+    }
+
+    /**
+     * Registra um ponto nas curvas em tempo real
+     */
+    function recordHistoryPoint() {
+      const pgsSA = simState.saParticles.filter(p => p.x > 0.15).length / N_PARTICLES;
+      const pgsQA = simState.qaParticles.filter(p => p.x > 0.15).length / N_PARTICLES;
+      const norm = getScheduleNormalized(simState.s);
+      // Deslocamento sutil entre curvas no gráfico 2 para que ambas sejam visíveis mantendo mesmo decaimento
+      simState.history.push({
+        s: simState.s,
+        pgsSA,
+        pgsQA,
+        normT: norm,
+        normGamma: norm
+      });
+    }
+
+    /**
+     * Passo de integração física em tempo real (Langevin Clássica + Tunelamento Quântico WKB)
+     */
+    function stepPhysics(dtSeconds) {
+      if (!simState.running || simState.s >= 1.0) return;
+
+      // Avança o tempo normalizado s = t / tau
+      const ds = dtSeconds * params.invTau;
+      simState.s = Math.min(1.0, simState.s + ds);
+
+      const normControl = getScheduleNormalized(simState.s);
+      const T = params.T0 * normControl;
+      const Gamma = params.Gamma0 * normControl;
+
+      // Sub-stepping para estabilidade numérica na barreira estreita
+      const subSteps = 6;
+      const h = (0.018 / subSteps);
+
+      // Energia de referência no fundo do falso vácuo e no topo da barreira
+      const vFalseVacuum = potentialV(-1.0);
+      const vPeak = potentialV(0.0);
+      const effectiveDeltaV = Math.max(0.2, vPeak - vFalseVacuum);
+
+      // 1. Atualização do Sistema Clássico (Simulated Annealing - Langevin Sobreamortecida)
+      for (let i = 0; i < N_PARTICLES; i++) {
+        const p = simState.saParticles[i];
+        for (let step = 0; step < subSteps; step++) {
+          const force = -gradV(p.x);
+          const thermalNoise = Math.sqrt(2.0 * Math.max(1e-5, T) * h) * randn();
+          p.x += force * h + thermalNoise;
+
+          // Condições de contorno refletoras suaves em [-1.85, 1.85]
+          if (p.x < -1.85) p.x = -1.85 + Math.abs(p.x + 1.85) * 0.5;
+          if (p.x > 1.85) p.x = 1.85 - Math.abs(p.x - 1.85) * 0.5;
+        }
+
+        // Taxa auxiliar de ativação térmica de Kramers-Arrhenius quando a partícula colide com a encosta da barreira
+        if (p.x > -0.85 && p.x < -0.12 && T > 0.02) {
+          const kramersProb = 0.08 * Math.exp(-effectiveDeltaV / Math.max(0.04, T)) * dtSeconds;
+          if (Math.random() < kramersProb) {
+            p.x = 0.18 + Math.random() * 0.25;
+          }
+        }
+      }
+
+      // 2. Atualização do Sistema Quântico (Quantum Annealing - Flutuação + Tunelamento WKB)
+      const c_wkb = 1.85; // Constante de acoplamento WKB na exponencial
+      const w = params.barrierWidth;
+
+      for (let i = 0; i < N_PARTICLES; i++) {
+        const p = simState.qaParticles[i];
+        p.phase += dtSeconds * (4.0 + 10.0 * normControl);
+        if (p.justTunneled > 0) p.justTunneled = Math.max(0, p.justTunneled - dtSeconds * 1.8);
+
+        for (let step = 0; step < subSteps; step++) {
+          const force = -gradV(p.x);
+          // Flutuação quântica de ponto-zero modulada por Gamma(s)
+          const quantumFluct = Math.sqrt(0.75 * Math.max(1e-5, Gamma) * h) * randn();
+          p.x += force * h + quantumFluct;
+
+          if (p.x < -1.85) p.x = -1.85 + Math.abs(p.x + 1.85) * 0.5;
+          if (p.x > 1.85) p.x = 1.85 - Math.abs(p.x - 1.85) * 0.5;
+        }
+
+        // Transição de Tunelamento WKB através da base da barreira estreita:
+        // Taxa proporcional a Gamma(s) * exp(-c * w * sqrt(DeltaV) / Gamma(s))
+        if (p.x < -0.15 && p.x > -1.35 && Gamma > 0.025) {
+          const wkbAction = (c_wkb * w * Math.sqrt(effectiveDeltaV)) / Math.max(0.03, Gamma);
+          const tunnelRate = 3.6 * Gamma * Math.exp(-wkbAction);
+          const probTunnel = 1.0 - Math.exp(-tunnelRate * dtSeconds);
+
+          if (Math.random() < probTunnel) {
+            const xFrom = p.x;
+            const yEnergy = potentialV(xFrom);
+            // Ponto de emergência clássico do outro lado da barreira na mesma energia aproximada
+            const xTo = 0.48 + (Math.random() - 0.5) * 0.32;
+            p.x = xTo;
+            p.justTunneled = 1.0;
+
+            // Registra o rastro visual de tunelamento atravessando a barreira
+            simState.tunnelEvents.push({
+              xFrom,
+              xTo,
+              energy: yEnergy,
+              alpha: 1.0
+            });
+          }
+        }
+      }
+
+      // Atualiza transparência dos rastros de tunelamento
+      for (let i = simState.tunnelEvents.length - 1; i >= 0; i--) {
+        simState.tunnelEvents[i].alpha -= dtSeconds * 1.15;
+        if (simState.tunnelEvents[i].alpha <= 0) {
+          simState.tunnelEvents.splice(i, 1);
+        }
+      }
+
+      // Registra histórico para os gráficos
+      const lastPoint = simState.history[simState.history.length - 1];
+      if (!lastPoint || (simState.s - lastPoint.s) >= 0.008 || simState.s >= 1.0) {
+        recordHistoryPoint();
+      }
+
+      updateKPIs();
+    }
+
+    /**
+     * Atualiza os contadores numéricos (KPIs) e barra de status
+     */
+    function updateKPIs() {
+      let countSA = 0;
+      let sumEnergySA = 0;
+      for (const p of simState.saParticles) {
+        if (p.x > 0.15) countSA++;
+        sumEnergySA += potentialV(p.x);
+      }
+
+      let countQA = 0;
+      let sumEnergyQA = 0;
+      for (const p of simState.qaParticles) {
+        if (p.x > 0.15) countQA++;
+        sumEnergyQA += potentialV(p.x);
+      }
+
+      const pctSA = ((countSA / N_PARTICLES) * 100).toFixed(1) + '%';
+      const pctQA = ((countQA / N_PARTICLES) * 100).toFixed(1) + '%';
+      const avgESA = (sumEnergySA / N_PARTICLES).toFixed(3);
+      const avgEQA = (sumEnergyQA / N_PARTICLES).toFixed(3);
+
+      document.getElementById('kpiPgsSA').textContent = pctSA;
+      document.getElementById('kpiCountSA').textContent = `${countSA} / ${N_PARTICLES} partículas no mínimo global`;
+      document.getElementById('kpiPgsQA').textContent = pctQA;
+      document.getElementById('kpiCountQA').textContent = `${countQA} / ${N_PARTICLES} partículas no mínimo global`;
+
+      document.getElementById('kpiEnergySA').textContent = avgESA;
+      document.getElementById('kpiEnergyQA').textContent = avgEQA;
+
+      const norm = getScheduleNormalized(simState.s);
+      document.getElementById('statusText').textContent = `s = t/τ = ${simState.s.toFixed(3)}`;
+      document.getElementById('progressFill').style.width = `${(simState.s * 100).toFixed(1)}%`;
+      document.getElementById('scheduleReadout').textContent =
+        `T/T₀ = ${norm.toFixed(2)} | Γ/Γ₀ = ${norm.toFixed(2)}`;
+
+      const vGlob = potentialV(1.0).toFixed(2);
+      const vLoc = potentialV(-1.0).toFixed(2);
+      document.getElementById('wellReference').textContent =
+        `V_min(Global) ≈ ${vGlob} | V_min(Local) ≈ +${vLoc}`;
+    }
+
+    /**
+     * Utilitário para redimensionamento nítido de Canvas em telas Retina/HiDPI
+     */
+    function resizeCanvas(canvas) {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      if (canvas.width !== Math.floor(rect.width * dpr) || canvas.height !== Math.floor(rect.height * dpr)) {
+        canvas.width = Math.floor(rect.width * dpr);
+        canvas.height = Math.floor(rect.height * dpr);
+      }
+      const ctx = canvas.getContext('2d');
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      return { width: rect.width, height: rect.height, ctx };
+    }
+
+    /**
+     * Renderiza o painel de paisagem de potencial V(x) e partículas (SA ou QA)
+     */
+    function renderLandscapePanel(canvas, mode) {
+      const { width, height, ctx } = resizeCanvas(canvas);
+      ctx.clearRect(0, 0, width, height);
+
+      const padLeft = 44;
+      const padRight = 20;
+      const padTop = 22;
+      const padBottom = 28;
+      const plotW = width - padLeft - padRight;
+      const plotH = height - padTop - padBottom;
+
+      const yMin = -0.35;
+      const yMax = Math.max(4.4, params.barrierHeight + 0.9);
+
+      const mapX = (x) => padLeft + ((x - X_MIN) / (X_MAX - X_MIN)) * plotW;
+      const mapY = (v) => padTop + plotH - ((v - yMin) / (yMax - yMin)) * plotH;
+
+      // 1. Destaque visual das zonas de Mínimo Local e Mínimo Global
+      const xLocalStart = mapX(-1.45);
+      const xLocalEnd = mapX(-0.55);
+      ctx.fillStyle = 'rgba(234, 179, 8, 0.06)';
+      ctx.fillRect(xLocalStart, padTop, xLocalEnd - xLocalStart, plotH);
+
+      const xGlobalStart = mapX(0.55);
+      const xGlobalEnd = mapX(1.45);
+      ctx.fillStyle = 'rgba(16, 185, 129, 0.08)';
+      ctx.fillRect(xGlobalStart, padTop, xGlobalEnd - xGlobalStart, plotH);
+
+      // Rótulos das Zonas
+      ctx.font = '600 11px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#eab308';
+      ctx.fillText('Mínimo Local (Falso Vácuo)', (xLocalStart + xLocalEnd) / 2, padTop + 14);
+      ctx.fillStyle = '#10b981';
+      ctx.fillText('Mínimo Global (Estado Fundamental)', (xGlobalStart + xGlobalEnd) / 2, padTop + 14);
+
+      // Grade de fundo
+      ctx.strokeStyle = 'rgba(51, 65, 85, 0.45)';
+      ctx.lineWidth = 1;
+      for (let gx = -2.0; gx <= 2.0; gx += 0.5) {
+        const px = mapX(gx);
+        ctx.beginPath();
+        ctx.moveTo(px, padTop);
+        ctx.lineTo(px, padTop + plotH);
+        ctx.stroke();
+
+        ctx.fillStyle = '#64748b';
+        ctx.font = '10px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(gx.toFixed(1), px, height - 8);
+      }
+
+      // 2. Desenha os rastros de tunelamento quântico através da barreira (somente QA)
+      if (mode === 'QA') {
+        for (const ev of simState.tunnelEvents) {
+          const sx = mapX(ev.xFrom);
+          const ex = mapX(ev.xTo);
+          const sy = mapY(ev.energy);
+
+          ctx.save();
+          ctx.strokeStyle = `rgba(56, 189, 248, ${ev.alpha * 0.95})`;
+          ctx.lineWidth = 2.2;
+          ctx.setLineDash([5, 4]);
+          ctx.beginPath();
+          ctx.moveTo(sx, sy);
+          ctx.lineTo(ex, sy);
+          ctx.stroke();
+
+          // Brilho no túnel atravessando a barreira
+          ctx.fillStyle = `rgba(56, 189, 248, ${ev.alpha * 0.4})`;
+          ctx.beginPath();
+          ctx.arc((sx + ex) / 2, sy, 5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      // 3. Desenha a Curva do Potencial V(x)
+      ctx.save();
+      ctx.beginPath();
+      const samples = 240;
+      for (let i = 0; i <= samples; i++) {
+        const x = X_MIN + (i / samples) * (X_MAX - X_MIN);
+        const v = potentialV(x);
+        const px = mapX(x);
+        const py = mapY(v);
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+
+      // Preenchimento sob a curva
+      ctx.lineTo(mapX(X_MAX), padTop + plotH);
+      ctx.lineTo(mapX(X_MIN), padTop + plotH);
+      ctx.closePath();
+      const gradFill = ctx.createLinearGradient(0, padTop, 0, padTop + plotH);
+      if (mode === 'SA') {
+        gradFill.addColorStop(0, 'rgba(249, 115, 22, 0.18)');
+        gradFill.addColorStop(1, 'rgba(15, 23, 42, 0.02)');
+      } else {
+        gradFill.addColorStop(0, 'rgba(56, 189, 248, 0.18)');
+        gradFill.addColorStop(1, 'rgba(15, 23, 42, 0.02)');
+      }
+      ctx.fillStyle = gradFill;
+      ctx.fill();
+
+      // Traço principal de V(x)
+      ctx.beginPath();
+      for (let i = 0; i <= samples; i++) {
+        const x = X_MIN + (i / samples) * (X_MAX - X_MIN);
+        const v = potentialV(x);
+        const px = mapX(x);
+        const py = mapY(v);
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.strokeStyle = mode === 'SA' ? '#fb923c' : '#7dd3fc';
+      ctx.lineWidth = 2.2;
+      ctx.stroke();
+      ctx.restore();
+
+      // Anotação da Barreira Central em x = 0
+      const peakX = mapX(0);
+      const peakY = mapY(potentialV(0));
+      ctx.fillStyle = '#cbd5e1';
+      ctx.font = '10px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(`ΔV=${params.barrierHeight.toFixed(1)}, w=${params.barrierWidth.toFixed(2)}`, peakX, Math.max(padTop + 12, peakY - 8));
+
+      // 4. Renderiza o Ensemble de N = 60 Partículas
+      const normControl = getScheduleNormalized(simState.s);
+      const particles = mode === 'SA' ? simState.saParticles : simState.qaParticles;
+
+      for (const p of particles) {
+        const v = potentialV(p.x);
+        const px = mapX(p.x);
+        // Elevação térmica ou flutuação vertical sutil acima da superfície do potencial
+        const thermalLift = normControl * 8 * Math.abs(Math.sin(p.jitterY));
+        const py = mapY(v) - 5 - thermalLift + p.jitterY * 0.35;
+
+        if (mode === 'SA') {
+          ctx.beginPath();
+          ctx.arc(px, py, 4.2, 0, Math.PI * 2);
+          ctx.fillStyle = '#f97316';
+          ctx.shadowColor = 'rgba(249, 115, 22, 0.8)';
+          ctx.shadowBlur = 6;
+          ctx.fill();
+          ctx.shadowBlur = 0;
+          ctx.strokeStyle = '#ffedd5';
+          ctx.lineWidth = 0.8;
+          ctx.stroke();
+        } else {
+          // Pacote de onda quântico com halo translúcido proporcional a Gamma(s)
+          const waveSpread = 4.5 + 7.5 * normControl * (0.7 + 0.3 * Math.sin(p.phase));
+          ctx.beginPath();
+          ctx.arc(px, py, waveSpread, 0, Math.PI * 2);
+          ctx.fillStyle = p.justTunneled > 0
+            ? 'rgba(16, 185, 129, 0.35)'
+            : 'rgba(56, 189, 248, 0.22)';
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.arc(px, py, 4.0, 0, Math.PI * 2);
+          ctx.fillStyle = p.justTunneled > 0 ? '#34d399' : '#38bdf8';
+          ctx.shadowColor = 'rgba(56, 189, 248, 0.85)';
+          ctx.shadowBlur = 6;
+          ctx.fill();
+          ctx.shadowBlur = 0;
+          ctx.strokeStyle = '#e0f2fe';
+          ctx.lineWidth = 0.8;
+          ctx.stroke();
+        }
+      }
+    }
+
+    /**
+     * Renderiza o Gráfico 1: Probabilidade do Estado Fundamental P_GS(s) vs. Tempo Normalizado s
+     */
+    function renderChartPGS(canvas) {
+      const { width, height, ctx } = resizeCanvas(canvas);
+      ctx.clearRect(0, 0, width, height);
+
+      const padL = 44, padR = 18, padT = 18, padB = 26;
+      const plotW = width - padL - padR;
+      const plotH = height - padT - padB;
+
+      const mapX = (s) => padL + s * plotW;
+      const mapY = (p) => padT + plotH - p * plotH;
+
+      // Grade e Eixos
+      ctx.strokeStyle = 'rgba(51, 65, 85, 0.5)';
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 4; i++) {
+        const pVal = i * 0.25;
+        const py = mapY(pVal);
+        ctx.beginPath();
+        ctx.moveTo(padL, py);
+        ctx.lineTo(padL + plotW, py);
+        ctx.stroke();
+
+        ctx.fillStyle = '#64748b';
+        ctx.font = '10px monospace';
+        ctx.textAlign = 'right';
+        ctx.fillText((pVal * 100).toFixed(0) + '%', padL - 6, py + 3);
+      }
+
+      for (let i = 0; i <= 5; i++) {
+        const sVal = i * 0.2;
+        const px = mapX(sVal);
+        ctx.beginPath();
+        ctx.moveTo(px, padT);
+        ctx.lineTo(px, padT + plotH);
+        ctx.stroke();
+
+        ctx.fillStyle = '#64748b';
+        ctx.font = '10px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(sVal.toFixed(1), px, height - 7);
+      }
+
+      if (simState.history.length < 1) return;
+
+      // Curva SA (Laranja)
+      ctx.beginPath();
+      simState.history.forEach((pt, idx) => {
+        const px = mapX(pt.s);
+        const py = mapY(pt.pgsSA);
+        if (idx === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      });
+      ctx.strokeStyle = '#f97316';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      // Curva QA (Ciano)
+      ctx.beginPath();
+      simState.history.forEach((pt, idx) => {
+        const px = mapX(pt.s);
+        const py = mapY(pt.pgsQA);
+        if (idx === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      });
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 2.6;
+      ctx.stroke();
+
+      // Legenda interna
+      ctx.font = '600 11px Inter, sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillText('● QA: Tunelamento Quântico P_GS(s)', padL + 10, padT + 15);
+      ctx.fillStyle = '#f97316';
+      ctx.fillText('● SA: Ativação Térmica P_GS(s)', padL + 10, padT + 31);
+    }
+
+    /**
+     * Renderiza o Gráfico 2: Cronograma de Arrefecimento T(s)/T0 e Gamma(s)/Gamma0
+     */
+    function renderChartSchedule(canvas) {
+      const { width, height, ctx } = resizeCanvas(canvas);
+      ctx.clearRect(0, 0, width, height);
+
+      const padL = 44, padR = 18, padT = 16, padB = 24;
+      const plotW = width - padL - padR;
+      const plotH = height - padT - padB;
+
+      const mapX = (s) => padL + s * plotW;
+      const mapY = (val) => padT + plotH - val * plotH;
+
+      // Grade
+      ctx.strokeStyle = 'rgba(51, 65, 85, 0.5)';
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 2; i++) {
+        const v = i * 0.5;
+        const py = mapY(v);
+        ctx.beginPath();
+        ctx.moveTo(padL, py);
+        ctx.lineTo(padL + plotW, py);
+        ctx.stroke();
+
+        ctx.fillStyle = '#64748b';
+        ctx.font = '10px monospace';
+        ctx.textAlign = 'right';
+        ctx.fillText(v.toFixed(1), padL - 6, py + 3);
+      }
+
+      // Curva completa de referência em tracejado escuro
+      ctx.beginPath();
+      for (let i = 0; i <= 100; i++) {
+        const sVal = i / 100;
+        const norm = getScheduleNormalized(sVal);
+        const px = mapX(sVal);
+        const py = mapY(norm);
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.strokeStyle = 'rgba(148, 163, 184, 0.25)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Curvas ativas até o instante atual s
+      if (simState.history.length > 0) {
+        // T(s)/T0 (Laranja sólido)
+        ctx.beginPath();
+        simState.history.forEach((pt, idx) => {
+          const px = mapX(pt.s);
+          const py = mapY(pt.normT);
+          if (idx === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        });
+        ctx.strokeStyle = '#f97316';
+        ctx.lineWidth = 3.0;
+        ctx.stroke();
+
+        // Gamma(s)/Gamma0 (Ciano tracejado sobreposto para demonstrar o mesmo schedule)
+        ctx.save();
+        ctx.beginPath();
+        ctx.setLineDash([6, 5]);
+        simState.history.forEach((pt, idx) => {
+          const px = mapX(pt.s);
+          const py = mapY(pt.normGamma);
+          if (idx === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        });
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 2.4;
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // Legenda
+      ctx.font = '600 11px Inter, sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillStyle = '#f97316';
+      ctx.fillText('— T(s) / T₀ (Clássico)', width - padR - 8, padT + 14);
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillText('--- Γ(s) / Γ₀ (Quântico)', width - padR - 8, padT + 30);
+    }
+
+    /**
+     * Loop Principal de Animação (60 FPS)
+     */
+    const canvasSA = document.getElementById('canvasSA');
+    const canvasQA = document.getElementById('canvasQA');
+    const chartPGS = document.getElementById('chartPGS');
+    const chartSchedule = document.getElementById('chartSchedule');
+
+    let lastTimestamp = performance.now();
+    function animate(now) {
+      const dt = Math.min(0.05, (now - lastTimestamp) / 1000);
+      lastTimestamp = now;
+
+      stepPhysics(dt);
+
+      renderLandscapePanel(canvasSA, 'SA');
+      renderLandscapePanel(canvasQA, 'QA');
+      renderChartPGS(chartPGS);
+      renderChartSchedule(chartSchedule);
+
+      requestAnimationFrame(animate);
+    }
+
+    /**
+     * Eventos dos Controles Interativos
+     */
+    const btnToggle = document.getElementById('btnToggle');
+    const btnReset = document.getElementById('btnReset');
+    const sliderSpeed = document.getElementById('sliderSpeed');
+    const sliderHeight = document.getElementById('sliderHeight');
+    const sliderWidth = document.getElementById('sliderWidth');
+
+    btnToggle.addEventListener('click', () => {
+      if (simState.s >= 1.0) {
+        initSimulation();
+        simState.running = true;
+      } else {
+        simState.running = !simState.running;
+      }
+      btnToggle.textContent = simState.running ? '⏸ Pausar' : '▶ Iniciar';
+    });
+
+    btnReset.addEventListener('click', () => {
+      initSimulation();
+      simState.running = true;
+      btnToggle.textContent = '⏸ Pausar';
+    });
+
+    sliderSpeed.addEventListener('input', (e) => {
+      params.invTau = parseFloat(e.target.value);
+      document.getElementById('valSpeed').textContent = params.invTau.toFixed(2) + 'x';
+    });
+
+    sliderHeight.addEventListener('input', (e) => {
+      params.barrierHeight = parseFloat(e.target.value);
+      document.getElementById('valHeight').textContent = params.barrierHeight.toFixed(2);
+    });
+
+    sliderWidth.addEventListener('input', (e) => {
+      params.barrierWidth = parseFloat(e.target.value);
+      document.getElementById('valWidth').textContent = params.barrierWidth.toFixed(2);
+    });
+
+    // Inicializa e dispara o loop 60 FPS
+    initSimulation();
+    requestAnimationFrame(animate);
+  </script>
+</body>
+</html>
